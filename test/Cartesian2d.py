@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-import GMatElastoPlasticQPot.Cartesian2d as GMat
+import GMatTensor.Cartesian2d as GMat
 
 def A4_ddot_B2(A, B):
     return np.einsum('ijkl,lk->ij', A, B)
