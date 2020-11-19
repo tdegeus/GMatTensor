@@ -41,17 +41,8 @@ jobs:
     - name: Extending conda environment for testing
       run: conda env update --file environment_test.yaml
 
-    - name: Extending conda environment to run examples
-      if: runner.os == 'Linux'
-      run: conda env update --file environment_examples.yaml
-
-    - name: Configure using CMake (with examples)
-      if: runner.os == 'Linux'
-      run: cmake . -DBUILD_TESTS=ON -DBUILD_EXAMPLES=ON -DCMAKE_BUILD_TYPE=RELEASE
-
-    - name: Configure using CMake (without examples)
-      if: runner.os != 'Linux'
-      run: cmake . -DBUILD_TESTS=ON -DBUILD_EXAMPLES=OFF -DCMAKE_BUILD_TYPE=RELEASE
+    - name: Configure using CMake
+      run: cmake . -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=RELEASE
 
     - name: Build C++ tests & examples
       run: cmake --build .
@@ -65,8 +56,7 @@ jobs:
         python setup.py install
 
     - name: Run Python examples
-      if: runner.os == 'Linux'
       run: |
-        python ./docs/examples/statics/FixedDisplacements_LinearElastic/example.py --no-plot
-        python ./docs/examples/statics/FixedDisplacements_LinearElastic/manual_partition.py --no-plot
+        python ./test/Cartesian2d.py
+        python ./test/Cartesian3d.py
 

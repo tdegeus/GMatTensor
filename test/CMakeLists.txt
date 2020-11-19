@@ -19,3 +19,5 @@ target_link_libraries(${test_name} PRIVATE GMatTensor::assert)
 if(XSIMD)
     target_link_libraries(${test_name} PRIVATE xtensor::optimize xtensor::use_xsimd)
 endif()
+
+add_test(NAME ${test_name} COMMAND ${test_name})

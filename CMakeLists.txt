@@ -81,6 +81,9 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/GMatTensor.pc"
 
 include("GMatTensorConfig.cmake")
 
+set(CTEST_TEST_TARGET_ALIAS RUN_TESTS_AND_EXAMPLES)
+include(CTest)
+
 if(BUILD_TESTS)
     enable_testing()
     add_subdirectory(test)
