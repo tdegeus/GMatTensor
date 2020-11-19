@@ -4,8 +4,8 @@
 
 */
 
-#ifndef GMATTENSOR_CARTESIAN3D_H
-#define GMATTENSOR_CARTESIAN3D_H
+#ifndef GMATTENSOR_CARTESIAN2D_H
+#define GMATTENSOR_CARTESIAN2D_H
 
 #include <xtensor/xtensor.hpp>
 #include <xtensor/xadapt.hpp>
@@ -15,7 +15,7 @@
 #include "config.h"
 
 namespace GMatTensor {
-namespace Cartesian3d {
+namespace Cartesian2d {
 
 // Type alias
 #if defined(_WIN32) || defined(_WIN64)
@@ -23,8 +23,8 @@ namespace Cartesian3d {
     using Tensor4 = xt::xtensor<double, 4>;
 #else
     #include <xtensor/xfixed.hpp>
-    using Tensor2 = xt::xtensor_fixed<double, xt::xshape<3, 3>>;
-    using Tensor4 = xt::xtensor_fixed<double, xt::xshape<3, 3, 3, 3>>;
+    using Tensor2 = xt::xtensor_fixed<double, xt::xshape<2, 2>>;
+    using Tensor4 = xt::xtensor_fixed<double, xt::xshape<2, 2, 2, 2>>;
 #endif
 
 // Unit tensors
@@ -80,17 +80,17 @@ public:
 protected:
     void init();
 
-    static const size_t m_ndim = 3;
+    static const size_t m_ndim = 2;
     size_t m_size;
     std::array<size_t, N> m_shape;
     std::array<size_t, N + 2> m_shape_tensor2;
     std::array<size_t, N + 4> m_shape_tensor4;
 };
 
-} // namespace Cartesian3d
+} // namespace Cartesian2d
 } // namespace GMatTensor
 
-#include "Cartesian3d.hpp"
-#include "Cartesian3d_Array.hpp"
+#include "Cartesian2d.hpp"
+#include "Cartesian2d_Array.hpp"
 
 #endif

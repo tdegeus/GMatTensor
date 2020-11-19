@@ -4,13 +4,13 @@
 
 */
 
-#ifndef GMATTENSOR_CARTESIAN3D_HPP
-#define GMATTENSOR_CARTESIAN3D_HPP
+#ifndef GMATTENSOR_CARTESIAN2D_HPP
+#define GMATTENSOR_CARTESIAN2D_HPP
 
-#include "Cartesian3d.h"
+#include "Cartesian2d.h"
 
 namespace GMatTensor {
-namespace Cartesian3d {
+namespace Cartesian2d {
 
 namespace detail {
 namespace xtensor {
@@ -18,18 +18,13 @@ namespace xtensor {
     template <class T>
     inline auto trace(const T& A)
     {
-        return A(0, 0) + A(1, 1) + A(2, 2);
+        return A(0, 0) + A(1, 1);
     }
 
     template <class T, class U>
     inline auto A2_ddot_B2(const T& A, const U& B)
     {
-        return A(0, 0) * B(0, 0)
-             + A(1, 1) * B(1, 1)
-             + A(2, 2) * B(2, 2)
-             + 2.0 * A(0, 1) * B(0, 1)
-             + 2.0 * A(0, 2) * B(0, 2)
-             + 2.0 * A(1, 2) * B(1, 2);
+        return A(0, 0) * B(0, 0) + 2.0 * A(0, 1) * B(0, 1) + A(1, 1) * B(1, 1);
     }
 
 } // namespace xtensor
@@ -41,34 +36,24 @@ namespace pointer {
     template <class T>
     inline auto trace(const T A)
     {
-        return A[0] + A[4] + A[8];
+        return A[0] + A[3];
     }
 
     template <class T, class U>
     inline void deviatoric(const T A, U ret)
     {
-        auto m = (A[0] + A[4] + A[8]) / 3.0;
+        auto m = 0.5 * (A[0] + A[3]);
         ret[0] = A[0] - m;
         ret[1] = A[1];
         ret[2] = A[2];
-        ret[3] = A[3];
-        ret[4] = A[4] - m;
-        ret[5] = A[5];
-        ret[6] = A[6];
-        ret[7] = A[7];
-        ret[8] = A[8] - m;
+        ret[3] = A[3] - m;
     }
 
     template <class T>
     inline auto deviatoric_ddot_deviatoric(const T A)
     {
-        auto m = (A[0] + A[4] + A[8]) / 3.0;
-        return (A[0] - m) * (A[0] - m)
-             + (A[4] - m) * (A[4] - m)
-             + (A[8] - m) * (A[8] - m)
-             + 2.0 * A[1] * A[1]
-             + 2.0 * A[2] * A[2]
-             + 2.0 * A[5] * A[5];
+        auto m = 0.5 * (A[0] + A[3]);
+        return (A[0] - m) * (A[0] - m) + 2.0 * A[1] * A[1] + (A[3] - m) * (A[3] - m);
     }
 
 } // namespace pointer
@@ -77,57 +62,45 @@ namespace pointer {
 namespace detail {
 
     template <class T>
-    inline T trace(const std::array<T, 9>& A)
+    inline T trace(const std::array<T, 4>& A)
     {
-        return A[0] + A[4] + A[8];
+        return A[0] + A[3];
     }
 
     template <class T>
-    inline T hydrostatic_deviator(const std::array<T, 9>& A, std::array<T, 9>& ret)
+    inline T hydrostatic_deviator(const std::array<T, 4>& A, std::array<T, 4>& ret)
     {
-        auto m = (A[0] + A[4] + A[8]) / 3.0;
+        T m = 0.5 * (A[0] + A[3]);
         ret[0] = A[0] - m;
         ret[1] = A[1];
         ret[2] = A[2];
-        ret[3] = A[3];
-        ret[4] = A[4] - m;
-        ret[5] = A[5];
-        ret[6] = A[6];
-        ret[7] = A[7];
-        ret[8] = A[8] - m;
+        ret[3] = A[3] - m;
         return m;
     }
 
     template <class T>
-    inline T A2_ddot_B2(const std::array<T, 9>& A, const std::array<T, 9>& B)
+    inline T A2_ddot_B2(const std::array<T, 4>& A, const std::array<T, 4>& B)
     {
-        auto m = (A[0] + A[4] + A[8]) / 3.0;
-        return (A[0] - m) * (B[0] - m)
-             + (A[4] - m) * (B[4] - m)
-             + (A[8] - m) * (B[8] - m)
-             + 2.0 * A[1] * B[1]
-             + 2.0 * A[2] * B[2]
-             + 2.0 * A[5] * B[5];
+        return A[0] * B[0] + 2.0 * A[1] * B[1] + A[3] * B[3];
     }
 
 } // namespace detail
 
 inline Tensor2 I2()
 {
-    return Tensor2({{1.0, 0.0, 0.0},
-                    {0.0, 1.0, 0.0},
-                    {0.0, 0.0, 1.0}});
+    return Tensor2({{1.0, 0.0},
+                    {0.0, 1.0}});
 }
 
 inline Tensor4 II()
 {
-    Tensor4 ret = Tensor4::from_shape({3, 3, 3, 3});
+    Tensor4 ret = Tensor4::from_shape({2, 2, 2, 2});
     ret.fill(0.0);
 
-    for (size_t i = 0; i < 3; ++i) {
-        for (size_t j = 0; j < 3; ++j) {
-            for (size_t k = 0; k < 3; ++k) {
-                for (size_t l = 0; l < 3; ++l) {
+    for (size_t i = 0; i < 2; ++i) {
+        for (size_t j = 0; j < 2; ++j) {
+            for (size_t k = 0; k < 2; ++k) {
+                for (size_t l = 0; l < 2; ++l) {
                     if (i == j && k == l) {
                         ret(i, j, k, l) = 1.0;
                     }
@@ -141,13 +114,13 @@ inline Tensor4 II()
 
 inline Tensor4 I4()
 {
-    Tensor4 ret = Tensor4::from_shape({3, 3, 3, 3});
+    Tensor4 ret = Tensor4::from_shape({2, 2, 2, 2});
     ret.fill(0.0);
 
-    for (size_t i = 0; i < 3; ++i) {
-        for (size_t j = 0; j < 3; ++j) {
-            for (size_t k = 0; k < 3; ++k) {
-                for (size_t l = 0; l < 3; ++l) {
+    for (size_t i = 0; i < 2; ++i) {
+        for (size_t j = 0; j < 2; ++j) {
+            for (size_t k = 0; k < 2; ++k) {
+                for (size_t l = 0; l < 2; ++l) {
                     if (i == l && j == k) {
                         ret(i, j, k, l) = 1.0;
                     }
@@ -161,13 +134,13 @@ inline Tensor4 I4()
 
 inline Tensor4 I4rt()
 {
-    Tensor4 ret = Tensor4::from_shape({3, 3, 3, 3});
+    Tensor4 ret = Tensor4::from_shape({2, 2, 2, 2});
     ret.fill(0.0);
 
-    for (size_t i = 0; i < 3; ++i) {
-        for (size_t j = 0; j < 3; ++j) {
-            for (size_t k = 0; k < 3; ++k) {
-                for (size_t l = 0; l < 3; ++l) {
+    for (size_t i = 0; i < 2; ++i) {
+        for (size_t j = 0; j < 2; ++j) {
+            for (size_t k = 0; k < 2; ++k) {
+                for (size_t l = 0; l < 2; ++l) {
                     if (i == k && j == l) {
                         ret(i, j, k, l) = 1.0;
                     }
@@ -186,7 +159,7 @@ inline Tensor4 I4s()
 
 inline Tensor4 I4d()
 {
-    return I4s() - II() / 3.0;
+    return I4s() - 0.5 * II();
 }
 
 namespace detail {
@@ -200,7 +173,7 @@ namespace detail {
         static_assert(xt::get_rank<T>::value >= 2, "Rank too low.");
         static const size_t rank = xt::get_rank<T>::value;
         static const size_t scalar_rank = rank - 2;
-        static const size_t ndim = 3;
+        static const size_t ndim = 2;
         static const size_t stride = ndim * ndim;
 
         template <class S>
@@ -261,7 +234,7 @@ namespace detail {
             GMATTENSOR_ASSERT(getShape(A.shape()) == getShapeTensor(B.shape()));
             #pragma omp parallel for
             for (size_t i = 0; i < getMatrixSize(A.shape()); ++i) {
-                B.data()[i] = detail::pointer::trace(&A.data()[i * stride]) / 3.0;
+                B.data()[i] = 0.5 * detail::pointer::trace(&A.data()[i * stride]);
             }
         }
 
@@ -273,7 +246,7 @@ namespace detail {
             #pragma omp parallel for
             for (size_t i = 0; i < getMatrixSize(A.shape()); ++i) {
                 auto b = detail::pointer::deviatoric_ddot_deviatoric(&A.data()[i * stride]);
-                B.data()[i] = std::sqrt( b);
+                B.data()[i] = std::sqrt(b);
             }
         }
 
@@ -337,7 +310,7 @@ inline auto Equivalent_deviatoric(const T& A)
     return detail::equiv_impl<T>::equivalent_deviatoric_alloc(A);
 }
 
-} // namespace Cartesian3d
+} // namespace Cartesian2d
 } // namespace GMatTensor
 
 #endif
