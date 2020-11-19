@@ -1,0 +1,7 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+includedir=${prefix}/include
+
+Name: @PROJECT_NAME@
+Description: Tensor operations and unit tensors support GMat models
+Version: @GMATTENSOR_VERSION@
+Cflags: -I${includedir}

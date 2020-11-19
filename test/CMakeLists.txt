@@ -1,0 +1,21 @@
+
+cmake_minimum_required(VERSION 3.0)
+
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    project(GMatTensor-test)
+    find_package(GMatTensor REQUIRED CONFIG)
+endif()
+
+option(XSIMD "Use xsimd and 'march=native' optimisations" OFF)
+
+find_package(Catch2 REQUIRED)
+find_package(xtensor REQUIRED)
+set(test_name "unit-tests")
+add_executable(${test_name} main.cpp Cartesian3d.cpp)
+target_link_libraries(${test_name} PRIVATE Catch2::Catch2 GMatTensor)
+target_link_libraries(${test_name} PRIVATE GMatTensor::compiler_warnings)
+target_link_libraries(${test_name} PRIVATE GMatTensor::assert)
+
+if(XSIMD)
+    target_link_libraries(${test_name} PRIVATE xtensor::optimize xtensor::use_xsimd)
+endif()
