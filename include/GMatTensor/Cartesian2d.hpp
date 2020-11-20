@@ -244,11 +244,11 @@ namespace detail {
             xt::xtensor<value_type, scalar_rank>& B)
         {
             // GMATTENSOR_ASSERT(getShape(A.shape()) == getShapeTensor(B.shape()));
-            // #pragma omp parallel for
-            // for (size_t i = 0; i < getMatrixSize(A.shape()); ++i) {
-            //     auto b = detail::pointer::deviatoric_ddot_deviatoric(&A.data()[i * stride]);
-            //     B.data()[i] = std::sqrt(b);
-            // }
+            #pragma omp parallel for
+            for (size_t i = 0; i < getMatrixSize(A.shape()); ++i) {
+                auto b = detail::pointer::deviatoric_ddot_deviatoric(&A.data()[i * stride]);
+                B.data()[i] = std::sqrt(b);
+            }
         }
 
         static auto deviatoric_alloc(const T& A)
