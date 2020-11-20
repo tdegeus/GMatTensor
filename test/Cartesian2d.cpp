@@ -138,13 +138,13 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
         REQUIRE(xt::allclose(GM::Hydrostatic(M), R));
     }
 
-    // SECTION("Equivalent_deviatoric - Tensor2")
-    // {
-    //     GM::Tensor2 A = xt::zeros<double>({2, 2});
-    //     A(0, 1) = 1.0;
-    //     A(1, 0) = 1.0;
-    //     REQUIRE(GM::Equivalent_deviatoric(A)() == Approx(std::sqrt(2.0)));
-    // }
+    SECTION("Equivalent_deviatoric - Tensor2")
+    {
+        GM::Tensor2 A = xt::zeros<double>({2, 2});
+        A(0, 1) = 1.0;
+        A(1, 0) = 1.0;
+        REQUIRE(GM::Equivalent_deviatoric(A)() == Approx(std::sqrt(2.0)));
+    }
 
     SECTION("Equivalent_deviatoric - List")
     {
