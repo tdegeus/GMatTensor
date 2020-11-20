@@ -4,6 +4,32 @@
 
 Tensor definitions supporting several GMat models.
 
+# Contests
+
+<!-- MarkdownTOC -->
+
+- [Disclaimer](#disclaimer)
+- [Functionality](#functionality)
+- [Implementation](#implementation)
+    - [Naming convention](#naming-convention)
+    - [C++ and Python](#c-and-python)
+- [Installation](#installation)
+    - [C++ headers](#c-headers)
+        - [Using conda](#using-conda)
+        - [From source](#from-source)
+    - [Python module](#python-module)
+        - [Using conda](#using-conda-1)
+        - [From source](#from-source-1)
+- [Compiling](#compiling)
+    - [Using CMake](#using-cmake)
+        - [Example](#example)
+        - [Targets](#targets)
+        - [Optimisation](#optimisation)
+    - [By hand](#by-hand)
+    - [Using pkg-config](#using-pkg-config)
+
+<!-- /MarkdownTOC -->
+
 # Disclaimer
 
 This library is free to use under the
@@ -22,6 +48,31 @@ Download:
 (c - [MIT](https://github.com/tdegeus/GMatTensor/blob/master/LICENSE))
 T.W.J. de Geus (Tom) | tom@geus.me | www.geus.me |
 [github.com/tdegeus/GMatTensor](https://github.com/tdegeus/GMatTensor)
+
+# Functionality
+
+This library implements for a Cartesian coordinate frame in 2d or in 3d:
+
+*   Second and fourth order unit tensors.
+*   Fourth order projection tensors: symmetric, deviatoric, right- and left-transposed:
+    -   A<sub>ik</sub> = `I2`<sub>ij</sub> A<sub>jk</sub>
+    -   tr(A) = `I2`<sub>ij</sub> A<sub>ji</sub>
+    -   dev(A) = `I4d`<sub>ijkl</sub> A<sub>lk</sub>
+    -   sym(A) = `I4s`<sub>ijkl</sub> A<sub>lk</sub>
+*   Taking the hydrostatic and deviatoric or a second order tensor.
+    -   dev(A) = A - `Hydrostatic`(A) * `I2`
+    -   dev(A) = `Deviatoric`(A)
+*   An equivalent value of the deviatoric part to the tensor:
+    -   dev(A)<sub>ij</sub> dev(A)<sub>ji</sub> = `Equivalent_deviatoric`(A)
+
+In addition it provides an `Array` of unit tensors. 
+Suppose that the array is rank three, with shape (R, S, T), then the output is:
+
+*   Second order tensors: (R, S, T, d, d), with `d` the number of dimensions (2 or 3).
+*   Fourth order tensors: (R, S, T, d, d, d, d).
+
+Given that the arrays are row-major, the tensors or each array component are thus 
+stored contiguously in the memory.
 
 # Implementation
 
