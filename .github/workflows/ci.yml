@@ -42,7 +42,7 @@ jobs:
       run: conda env update --file environment_test.yaml
 
     - name: Configure using CMake
-      run: cmake . -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=RELEASE
+      run: cmake . -DBUILD_TESTS=ON
 
     - name: Build C++ tests & examples
       run: cmake --build .

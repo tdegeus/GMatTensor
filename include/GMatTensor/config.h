@@ -7,18 +7,6 @@
 #ifndef GMATTENSOR_H
 #define GMATTENSOR_H
 
-// #include <stdexcept>
-// #include <limits>
-// #include <math.h>
-// #include <xtensor/xadapt.hpp>
-// #include <xtensor/xfixed.hpp>
-// #include <xtensor/xmath.hpp>
-// #include <xtensor/xnoalias.hpp>
-// #include <xtensor/xoperation.hpp>
-// #include <xtensor/xsort.hpp>
-#include <xtensor/xtensor.hpp>
-// #include <xtensor/xview.hpp>
-
 #ifdef GMATTENSOR_ENABLE_ASSERT
 
     #define GMATTENSOR_ASSERT(expr) GMATTENSOR_ASSERT_IMPL(expr, __FILE__, __LINE__)
