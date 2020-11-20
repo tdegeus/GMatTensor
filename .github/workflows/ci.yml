@@ -50,9 +50,10 @@ jobs:
 
     - name: Run C++ tests & examples
       # run: cmake --build . --target "RUN_TESTS_AND_EXAMPLES"
-      run: |
-        ls
-        .\test\unit-test
+      run: ls test
+
+    - name: Run test
+      run: .\test\unit-tests
 
     - name: Build and install Python module
       run: |
