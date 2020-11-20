@@ -29,6 +29,9 @@ jobs:
     - name: Basic GitHub action setup
       uses: actions/checkout@v2
 
+    - name: Enable MSVS for the use of NMake
+      uses: ilammy/msvc-dev-cmd@v1
+
     - name: Set conda environment "test"
       uses: conda-incubator/setup-miniconda@v2
       with:
@@ -42,14 +45,13 @@ jobs:
     - name: Extending conda environment for testing
       run: conda env update --file environment_test.yaml
 
-    - name: Configure using CMake
-      run: cmake . -DBUILD_TESTS=ON
-
-    - name: Build C++ tests & examples
-      run: cmake --build .
+    - name: Configure using CMake & build
+      run: |
+        cmake . -G "NMake Makefiles" -DBUILD_TESTS=ON
+        nmake
 
     - name: Run C++ tests & examples
-      run: cmake --build . --target "RUN_TESTS_AND_EXAMPLES"
+      run: ./test/unit-tests
 
     - name: Build and install Python module
       run: |
