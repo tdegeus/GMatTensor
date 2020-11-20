@@ -172,7 +172,7 @@ namespace detail {
         static_assert(xt::has_fixed_rank_t<T>::value, "Only fixed rank allowed.");
         static_assert(xt::get_rank<T>::value >= 2, "Rank too low.");
         constexpr static size_t rank = xt::get_rank<T>::value;
-        constexpr static size_t scalar_rank = rank - 2;
+        // constexpr static size_t rank - 2 = rank - 2;
         // constexpr static size_t ndim = 2;
         // constexpr static size_t stride = ndim * ndim;
         constexpr static size_t stride = 4;
@@ -180,10 +180,15 @@ namespace detail {
         template <class S>
         static size_t getMatrixSize(const S& arg)
         {
-            size_t ret = 1;
-            for (size_t i = 0; i < scalar_rank; ++i) {
-                ret *= arg[i];
-            }
+            using ST = typename S::value_type;
+            return std::accumulate(arg.cbegin(), arg.cend() - 2, ST(1), std::multiplies<ST>());
+        }
+
+        template <class S>
+        static std::array<size_t, rank - 2> getShapeMatrix(const S& arg)
+        {
+            std::array<size_t, rank - 2> ret;
+            std::copy(arg.cbegin(), arg.cend() - 2, ret.begin());
             return ret;
         }
 
@@ -197,27 +202,14 @@ namespace detail {
         //     return ret;
         // }
 
-        template <class S>
-        static std::array<size_t, scalar_rank> getShapeScalar(const S& arg)
-        {
-            std::cout << scalar_rank << std::endl;
-            std::array<size_t, scalar_rank> ret;
-            if (scalar_rank > 0) {
-                for (size_t i = 0; i < scalar_rank; ++i) {
-                    ret[i] = arg[i];
-                }
-            }
-            return ret;
-        }
-
         // template <class S>
         // static std::array<size_t, rank> getShapeTensor(const S& arg)
         // {
         //     std::array<size_t, rank> ret;
-        //     for (size_t i = 0; i < scalar_rank; ++i) {
+        //     for (size_t i = 0; i < rank - 2; ++i) {
         //         ret[i] = arg[i];
         //     }
-        //     for (size_t i = scalar_rank; i < rank; ++i) {
+        //     for (size_t i = rank - 2; i < rank; ++i) {
         //         ret[i] = ndim;
         //     }
         //     return ret;
@@ -233,7 +225,7 @@ namespace detail {
             }
         }
 
-        static void hydrostatic_no_alloc(const T& A, xt::xtensor<value_type, scalar_rank>& B)
+        static void hydrostatic_no_alloc(const T& A, xt::xtensor<value_type, rank - 2>& B)
         {
             // GMATTENSOR_ASSERT(getShape(A.shape()) == getShapeTensor(B.shape()));
             // #pragma omp parallel for
@@ -244,10 +236,10 @@ namespace detail {
 
         static void equivalent_deviatoric_no_alloc(
             const T& A,
-            xt::xtensor<value_type, scalar_rank>& B)
+            xt::xtensor<value_type, rank - 2>& B)
         {
             // GMATTENSOR_ASSERT(getShape(A.shape()) == getShapeTensor(B.shape()));
-            #pragma omp parallel for
+            // #pragma omp parallel for
             for (size_t i = 0; i < getMatrixSize(A.shape()); ++i) {
                 auto b = detail::pointer::deviatoric_ddot_deviatoric(&A.data()[i * stride]);
                 B.data()[i] = std::sqrt(b);
@@ -263,22 +255,22 @@ namespace detail {
 
         static auto hydrostatic_alloc(const T& A)
         {
-            xt::xtensor<value_type, scalar_rank> B = xt::empty<value_type>(getShapeScalar(A.shape()));
+            xt::xtensor<value_type, rank - 2> B = xt::empty<value_type>(getShapeMatrix(A.shape()));
             hydrostatic_no_alloc(A, B);
             return B;
         }
 
         static auto equivalent_deviatoric_alloc(const T& A)
         {
-            std::cout << scalar_rank << std::endl;
+            // std::cout << rank - 2 << std::endl;
 
-            if constexpr(rank == 2) {
-                xt::xtensor<value_type, 0> B = xt::empty<value_type>(getShapeScalar(A.shape()));
-                equivalent_deviatoric_no_alloc(A, B);
-                return B;
-            }
+            // if constexpr(rank == 2) {
+            //     xt::xtensor<value_type, 0> B = xt::empty<value_type>(getShapeMatrix(A.shape()));
+            //     equivalent_deviatoric_no_alloc(A, B);
+            //     return B;
+            // }
 
-            xt::xtensor<value_type, scalar_rank> B = xt::empty<value_type>(getShapeScalar(A.shape()));
+            xt::xtensor<value_type, rank - 2> B = xt::empty<value_type>(getShapeMatrix(A.shape()));
             equivalent_deviatoric_no_alloc(A, B);
             return B;
         }
