@@ -173,8 +173,9 @@ namespace detail {
         static_assert(xt::get_rank<T>::value >= 2, "Rank too low.");
         constexpr static size_t rank = xt::get_rank<T>::value;
         constexpr static size_t scalar_rank = rank - 2;
-        constexpr static size_t ndim = 2;
-        constexpr static size_t stride = ndim * ndim;
+        // constexpr static size_t ndim = 2;
+        // constexpr static size_t stride = ndim * ndim;
+        constexpr static size_t stride = 4;
 
         template <class S>
         static size_t getMatrixSize(const S& arg)
@@ -186,15 +187,15 @@ namespace detail {
             return ret;
         }
 
-        template <class S>
-        static std::array<size_t, rank> getShape(const S& arg)
-        {
-            std::array<size_t, rank> ret;
-            for (size_t i = 0; i < rank; ++i) {
-                ret[i] = arg[i];
-            }
-            return ret;
-        }
+        // template <class S>
+        // static std::array<size_t, rank> getShape(const S& arg)
+        // {
+        //     std::array<size_t, rank> ret;
+        //     for (size_t i = 0; i < rank; ++i) {
+        //         ret[i] = arg[i];
+        //     }
+        //     return ret;
+        // }
 
         template <class S>
         static std::array<size_t, scalar_rank> getShapeScalar(const S& arg)
@@ -206,23 +207,23 @@ namespace detail {
             return ret;
         }
 
-        template <class S>
-        static std::array<size_t, rank> getShapeTensor(const S& arg)
-        {
-            std::array<size_t, rank> ret;
-            for (size_t i = 0; i < scalar_rank; ++i) {
-                ret[i] = arg[i];
-            }
-            for (size_t i = scalar_rank; i < rank; ++i) {
-                ret[i] = ndim;
-            }
-            return ret;
-        }
+        // template <class S>
+        // static std::array<size_t, rank> getShapeTensor(const S& arg)
+        // {
+        //     std::array<size_t, rank> ret;
+        //     for (size_t i = 0; i < scalar_rank; ++i) {
+        //         ret[i] = arg[i];
+        //     }
+        //     for (size_t i = scalar_rank; i < rank; ++i) {
+        //         ret[i] = ndim;
+        //     }
+        //     return ret;
+        // }
 
         static void deviatoric_no_alloc(const T& A, xt::xtensor<value_type, rank>& B)
         {
-            GMATTENSOR_ASSERT(getShape(A.shape()) == getShapeTensor(B.shape()));
-            GMATTENSOR_ASSERT(getShape(A.shape()) == getShape(B.shape()));
+            // GMATTENSOR_ASSERT(getShape(A.shape()) == getShapeTensor(B.shape()));
+            // GMATTENSOR_ASSERT(getShape(A.shape()) == getShape(B.shape()));
             #pragma omp parallel for
             for (size_t i = 0; i < getMatrixSize(A.shape()); ++i) {
                 detail::pointer::deviatoric(&A.data()[i * stride], &B.data()[i * stride]);
@@ -231,7 +232,7 @@ namespace detail {
 
         static void hydrostatic_no_alloc(const T& A, xt::xtensor<value_type, scalar_rank>& B)
         {
-            GMATTENSOR_ASSERT(getShape(A.shape()) == getShapeTensor(B.shape()));
+            // GMATTENSOR_ASSERT(getShape(A.shape()) == getShapeTensor(B.shape()));
             #pragma omp parallel for
             for (size_t i = 0; i < getMatrixSize(A.shape()); ++i) {
                 B.data()[i] = 0.5 * detail::pointer::trace(&A.data()[i * stride]);
@@ -242,7 +243,7 @@ namespace detail {
             const T& A,
             xt::xtensor<value_type, scalar_rank>& B)
         {
-            GMATTENSOR_ASSERT(getShape(A.shape()) == getShapeTensor(B.shape()));
+            // GMATTENSOR_ASSERT(getShape(A.shape()) == getShapeTensor(B.shape()));
             #pragma omp parallel for
             for (size_t i = 0; i < getMatrixSize(A.shape()); ++i) {
                 auto b = detail::pointer::deviatoric_ddot_deviatoric(&A.data()[i * stride]);
