@@ -53,23 +53,35 @@ T.W.J. de Geus (Tom) | tom@geus.me | www.geus.me |
 
 This library implements for a Cartesian coordinate frame in 2d or in 3d:
 
-*   Second and fourth order unit tensors.
-*   Fourth order projection tensors: symmetric, deviatoric, right- and left-transposed:
+*   Second (`I2`) and fourth (`I4`) order unit tensors:
     -   A<sub>ik</sub> = `I2`<sub>ij</sub> A<sub>jk</sub>
+    -   A<sub>ij</sub> = `I4`<sub>ijkl</sub> A<sub>lk</sub>
+*   Fourth order projection tensors: symmetric, deviatoric, right- and left-transposed:
     -   tr(A) = `I2`<sub>ij</sub> A<sub>ji</sub>
     -   dev(A) = `I4d`<sub>ijkl</sub> A<sub>lk</sub>
     -   sym(A) = `I4s`<sub>ijkl</sub> A<sub>lk</sub>
 *   Taking the hydrostatic and deviatoric or a second order tensor.
-    -   dev(A) = A - `Hydrostatic`(A) * `I2`
-    -   dev(A) = `Deviatoric`(A)
+    -   dev(A) = A - `Hydrostatic(A)` * `I2`
+    -   dev(A) = `Deviatoric(A)`
 *   An equivalent value of the deviatoric part to the tensor:
-    -   dev(A)<sub>ij</sub> dev(A)<sub>ji</sub> = `Equivalent_deviatoric`(A)
+    -   dev(A)<sub>ij</sub> dev(A)<sub>ji</sub> = `Equivalent_deviatoric(A)`
 
-In addition it provides an `Array` of unit tensors. 
+In addition it provides an `Array<rank>` of unit tensors. 
 Suppose that the array is rank three, with shape (R, S, T), then the output is:
 
 *   Second order tensors: (R, S, T, d, d), with `d` the number of dimensions (2 or 3).
 *   Fourth order tensors: (R, S, T, d, d, d, d).
+
+E.g.
+```cpp
+auto i = GMatTensor::Array<3>({4, 5, 6}).I2();
+auto i = GMatTensor::Array<3>({4, 5, 6}).I4();
+auto i = GMatTensor::Array<3>({4, 5, 6}).II();
+auto i = GMatTensor::Array<3>({4, 5, 6}).I4d();
+auto i = GMatTensor::Array<3>({4, 5, 6}).I4s();
+auto i = GMatTensor::Array<3>({4, 5, 6}).I4rt();
+auto i = GMatTensor::Array<3>({4, 5, 6}).I4lt();
+```
 
 Given that the arrays are row-major, the tensors or each array component are thus 
 stored contiguously in the memory.
