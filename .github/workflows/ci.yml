@@ -43,10 +43,10 @@ jobs:
       run: conda env update --file environment_test.yaml
 
     - name: Configure using CMake
-      run: cmake . -DBUILD_TESTS=ON
+      run: cmake . -G "NMake Makefiles" -DBUILD_TESTS=ON
 
     - name: Build C++ tests & examples
-      run: cmake --build .
+      run: nmake
 
     - name: Run C++ tests & examples
       # run: cmake --build . --target "RUN_TESTS_AND_EXAMPLES"
