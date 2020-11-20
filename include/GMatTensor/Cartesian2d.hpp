@@ -268,7 +268,7 @@ namespace detail {
         static auto equivalent_deviatoric_alloc(const T& A)
         {
             if constexpr(rank == 2) {
-                xt::xtensor<value_type, 0> B = xt::empty<value_type>(std::array<size_t, 0>{});
+                xt::xtensor<value_type, 0> B = xt::empty<value_type>(getShapeScalar(A.shape()));
                 equivalent_deviatoric_no_alloc(A, B);
                 return B;
             }
