@@ -18,14 +18,14 @@ namespace GMatTensor {
 namespace Cartesian3d {
 
 // Type alias
-#if defined(_WIN32) || defined(_WIN64)
+// #if defined(_WIN32) || defined(_WIN64)
     using Tensor2 = xt::xtensor<double, 2>;
     using Tensor4 = xt::xtensor<double, 4>;
-#else
-    #include <xtensor/xfixed.hpp>
-    using Tensor2 = xt::xtensor_fixed<double, xt::xshape<3, 3>>;
-    using Tensor4 = xt::xtensor_fixed<double, xt::xshape<3, 3, 3, 3>>;
-#endif
+// #else
+//     #include <xtensor/xfixed.hpp>
+//     using Tensor2 = xt::xtensor_fixed<double, xt::xshape<3, 3>>;
+//     using Tensor4 = xt::xtensor_fixed<double, xt::xshape<3, 3, 3, 3>>;
+// #endif
 
 // Unit tensors
 inline Tensor2 I2();
