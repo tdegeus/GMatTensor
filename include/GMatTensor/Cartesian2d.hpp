@@ -171,10 +171,10 @@ namespace detail {
         using shape_type = typename T::shape_type;
         static_assert(xt::has_fixed_rank_t<T>::value, "Only fixed rank allowed.");
         static_assert(xt::get_rank<T>::value >= 2, "Rank too low.");
-        static const size_t rank = xt::get_rank<T>::value;
-        static const size_t scalar_rank = rank - 2;
-        static const size_t ndim = 2;
-        static const size_t stride = ndim * ndim;
+        constexpr static size_t rank = xt::get_rank<T>::value;
+        constexpr static size_t scalar_rank = rank - 2;
+        constexpr static size_t ndim = 2;
+        constexpr static size_t stride = ndim * ndim;
 
         template <class S>
         static size_t getMatrixSize(const S& arg)
