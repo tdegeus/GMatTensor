@@ -48,6 +48,7 @@ jobs:
       run: cmake --build .
 
     - name: Run C++ tests & examples
+      if: runner.os != 'Windows'
       run: cmake --build . --target "RUN_TESTS_AND_EXAMPLES"
 
     - name: Build and install Python module
