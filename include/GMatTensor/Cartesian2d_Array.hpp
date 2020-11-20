@@ -42,7 +42,7 @@ inline xt::xtensor<double, N + 2> Array<N>::I2() const
 
     #pragma omp parallel
     {
-        Tensor2 unit = Cartesian2d::I2();
+        auto unit = Cartesian2d::I2();
         size_t stride = m_ndim * m_ndim;
 
         #pragma omp for
@@ -62,7 +62,7 @@ inline xt::xtensor<double, N + 4> Array<N>::II() const
 
     #pragma omp parallel
     {
-        Tensor4 unit = Cartesian2d::II();
+        auto unit = Cartesian2d::II();
         size_t stride = m_ndim * m_ndim * m_ndim * m_ndim;
 
         #pragma omp for
@@ -82,7 +82,7 @@ inline xt::xtensor<double, N + 4> Array<N>::I4() const
 
     #pragma omp parallel
     {
-        Tensor4 unit = Cartesian2d::I4();
+        auto unit = Cartesian2d::I4();
         size_t stride = m_ndim * m_ndim * m_ndim * m_ndim;
 
         #pragma omp for
@@ -102,7 +102,7 @@ inline xt::xtensor<double, N + 4> Array<N>::I4rt() const
 
     #pragma omp parallel
     {
-        Tensor4 unit = Cartesian2d::I4rt();
+        auto unit = Cartesian2d::I4rt();
         size_t stride = m_ndim * m_ndim * m_ndim * m_ndim;
 
         #pragma omp for
@@ -122,7 +122,7 @@ inline xt::xtensor<double, N + 4> Array<N>::I4s() const
 
     #pragma omp parallel
     {
-        Tensor4 unit = Cartesian2d::I4s();
+        auto unit = Cartesian2d::I4s();
         size_t stride = m_ndim * m_ndim * m_ndim * m_ndim;
 
         #pragma omp for
@@ -142,7 +142,7 @@ inline xt::xtensor<double, N + 4> Array<N>::I4d() const
 
     #pragma omp parallel
     {
-        Tensor4 unit = Cartesian2d::I4d();
+        auto unit = Cartesian2d::I4d();
         size_t stride = m_ndim * m_ndim * m_ndim * m_ndim;
 
         #pragma omp for

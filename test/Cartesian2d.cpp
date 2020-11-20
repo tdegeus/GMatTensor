@@ -8,69 +8,69 @@
 
 namespace GM = GMatTensor::Cartesian2d;
 
-// namespace Prod2d {
+namespace Prod2d {
 
-//     template <class T, class S>
-//     S A4_ddot_B2(const T& A, const S& B)
-//     {
-//         S C = xt::empty<double>({2, 2});
-//         C.fill(0.0);
+    template <class T, class S>
+    S A4_ddot_B2(const T& A, const S& B)
+    {
+        S C = xt::empty<double>({2, 2});
+        C.fill(0.0);
 
-//         for (size_t i = 0; i < 2; i++) {
-//             for (size_t j = 0; j < 2; j++) {
-//                 for (size_t k = 0; k < 2; k++) {
-//                     for (size_t l = 0; l < 2; l++) {
-//                         C(i, j) += A(i, j, k, l) * B(l, k);
-//                     }
-//                 }
-//             }
-//         }
+        for (size_t i = 0; i < 2; i++) {
+            for (size_t j = 0; j < 2; j++) {
+                for (size_t k = 0; k < 2; k++) {
+                    for (size_t l = 0; l < 2; l++) {
+                        C(i, j) += A(i, j, k, l) * B(l, k);
+                    }
+                }
+            }
+        }
 
-//         return C;
-//     }
+        return C;
+    }
 
-// } // namespace Prod2d
+} // namespace Prod2d
 
 TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
 {
 
-    // SECTION("I4")
-    // {
-    //     GM::Tensor2 A = xt::random::randn<double>({2, 2});
-    //     GM::Tensor4 I = GM::I4();
-    //     REQUIRE(xt::allclose(Prod2d::A4_ddot_B2(I, A), A));
-    // }
+    SECTION("I4")
+    {
+        xt::xtensor<double, 2> A = xt::random::randn<double>({2, 2});
+        xt::xtensor<double, 4> I = GM::I4();
+        REQUIRE(xt::allclose(Prod2d::A4_ddot_B2(I, A), A));
+    }
 
-    // SECTION("I4s")
-    // {
-    //     GM::Tensor2 A = xt::random::randn<double>({2, 2});
-    //     GM::Tensor4 Is = GM::I4s();
-    //     REQUIRE(xt::allclose(Prod2d::A4_ddot_B2(Is, A), 0.5 * (A + xt::transpose(A))));
-    // }
+    SECTION("I4s")
+    {
+        xt::xtensor<double, 2> A = xt::random::randn<double>({2, 2});
+        xt::xtensor<double, 4> Is = GM::I4s();
+        REQUIRE(xt::allclose(Prod2d::A4_ddot_B2(Is, A), 0.5 * (A + xt::transpose(A))));
+    }
 
-    // SECTION("I4d")
-    // {
-    //     GM::Tensor2 A = xt::random::randn<double>({2, 2});
-    //     GM::Tensor2 I = GM::I2();
-    //     GM::Tensor4 Id = GM::I4d();
-    //     GM::Tensor2 B = 0.5 * (A + xt::transpose(A));
-    //     REQUIRE(xt::allclose(Prod2d::A4_ddot_B2(Id, A), B - GM::Hydrostatic(B) * I));
-    // }
+    SECTION("I4d")
+    {
+        xt::xtensor<double, 2> A = xt::random::randn<double>({2, 2});
+        xt::xtensor<double, 2> I = GM::I2();
+        xt::xtensor<double, 4> Id = GM::I4d();
+        xt::xtensor<double, 2> B = 0.5 * (A + xt::transpose(A));
+        REQUIRE(xt::allclose(Prod2d::A4_ddot_B2(Id, A), B - GM::Hydrostatic(B) * I));
+    }
 
-    // SECTION("Deviatoric - Tensor2")
-    // {
-    //     GM::Tensor2 A = xt::random::randn<double>({2, 2});
-    //     GM::Tensor2 B = A;
-    //     double tr = B(0, 0) + B(1, 1);
-    //     B(0, 0) -= 0.5 * tr;
-    //     B(1, 1) -= 0.5 * tr;
-    //     REQUIRE(xt::allclose(GM::Deviatoric(A), B));
-    // }
+    SECTION("Deviatoric - Tensor2")
+    {
+        xt::xtensor<double, 2> A = xt::random::randn<double>({2, 2});
+        xt::xtensor<double, 2> B = A;
+        double tr = B(0, 0) + B(1, 1);
+        B(0, 0) -= 0.5 * tr;
+        B(1, 1) -= 0.5 * tr;
+        REQUIRE(xt::allclose(GM::Deviatoric(A), B));
+    }
 
     SECTION("Deviatoric - List")
     {
-        GM::Tensor2 A = xt::random::randn<double>({2, 2});
-        GM::Tensor2 B = A;
+        xt::xtensor<double, 2> A = xt::random::randn<double>({2, 2});
+        xt::xtensor<double, 2> B = A;
         double tr = B(0, 0) + B(1, 1);
         B(0, 0) -= 0.5 * tr;
         B(1, 1) -= 0.5 * tr;
@@ -85,8 +85,8 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
 
     SECTION("Deviatoric - Matrix")
     {
-        GM::Tensor2 A = xt::random::randn<double>({2, 2});
-        GM::Tensor2 B = A;
+        xt::xtensor<double, 2> A = xt::random::randn<double>({2, 2});
+        xt::xtensor<double, 2> B = A;
         double tr = B(0, 0) + B(1, 1);
         B(0, 0) -= 0.5 * tr;
         B(1, 1) -= 0.5 * tr;
@@ -101,17 +101,17 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
         REQUIRE(xt::allclose(GM::Deviatoric(M), R));
     }
 
-    // SECTION("Hydrostatic - Tensor2")
-    // {
-    //     GM::Tensor2 A = xt::random::randn<double>({2, 2});
-    //     A(0, 0) = 1.0;
-    //     A(1, 1) = 1.0;
-    //     REQUIRE(GM::Hydrostatic(A)() == Approx(1.0));
-    // }
+    SECTION("Hydrostatic - Tensor2")
+    {
+        xt::xtensor<double, 2> A = xt::random::randn<double>({2, 2});
+        A(0, 0) = 1.0;
+        A(1, 1) = 1.0;
+        REQUIRE(GM::Hydrostatic(A)() == Approx(1.0));
+    }
 
     SECTION("Hydrostatic - List")
     {
-        GM::Tensor2 A = xt::random::randn<double>({2, 2});
+        xt::xtensor<double, 2> A = xt::random::randn<double>({2, 2});
         A(0, 0) = 1.0;
         A(1, 1) = 1.0;
         auto M = xt::xtensor<double,3>::from_shape({3, 2, 2});
@@ -125,7 +125,7 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
 
     SECTION("Hydrostatic - Matrix")
     {
-        GM::Tensor2 A = xt::random::randn<double>({2, 2});
+        xt::xtensor<double, 2> A = xt::random::randn<double>({2, 2});
         A(0, 0) = 1.0;
         A(1, 1) = 1.0;
         auto M = xt::xtensor<double,4>::from_shape({3, 4, 2, 2});
@@ -141,7 +141,7 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
 
     SECTION("Equivalent_deviatoric - Tensor2")
     {
-        GM::Tensor2 A = xt::zeros<double>({2, 2});
+        xt::xtensor<double, 2> A = xt::zeros<double>({2, 2});
         A(0, 1) = 1.0;
         A(1, 0) = 1.0;
         REQUIRE(GM::Equivalent_deviatoric(A)() == Approx(std::sqrt(2.0)));
@@ -149,7 +149,7 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
 
     SECTION("Equivalent_deviatoric - List")
     {
-        GM::Tensor2 A = xt::zeros<double>({2, 2});
+        xt::xtensor<double, 2> A = xt::zeros<double>({2, 2});
         A(0, 1) = 1.0;
         A(1, 0) = 1.0;
         auto M = xt::xtensor<double,3>::from_shape({3, 2, 2});
@@ -163,7 +163,7 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
 
     SECTION("Equivalent_deviatoric - Matrix")
     {
-        GM::Tensor2 A = xt::zeros<double>({2, 2});
+        xt::xtensor<double, 2> A = xt::zeros<double>({2, 2});
         A(0, 1) = 1.0;
         A(1, 0) = 1.0;
         auto M = xt::xtensor<double,4>::from_shape({3, 4, 2, 2});

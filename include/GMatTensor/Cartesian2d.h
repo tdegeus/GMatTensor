@@ -17,23 +17,13 @@
 namespace GMatTensor {
 namespace Cartesian2d {
 
-// Type alias
-// #if defined(_WIN32) || defined(_WIN64)
-    using Tensor2 = xt::xtensor<double, 2>;
-    using Tensor4 = xt::xtensor<double, 4>;
-// #else
-//     #include <xtensor/xfixed.hpp>
-//     using Tensor2 = xt::xtensor_fixed<double, xt::xshape<2, 2>>;
-//     using Tensor4 = xt::xtensor_fixed<double, xt::xshape<2, 2, 2, 2>>;
-// #endif
-
 // Unit tensors
-inline Tensor2 I2();
-inline Tensor4 II();
-inline Tensor4 I4();
-inline Tensor4 I4rt();
-inline Tensor4 I4s();
-inline Tensor4 I4d();
+inline xt::xtensor<double, 2> I2();
+inline xt::xtensor<double, 4> II();
+inline xt::xtensor<double, 4> I4();
+inline xt::xtensor<double, 4> I4rt();
+inline xt::xtensor<double, 4> I4s();
+inline xt::xtensor<double, 4> I4d();
 
 // Tensor decomposition
 template <class T, class U>
