@@ -151,7 +151,7 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
         // std::cout << GM::Equivalent_deviatoric(A)() << std::endl;
         // double eq = GM::Equivalent_deviatoric(A)();
         // REQUIRE(eq == Approx(std::sqrt(2.0)));
-        auto eq = GM::Equivalent_deviatoric(A);
+        // auto eq = GM::Equivalent_deviatoric(A);
     }
 
     SECTION("Equivalent_deviatoric - List")
