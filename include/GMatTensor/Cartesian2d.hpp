@@ -200,6 +200,7 @@ namespace detail {
         template <class S>
         static std::array<size_t, scalar_rank> getShapeScalar(const S& arg)
         {
+            std::cout << scalar_rank << std::endl;
             std::array<size_t, scalar_rank> ret;
             for (size_t i = 0; i < scalar_rank; ++i) {
                 ret[i] = arg[i];
@@ -267,6 +268,8 @@ namespace detail {
 
         static auto equivalent_deviatoric_alloc(const T& A)
         {
+            std::cout << scalar_rank << std::endl;
+
             if constexpr(rank == 2) {
                 xt::xtensor<value_type, 0> B = xt::empty<value_type>(getShapeScalar(A.shape()));
                 equivalent_deviatoric_no_alloc(A, B);
