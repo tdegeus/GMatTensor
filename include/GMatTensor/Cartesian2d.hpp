@@ -202,8 +202,10 @@ namespace detail {
         {
             std::cout << scalar_rank << std::endl;
             std::array<size_t, scalar_rank> ret;
-            for (size_t i = 0; i < scalar_rank; ++i) {
-                ret[i] = arg[i];
+            if (scalar_rank > 0) {
+                for (size_t i = 0; i < scalar_rank; ++i) {
+                    ret[i] = arg[i];
+                }
             }
             return ret;
         }
