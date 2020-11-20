@@ -8,7 +8,7 @@ endif()
 
 option(XSIMD "Use xsimd and 'march=native' optimisations" OFF)
 
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Debug)
 
 find_package(Catch2 REQUIRED)
 find_package(xtensor REQUIRED)
@@ -21,6 +21,7 @@ add_executable(${test_name} main.cpp Cartesian2d.cpp)
 target_link_libraries(${test_name} PRIVATE Catch2::Catch2 GMatTensor)
 target_link_libraries(${test_name} PRIVATE GMatTensor::compiler_warnings)
 target_link_libraries(${test_name} PRIVATE GMatTensor::assert)
+target_link_libraries(${test_name} PRIVATE GMatTensor::debug)
 
 if(XSIMD)
     target_link_libraries(${test_name} PRIVATE xtensor::optimize xtensor::use_xsimd)
