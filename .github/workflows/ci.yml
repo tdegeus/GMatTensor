@@ -14,7 +14,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        runs-on: [ubuntu-latest, macos-latest, windows-latest]
+        # runs-on: [ubuntu-latest, macos-latest, windows-latest]
+        runs-on: [windows-latest]
 
     defaults:
       run:
@@ -48,7 +49,6 @@ jobs:
       run: cmake --build .
 
     - name: Run C++ tests & examples
-      if: runner.os != 'Windows'
       run: cmake --build . --target "RUN_TESTS_AND_EXAMPLES"
 
     - name: Build and install Python module
