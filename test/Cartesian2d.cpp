@@ -101,13 +101,13 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
         REQUIRE(xt::allclose(GM::Deviatoric(M), R));
     }
 
-    // SECTION("Hydrostatic - Tensor2")
-    // {
-    //     GM::Tensor2 A = xt::random::randn<double>({2, 2});
-    //     A(0, 0) = 1.0;
-    //     A(1, 1) = 1.0;
-    //     REQUIRE(GM::Hydrostatic(A)() == Approx(1.0));
-    // }
+    SECTION("Hydrostatic - Tensor2")
+    {
+        GM::Tensor2 A = xt::random::randn<double>({2, 2});
+        A(0, 0) = 1.0;
+        A(1, 1) = 1.0;
+        REQUIRE(GM::Hydrostatic(A)() == Approx(1.0));
+    }
 
     SECTION("Hydrostatic - List")
     {
