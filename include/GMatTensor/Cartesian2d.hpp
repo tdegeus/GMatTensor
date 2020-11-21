@@ -88,29 +88,6 @@ inline xt::xtensor<double, 4> I4d()
 namespace detail {
 
     template <class T>
-    inline auto trace(const T A)
-    {
-        return A[0] + A[3];
-    }
-
-    template <class T, class U>
-    inline void deviatoric(const T A, U ret)
-    {
-        auto m = 0.5 * (A[0] + A[3]);
-        ret[0] = A[0] - m;
-        ret[1] = A[1];
-        ret[2] = A[2];
-        ret[3] = A[3] - m;
-    }
-
-    template <class T>
-    inline auto deviatoric_ddot_deviatoric(const T A)
-    {
-        auto m = 0.5 * (A[0] + A[3]);
-        return (A[0] - m) * (A[0] - m) + 2.0 * A[1] * A[1] + (A[3] - m) * (A[3] - m);
-    }
-
-    template <class T>
     struct equiv_impl
     {
         using value_type = typename T::value_type;
@@ -144,21 +121,23 @@ namespace detail {
             return ret;
         }
 
-        static void deviatoric_no_alloc(const T& A, xt::xtensor<value_type, rank>& B)
-        {
-            GMATTENSOR_ASSERT(xt::has_shape(A, toShape(A.shape())));
-            GMATTENSOR_ASSERT(xt::has_shape(A, B.shape()));
-            for (size_t i = 0; i < toMatrixSize(A.shape()); ++i) {
-                detail::deviatoric(&A.data()[i * 4], &B.data()[i * 4]);
-            }
-        }
-
         static void hydrostatic_no_alloc(const T& A, xt::xtensor<value_type, rank - 2>& B)
         {
             GMATTENSOR_ASSERT(xt::has_shape(A, toShape(A.shape())));
             GMATTENSOR_ASSERT(xt::has_shape(B, toMatrixShape(A.shape())));
+            #pragma omp parallel for
             for (size_t i = 0; i < toMatrixSize(A.shape()); ++i) {
-                B.data()[i] = 0.5 * detail::trace(&A.data()[i * 4]);
+                B.data()[i] = 0.5 * pointer::trace(&A.data()[i * 4]);
+            }
+        }
+
+        static void deviatoric_no_alloc(const T& A, xt::xtensor<value_type, rank>& B)
+        {
+            GMATTENSOR_ASSERT(xt::has_shape(A, toShape(A.shape())));
+            GMATTENSOR_ASSERT(xt::has_shape(A, B.shape()));
+            #pragma omp parallel for
+            for (size_t i = 0; i < toMatrixSize(A.shape()); ++i) {
+                pointer::hydrostatic_deviatoric(&A.data()[i * 4], &B.data()[i * 4]);
             }
         }
 
@@ -166,23 +145,24 @@ namespace detail {
         {
             GMATTENSOR_ASSERT(xt::has_shape(A, toShape(A.shape())));
             GMATTENSOR_ASSERT(xt::has_shape(B, toMatrixShape(A.shape())));
+            #pragma omp parallel for
             for (size_t i = 0; i < toMatrixSize(A.shape()); ++i) {
-                auto b = detail::deviatoric_ddot_deviatoric(&A.data()[i * 4]);
+                auto b = pointer::deviatoric_ddot_deviatoric(&A.data()[i * 4]);
                 B.data()[i] = std::sqrt(b);
             }
-        }
-
-        static auto deviatoric_alloc(const T& A)
-        {
-            xt::xtensor<value_type, rank> B = xt::empty<value_type>(A.shape());
-            deviatoric_no_alloc(A, B);
-            return B;
         }
 
         static auto hydrostatic_alloc(const T& A)
         {
             xt::xtensor<value_type, rank - 2> B = xt::empty<value_type>(toMatrixShape(A.shape()));
             hydrostatic_no_alloc(A, B);
+            return B;
+        }
+
+        static auto deviatoric_alloc(const T& A)
+        {
+            xt::xtensor<value_type, rank> B = xt::empty<value_type>(A.shape());
+            deviatoric_no_alloc(A, B);
             return B;
         }
 
@@ -231,6 +211,44 @@ inline auto Equivalent_deviatoric(const T& A)
 {
     return detail::equiv_impl<T>::equivalent_deviatoric_alloc(A);
 }
+
+namespace pointer {
+
+    template <class T>
+    inline auto trace(const T A)
+    {
+        return A[0] + A[3];
+    }
+
+    template <class T, class U>
+    inline auto hydrostatic_deviatoric(const T A, U ret)
+    {
+        auto m = 0.5 * (A[0] + A[3]);
+        ret[0] = A[0] - m;
+        ret[1] = A[1];
+        ret[2] = A[2];
+        ret[3] = A[3] - m;
+        return m;
+    }
+
+    template <class T>
+    inline auto deviatoric_ddot_deviatoric(const T A)
+    {
+        auto m = 0.5 * (A[0] + A[3]);
+        return (A[0] - m) * (A[0] - m)
+             + (A[3] - m) * (A[3] - m)
+             + 2.0 * A[1] * A[1];
+    }
+
+    template <class T, class U>
+    inline auto A2_ddot_B2(const T A, const U B)
+    {
+        return A[0] * B[0]
+             + A[3] * B[3]
+             + 2.0 * A[1] * B[1];
+    }
+
+} // namespace pointer
 
 } // namespace Cartesian2d
 } // namespace GMatTensor

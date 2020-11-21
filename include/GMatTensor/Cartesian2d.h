@@ -25,13 +25,14 @@ inline xt::xtensor<double, 4> I4rt();
 inline xt::xtensor<double, 4> I4s();
 inline xt::xtensor<double, 4> I4d();
 
-// Tensor decomposition
+// Hydrostatic part of a tensor (== trace(A) / 2)
 template <class T, class U>
 inline void hydrostatic(const T& A, U& B);
 
 template <class T>
 inline auto Hydrostatic(const T& A);
 
+// Deviatoric part of a tensor
 template <class T, class U>
 inline void deviatoric(const T& A, U& B);
 
@@ -76,6 +77,22 @@ protected:
     std::array<size_t, N + 2> m_shape_tensor2;
     std::array<size_t, N + 4> m_shape_tensor4;
 };
+
+namespace pointer {
+
+    template <class T>
+    inline auto trace(const T A);
+
+    template <class T, class U>
+    inline auto hydrostatic_deviatoric(const T A, U ret);
+
+    template <class T>
+    inline auto deviatoric_ddot_deviatoric(const T A);
+
+    template <class T, class U>
+    inline auto A2_ddot_B2(const T A, const U B);
+
+} // namespace pointer
 
 } // namespace Cartesian2d
 } // namespace GMatTensor

@@ -17,31 +17,22 @@
 namespace GMatTensor {
 namespace Cartesian3d {
 
-// Type alias
-// #if defined(_WIN32) || defined(_WIN64)
-    using Tensor2 = xt::xtensor<double, 2>;
-    using Tensor4 = xt::xtensor<double, 4>;
-// #else
-//     #include <xtensor/xfixed.hpp>
-//     using Tensor2 = xt::xtensor_fixed<double, xt::xshape<3, 3>>;
-//     using Tensor4 = xt::xtensor_fixed<double, xt::xshape<3, 3, 3, 3>>;
-// #endif
-
 // Unit tensors
-inline Tensor2 I2();
-inline Tensor4 II();
-inline Tensor4 I4();
-inline Tensor4 I4rt();
-inline Tensor4 I4s();
-inline Tensor4 I4d();
+inline xt::xtensor<double, 2> I2();
+inline xt::xtensor<double, 4> II();
+inline xt::xtensor<double, 4> I4();
+inline xt::xtensor<double, 4> I4rt();
+inline xt::xtensor<double, 4> I4s();
+inline xt::xtensor<double, 4> I4d();
 
-// Tensor decomposition
+// Hydrostatic part of a tensor (== trace(A) / 3)
 template <class T, class U>
 inline void hydrostatic(const T& A, U& B);
 
 template <class T>
 inline auto Hydrostatic(const T& A);
 
+// Deviatoric part of a tensor
 template <class T, class U>
 inline void deviatoric(const T& A, U& B);
 
@@ -86,6 +77,22 @@ protected:
     std::array<size_t, N + 2> m_shape_tensor2;
     std::array<size_t, N + 4> m_shape_tensor4;
 };
+
+namespace pointer {
+
+    template <class T>
+    inline auto trace(const T A);
+
+    template <class T, class U>
+    inline auto hydrostatic_deviatoric(const T A, U ret);
+
+    template <class T>
+    inline auto deviatoric_ddot_deviatoric(const T A);
+
+    template <class T, class U>
+    inline auto A2_ddot_B2(const T A, const U B);
+
+} // namespace pointer
 
 } // namespace Cartesian3d
 } // namespace GMatTensor
