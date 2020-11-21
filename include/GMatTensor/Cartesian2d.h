@@ -32,21 +32,21 @@ inline void hydrostatic(const T& A, U& B);
 template <class T>
 inline auto Hydrostatic(const T& A);
 
-// Deviatoric part of a tensor
+// Deviatoric part of a tensor (== A - Hydrostatic(A) * I2)
 template <class T, class U>
 inline void deviatoric(const T& A, U& B);
 
 template <class T>
 inline auto Deviatoric(const T& A);
 
-// Equivalent value of the tensor's deviator
+// Equivalent value of the tensor's deviator: (dev(A))_ij (dev(A))_ji
 template <class T, class U>
 inline void equivalent_deviatoric(const T& A, U& B);
 
 template <class T>
 inline auto Equivalent_deviatoric(const T& A);
 
-// Array of tensors
+// Array of tensors: shape (..., d, d), e.g. (R, S, T, d, d)
 template <size_t N>
 class Array
 {
@@ -57,10 +57,10 @@ public:
     Array() = default;
     Array(const std::array<size_t, N>& shape);
 
-    // Shape
+    // Shape of the array (excluding the two additional tensor ranks), e,g. (R, S, T)
     std::array<size_t, N> shape() const;
 
-    // Array of unit tensors
+    // Array of unit tensors, shape (..., d, d), e.g. (R, S, T, d, d)
     xt::xtensor<double, N + 2> I2() const;
     xt::xtensor<double, N + 4> II() const;
     xt::xtensor<double, N + 4> I4() const;
@@ -78,6 +78,8 @@ protected:
     std::array<size_t, N + 4> m_shape_tensor4;
 };
 
+// API for pure-tensor with pointer-on;y input
+// Storage convention: (xx, xy, yx, yy)
 namespace pointer {
 
     template <class T>

@@ -10,8 +10,10 @@ Tensor definitions supporting several GMat models.
 
 - [Disclaimer](#disclaimer)
 - [Functionality](#functionality)
+    - [Unit tensors](#unit-tensors)
+    - [Tensor operations](#tensor-operations)
+    - [Tensor operations \(semi-public API\)](#tensor-operations-semi-public-api)
 - [Implementation](#implementation)
-    - [Naming convention](#naming-convention)
     - [C++ and Python](#c-and-python)
 - [Installation](#installation)
     - [C++ headers](#c-headers)
@@ -51,20 +53,18 @@ T.W.J. de Geus (Tom) | tom@geus.me | www.geus.me |
 
 # Functionality
 
+## Unit tensors
+
 This library implements for a Cartesian coordinate frame in 2d or in 3d:
 
 *   Second (`I2`) and fourth (`I4`) order unit tensors:
-    -   A<sub>ik</sub> = `I2`<sub>ij</sub> A<sub>jk</sub>
-    -   A<sub>ij</sub> = `I4`<sub>ijkl</sub> A<sub>lk</sub>
+    -   *A*<sub>ik</sub> = `I2`<sub>ij</sub> *A*<sub>jk</sub>
+    -   *A*<sub>ij</sub> = `I4`<sub>ijkl</sub> *A*<sub>lk</sub>
 *   Fourth order projection tensors: symmetric, deviatoric, right- and left-transposed:
-    -   tr(A) = `I2`<sub>ij</sub> A<sub>ji</sub>
-    -   dev(A) = `I4d`<sub>ijkl</sub> A<sub>lk</sub>
-    -   sym(A) = `I4s`<sub>ijkl</sub> A<sub>lk</sub>
-*   Taking the hydrostatic and deviatoric or a second order tensor.
-    -   dev(A) = A - `Hydrostatic(A)` * `I2`
-    -   dev(A) = `Deviatoric(A)`
-*   An equivalent value of the deviatoric part to the tensor:
-    -   dev(A)<sub>ij</sub> dev(A)<sub>ji</sub> = `Equivalent_deviatoric(A)`
+    -   tr(*A*) = `I2`<sub>ij</sub> *A*<sub>ji</sub>
+    -   dev(*A*) = `I4d`<sub>ijkl</sub> *A*<sub>lk</sub>
+    -   sym(*A*) = `I4s`<sub>ijkl</sub> *A*<sub>lk</sub>
+    -   transpose(*A*) = `I4rt`<sub>ijkl</sub> *A*<sub>lk</sub>
 
 In addition it provides an `Array<rank>` of unit tensors. 
 Suppose that the array is rank three, with shape (R, S, T), then the output is:
@@ -86,13 +86,51 @@ auto i = GMatTensor::Array<3>({4, 5, 6}).I4lt();
 Given that the arrays are row-major, the tensors or each array component are thus 
 stored contiguously in the memory.
 
-# Implementation
+## Tensor operations
 
-## Naming convention
+*   Taking the hydrostatic and deviatoric of a(n array of) second order tensor(s).
+    -   tr(*A*) / *d* = `Hydrostatic(A)`
+    -   dev(*A*) = A - `Hydrostatic(A)` * `I2`
+    -   dev(*A*) = `Deviatoric(A)`
+*   An equivalent value of the deviatoric part of a(n array of) second order tensor(s).
+    -   dev(*A*)<sub>ij</sub> dev(A)<sub>ji</sub> = `Equivalent_deviatoric(A)`
+
+Note that the output has:
+
+*   The same rank of the input: `Deviatoric`.
+*   The rank of the input minus two: `Hydrostatic`, `Equivalent_deviatoric`.
+    -   In the case of an input tensor (input shape `(d, d)`), this results in a rank-zero matrix.
+        To get a scalar do e.g. `Hydrostatic(A)()`.
+    -   In the case of an input array of tensors this results in the array. 
+        E.g. for input shape `(R, S, T, d, d)`, the output shape is `(R, S, T)`.
+
+Furthermore note that:
 
 *   Functions whose name starts with a capital letter allocate and return their output.
 *   Functions whose name starts with a small letter require their output as final
     input parameter(s), which is changed in-place.
+
+## Tensor operations (semi-public API)
+
+A semi-public API exists that is mostly aimed to support *GMat* implementation.
+These involve pure-tensor operations based the input (and the output) as a pointer, 
+using the following storage convention:
+
+*   Cartesian2d: (xx, xy, yx, yy).
+*   Cartesian3d: (xx, xy, xz, yx, yy, yz, zx, zy, zz).
+
+This part of the API does not support arrays of tensors.
+The following functions are available:
+
+*   `t = trace(A)`: return the trace *t* = *A*<sub>ii</sub>.
+*   `m = hydrostatic_deviatoric(A, B)`: returns the hydrostatic part of *A* (`== trace(A) / d`),
+    and writes its deviatoric part to *B*.
+*   `deviatoric_ddot_deviatoric(A)`: returns the double-dot product of the deviatoric part of *A*, 
+    dev(*A*)<sub>ij</sub> dev(*A*)<sub>ji</sub>.
+*   `A2_ddot_B2`: returns the double-dot product of *A* and *B*,
+    *A*<sub>ij</sub> *B*<sub>ji</sub>.
+
+# Implementation
 
 ## C++ and Python
 
