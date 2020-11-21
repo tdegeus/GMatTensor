@@ -38,8 +38,13 @@ jobs:
         activate-environment: test
         auto-activate-base: false
 
-    - name: Extending conda environment for testing
+    - name: Extending conda environment for testing (using mamba)
+      if: runner.os != 'Windows'
       run: mamba env update --file environment_test.yaml
+
+    - name: Extending conda environment for testing (using conda)
+      if: runner.os == 'Windows'
+      run: conda env update --file environment_test.yaml
 
     - name: Configure using CMake
       run: cmake . -DBUILD_TESTS=ON
