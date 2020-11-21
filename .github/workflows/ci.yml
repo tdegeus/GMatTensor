@@ -39,7 +39,7 @@ jobs:
         auto-activate-base: false
 
     - name: Extending conda environment for testing
-      run: conda env update --file environment_test.yaml
+      run: mamba env update --file environment_test.yaml
 
     - name: Configure using CMake
       run: cmake . -DBUILD_TESTS=ON
