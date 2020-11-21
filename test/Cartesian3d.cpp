@@ -203,7 +203,7 @@ TEST_CASE("GMatTensor::Cartesian3d::pointer", "Cartesian3d.h")
         B(1, 1) -= tr / 3.0;
         B(2, 2) -= tr / 3.0;
         double m = GM::pointer::hydrostatic_deviatoric(A.data(), C.data());
-        REQUIRE(m == Approx(tr));
+        REQUIRE(m == Approx(tr / 3.0));
         REQUIRE(xt::allclose(C, B));
     }
 
@@ -212,7 +212,7 @@ TEST_CASE("GMatTensor::Cartesian3d::pointer", "Cartesian3d.h")
         xt::xtensor<double, 2> A = xt::zeros<double>({3, 3});
         A(0, 1) = 1.0;
         A(1, 0) = 1.0;
-        REQUIRE(GM::pointer::deviatoric_ddot_deviatoric(A.data()) == Approx(std::sqrt(2.0)));
+        REQUIRE(GM::pointer::deviatoric_ddot_deviatoric(A.data()) == Approx(2.0));
     }
 
     SECTION("A2_ddot_B2")
@@ -220,6 +220,6 @@ TEST_CASE("GMatTensor::Cartesian3d::pointer", "Cartesian3d.h")
         xt::xtensor<double, 2> A = xt::zeros<double>({3, 3});
         A(0, 1) = 1.0;
         A(1, 0) = 1.0;
-        REQUIRE(GM::pointer::A2_ddot_B2(A.data(), A.data()) == Approx(std::sqrt(2.0)));
+        REQUIRE(GM::pointer::A2_ddot_B2(A.data(), A.data()) == Approx(2.0));
     }
 }
