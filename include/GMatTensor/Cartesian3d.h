@@ -69,7 +69,7 @@ public:
     xt::xtensor<double, N + 4> I4d() const;
 
 protected:
-    void init();
+    void init(const std::array<size_t, N>& shape);
 
     static const size_t m_ndim = 3;
     size_t m_size;

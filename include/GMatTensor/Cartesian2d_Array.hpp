@@ -13,14 +13,15 @@ namespace GMatTensor {
 namespace Cartesian2d {
 
 template <size_t N>
-inline Array<N>::Array(const std::array<size_t, N>& shape) : m_shape(shape)
+inline Array<N>::Array(const std::array<size_t, N>& shape)
 {
-    this->init();
+    this->init(shape);
 }
 
 template <size_t N>
-inline void Array<N>::init()
+inline void Array<N>::init(const std::array<size_t, N>& shape)
 {
+    m_shape = shape;
     size_t nd = m_ndim;
     std::copy(m_shape.begin(), m_shape.end(), m_shape_tensor2.begin());
     std::copy(m_shape.begin(), m_shape.end(), m_shape_tensor4.begin());
