@@ -39,7 +39,7 @@ void add_deviatoric_overloads_2d(T& module)
     module.def(
         "Deviatoric",
         static_cast<S (*)(const S&)>(&GMatTensor::Cartesian2d::Deviatoric<S>),
-        "Deviatoric part of a (array of) tensor(s).",
+        "Deviatoric part of a(n) (array of) tensor(s).",
         py::arg("A"));
 }
 
@@ -49,7 +49,7 @@ void add_hydrostatic_overloads_2d(T& module)
     module.def(
         "Hydrostatic",
         static_cast<R (*)(const S&)>(&GMatTensor::Cartesian2d::Hydrostatic<S>),
-        "Hydrostatic part of a (array of) tensor(s).",
+        "Hydrostatic part of a(n) (array of) tensor(s).",
         py::arg("A"));
 }
 
@@ -60,7 +60,7 @@ void add_equivalent_deviatoric_overloads_2d(T& module)
         "Equivalent_deviatoric",
         static_cast<R (*)(const S&)>(
             &GMatTensor::Cartesian2d::Equivalent_deviatoric<S>),
-        "Equivalent_deviatoric part of a (array of) tensor(s).",
+        "Equivalent_deviatoric part of a(n) (array of) tensor(s).",
         py::arg("A"));
 }
 
