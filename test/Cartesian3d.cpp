@@ -223,3 +223,15 @@ TEST_CASE("GMatTensor::Cartesian3d::pointer", "Cartesian3d.h")
         REQUIRE(GM::pointer::A2_ddot_B2(A.data(), A.data()) == Approx(2.0));
     }
 }
+
+TEST_CASE("GMatTensor::Cartesian3d::xtensor", "Cartesian3d.h")
+{
+    SECTION("A2_dyadic_B2")
+    {
+        xt::xtensor<double, 2> I2 = GM::I2();
+        xt::xtensor<double, 4> II = GM::II();
+        xt::xtensor<double, 4> C = xt::empty<double>({3, 3, 3, 3});
+        GM::xtensor::A2_dyadic_B2(I2, I2, C);
+        REQUIRE(xt::allclose(II, C));
+    }
+}
