@@ -185,6 +185,54 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
 
 TEST_CASE("GMatTensor::Cartesian3d::pointer", "Cartesian3d.h")
 {
+    SECTION("I2")
+    {
+        xt::xtensor<double, 2> i = GM::I2();
+        xt::xtensor<double, 2> r = xt::empty<double>(i.shape());
+        GM::pointer::I2(r.data());
+        REQUIRE(xt::allclose(i, r));
+    }
+
+    SECTION("II")
+    {
+        xt::xtensor<double, 4> i = GM::II();
+        xt::xtensor<double, 4> r = xt::empty<double>(i.shape());
+        GM::pointer::II(r.data());
+        REQUIRE(xt::allclose(i, r));
+    }
+
+    SECTION("I4")
+    {
+        xt::xtensor<double, 4> i = GM::I4();
+        xt::xtensor<double, 4> r = xt::empty<double>(i.shape());
+        GM::pointer::I4(r.data());
+        REQUIRE(xt::allclose(i, r));
+    }
+
+    SECTION("I4rt")
+    {
+        xt::xtensor<double, 4> i = GM::I4rt();
+        xt::xtensor<double, 4> r = xt::empty<double>(i.shape());
+        GM::pointer::I4rt(r.data());
+        REQUIRE(xt::allclose(i, r));
+    }
+
+    SECTION("I4s")
+    {
+        xt::xtensor<double, 4> i = GM::I4s();
+        xt::xtensor<double, 4> r = xt::empty<double>(i.shape());
+        GM::pointer::I4s(r.data());
+        REQUIRE(xt::allclose(i, r));
+    }
+
+    SECTION("I4d")
+    {
+        xt::xtensor<double, 4> i = GM::I4d();
+        xt::xtensor<double, 4> r = xt::empty<double>(i.shape());
+        GM::pointer::I4d(r.data());
+        REQUIRE(xt::allclose(i, r));
+    }
+
     SECTION("trace")
     {
         xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});

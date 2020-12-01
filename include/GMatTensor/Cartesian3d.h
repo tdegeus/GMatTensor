@@ -79,8 +79,27 @@ protected:
 };
 
 // API for pure-tensor with pointer-only input
-// Storage convention: (xx, xy, xz, yx, yy, yz, zx, zy, zz)
+// Storage convention:
+// - 2nd-order tensor: (xx, xy, xz, yx, yy, yz, zx, zy, zz)
 namespace pointer {
+
+    template <class T>
+    inline void I2(T ret);
+
+    template <class T>
+    inline void II(T ret);
+
+    template <class T>
+    inline void I4(T ret);
+
+    template <class T>
+    inline void I4rt(T ret);
+
+    template <class T>
+    inline void I4s(T ret);
+
+    template <class T>
+    inline void I4d(T ret);
 
     template <class T>
     inline auto trace(const T A);

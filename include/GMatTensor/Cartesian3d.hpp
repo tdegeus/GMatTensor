@@ -216,6 +216,106 @@ inline auto Equivalent_deviatoric(const T& A)
 namespace pointer {
 
     template <class T>
+    inline void I2(T ret)
+    {
+        ret[0] = 1.0;
+        ret[1] = 0.0;
+        ret[2] = 0.0;
+        ret[3] = 0.0;
+        ret[4] = 1.0;
+        ret[5] = 0.0;
+        ret[6] = 0.0;
+        ret[7] = 0.0;
+        ret[8] = 1.0;
+    }
+
+    template <class T>
+    inline void II(T ret)
+    {
+        std::fill(&ret[0], &ret[0] + 81, 0);
+
+        for (size_t i = 0; i < 3; ++i) {
+            for (size_t j = 0; j < 3; ++j) {
+                for (size_t k = 0; k < 3; ++k) {
+                    for (size_t l = 0; l < 3; ++l) {
+                        if (i == j && k == l) {
+                            ret[i * 27 + j * 9 + k * 3 + l] = 1.0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    template <class T>
+    inline void I4(T ret)
+    {
+        std::fill(&ret[0], &ret[0] + 81, 0);
+
+        for (size_t i = 0; i < 3; ++i) {
+            for (size_t j = 0; j < 3; ++j) {
+                for (size_t k = 0; k < 3; ++k) {
+                    for (size_t l = 0; l < 3; ++l) {
+                        if (i == l && j == k) {
+                            ret[i * 27 + j * 9 + k * 3 + l] = 1.0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    template <class T>
+    inline void I4rt(T ret)
+    {
+        std::fill(&ret[0], &ret[0] + 81, 0);
+
+        for (size_t i = 0; i < 3; ++i) {
+            for (size_t j = 0; j < 3; ++j) {
+                for (size_t k = 0; k < 3; ++k) {
+                    for (size_t l = 0; l < 3; ++l) {
+                        if (i == k && j == l) {
+                            ret[i * 27 + j * 9 + k * 3 + l] = 1.0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    template <class T>
+    inline void I4s(T ret)
+    {
+        using value_type = typename std::remove_pointer<T>::type;
+
+        I4(ret);
+
+        std::array<double, 81> i4rt;
+        I4rt(&i4rt[0]);
+
+        std::transform(&ret[0], &ret[0] + 81, &i4rt[0], &ret[0], std::plus<value_type>());
+
+        std::transform(&ret[0], &ret[0] + 81, &ret[0],
+            std::bind(std::multiplies<value_type>(), std::placeholders::_1, 0.5));
+    }
+
+    template <class T>
+    inline void I4d(T ret)
+    {
+        using value_type = typename std::remove_pointer<T>::type;
+
+        I4s(ret);
+
+        std::array<double, 81> ii;
+        II(&ii[0]);
+
+        std::transform(&ii[0], &ii[0] + 81, &ii[0],
+            std::bind(std::divides<value_type>(), std::placeholders::_1, 3.0));
+
+        std::transform(&ret[0], &ret[0] + 81, &ii[0], &ret[0], std::minus<value_type>());
+    }
+
+    template <class T>
     inline auto trace(const T A)
     {
         return A[0] + A[4] + A[8];
