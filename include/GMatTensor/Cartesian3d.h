@@ -94,14 +94,10 @@ namespace pointer {
     template <class T, class U>
     inline auto A2_ddot_B2(const T A, const U B);
 
-} // namespace pointer
-
-namespace xtensor {
-
     template <class U, class V, class W>
-    inline void A2_dyadic_B2(const U& A, const V& B, W& C);
+    inline void A2_dyadic_B2(const U A, const V B, W C);
 
-} // namespace xtensor
+} // namespace pointer
 
 } // namespace Cartesian3d
 } // namespace GMatTensor

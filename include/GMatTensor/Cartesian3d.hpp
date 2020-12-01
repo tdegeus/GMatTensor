@@ -260,27 +260,21 @@ namespace pointer {
              + 2.0 * A[5] * B[5];
     }
 
-} // namespace pointer
-
-namespace xtensor {
-
     template <class U, class V, class W>
-    inline void A2_dyadic_B2(const U& A, const V& B, W& C)
+    inline void A2_dyadic_B2(const U A, const V B, W C)
     {
-        C.fill(0.0);
-
         for (size_t i = 0; i < 3; ++i) {
             for (size_t j = 0; j < 3; ++j) {
                 for (size_t k = 0; k < 3; ++k) {
                     for (size_t l = 0; l < 3; ++l) {
-                        C(i, j, k, l) += A(i, j) * B(k, l);
+                        C[i * 27 + j * 9 + k * 3 + l] = A[i * 3 + j] * B[k * 3 + l];
                     }
                 }
             }
         }
     }
 
-} // namespace xtensor
+} // namespace pointer
 
 } // namespace Cartesian3d
 } // namespace GMatTensor
