@@ -71,7 +71,9 @@ public:
 protected:
     void init(const std::array<size_t, N>& shape);
 
-    static const size_t m_ndim = 2;
+    static constexpr size_t m_ndim = 2;
+    static constexpr size_t m_stride_tensor2 = 4;
+    static constexpr size_t m_stride_tensor4 = 16;
     size_t m_size;
     std::array<size_t, N> m_shape;
     std::array<size_t, N + 2> m_shape_tensor2;
