@@ -179,6 +179,54 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
 
 TEST_CASE("GMatTensor::Cartesian2d::pointer", "Cartesian2d.h")
 {
+    SECTION("I2")
+    {
+        xt::xtensor<double, 2> i = GM::I2();
+        xt::xtensor<double, 2> r = xt::empty<double>(i.shape());
+        GM::pointer::I2(r.data());
+        REQUIRE(xt::allclose(i, r));
+    }
+
+    SECTION("II")
+    {
+        xt::xtensor<double, 4> i = GM::II();
+        xt::xtensor<double, 4> r = xt::empty<double>(i.shape());
+        GM::pointer::II(r.data());
+        REQUIRE(xt::allclose(i, r));
+    }
+
+    SECTION("I4")
+    {
+        xt::xtensor<double, 4> i = GM::I4();
+        xt::xtensor<double, 4> r = xt::empty<double>(i.shape());
+        GM::pointer::I4(r.data());
+        REQUIRE(xt::allclose(i, r));
+    }
+
+    SECTION("I4rt")
+    {
+        xt::xtensor<double, 4> i = GM::I4rt();
+        xt::xtensor<double, 4> r = xt::empty<double>(i.shape());
+        GM::pointer::I4rt(r.data());
+        REQUIRE(xt::allclose(i, r));
+    }
+
+    SECTION("I4s")
+    {
+        xt::xtensor<double, 4> i = GM::I4s();
+        xt::xtensor<double, 4> r = xt::empty<double>(i.shape());
+        GM::pointer::I4s(r.data());
+        REQUIRE(xt::allclose(i, r));
+    }
+
+    SECTION("I4d")
+    {
+        xt::xtensor<double, 4> i = GM::I4d();
+        xt::xtensor<double, 4> r = xt::empty<double>(i.shape());
+        GM::pointer::I4d(r.data());
+        REQUIRE(xt::allclose(i, r));
+    }
+
     SECTION("trace")
     {
         xt::xtensor<double, 2> A = xt::random::randn<double>({2, 2});
@@ -215,5 +263,13 @@ TEST_CASE("GMatTensor::Cartesian2d::pointer", "Cartesian2d.h")
         A(1, 0) = 1.0;
         REQUIRE(GM::pointer::A2_ddot_B2(A.data(), A.data()) == Approx(2.0));
     }
-}
 
+    SECTION("A2_dyadic_B2")
+    {
+        xt::xtensor<double, 2> I2 = GM::I2();
+        xt::xtensor<double, 4> II = GM::II();
+        xt::xtensor<double, 4> C = xt::empty<double>({2, 2, 2, 2});
+        GM::pointer::A2_dyadic_B2(I2.data(), I2.data(), C.data());
+        REQUIRE(xt::allclose(II, C));
+    }
+}

@@ -215,13 +215,116 @@ inline auto Equivalent_deviatoric(const T& A)
 namespace pointer {
 
     template <class T>
-    inline auto trace(const T A)
+    inline void O2(T* ret)
+    {
+        std::fill(&ret[0], &ret[0] + 4, T(0));
+    }
+
+    template <class T>
+    inline void O4(T* ret)
+    {
+        std::fill(&ret[0], &ret[0] + 16, T(0));
+    }
+
+    template <class T>
+    inline void I2(T* ret)
+    {
+        ret[0] = 1.0;
+        ret[1] = 0.0;
+        ret[2] = 0.0;
+        ret[3] = 1.0;
+    }
+
+    template <class T>
+    inline void II(T* ret)
+    {
+        std::fill(&ret[0], &ret[0] + 16, T(0));
+
+        for (size_t i = 0; i < 2; ++i) {
+            for (size_t j = 0; j < 2; ++j) {
+                for (size_t k = 0; k < 2; ++k) {
+                    for (size_t l = 0; l < 2; ++l) {
+                        if (i == j && k == l) {
+                            ret[i * 8 + j * 4 + k * 2 + l] = 1.0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    template <class T>
+    inline void I4(T* ret)
+    {
+        std::fill(&ret[0], &ret[0] + 16, T(0));
+
+        for (size_t i = 0; i < 2; ++i) {
+            for (size_t j = 0; j < 2; ++j) {
+                for (size_t k = 0; k < 2; ++k) {
+                    for (size_t l = 0; l < 2; ++l) {
+                        if (i == l && j == k) {
+                            ret[i * 8 + j * 4 + k * 2 + l] = 1.0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    template <class T>
+    inline void I4rt(T* ret)
+    {
+        std::fill(&ret[0], &ret[0] + 16, T(0));
+
+        for (size_t i = 0; i < 2; ++i) {
+            for (size_t j = 0; j < 2; ++j) {
+                for (size_t k = 0; k < 2; ++k) {
+                    for (size_t l = 0; l < 2; ++l) {
+                        if (i == k && j == l) {
+                            ret[i * 8 + j * 4 + k * 2 + l] = 1.0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    template <class T>
+    inline void I4s(T* ret)
+    {
+        I4(ret);
+
+        std::array<double, 16> i4rt;
+        I4rt(&i4rt[0]);
+
+        std::transform(&ret[0], &ret[0] + 16, &i4rt[0], &ret[0], std::plus<T>());
+
+        std::transform(&ret[0], &ret[0] + 16, &ret[0],
+            std::bind(std::multiplies<T>(), std::placeholders::_1, 0.5));
+    }
+
+    template <class T>
+    inline void I4d(T* ret)
+    {
+        I4s(ret);
+
+        std::array<double, 16> ii;
+        II(&ii[0]);
+
+        std::transform(&ii[0], &ii[0] + 16, &ii[0],
+            std::bind(std::multiplies<T>(), std::placeholders::_1, 0.5));
+
+        std::transform(&ret[0], &ret[0] + 16, &ii[0], &ret[0], std::minus<T>());
+    }
+
+    template <class T>
+    inline auto trace(const T* A)
     {
         return A[0] + A[3];
     }
 
-    template <class T, class U>
-    inline auto hydrostatic_deviatoric(const T A, U ret)
+    template <class S, class T>
+    inline auto hydrostatic_deviatoric(const S* A, T* ret)
     {
         auto m = 0.5 * (A[0] + A[3]);
         ret[0] = A[0] - m;
@@ -232,7 +335,7 @@ namespace pointer {
     }
 
     template <class T>
-    inline auto deviatoric_ddot_deviatoric(const T A)
+    inline auto deviatoric_ddot_deviatoric(const T* A)
     {
         auto m = 0.5 * (A[0] + A[3]);
         return (A[0] - m) * (A[0] - m)
@@ -240,12 +343,26 @@ namespace pointer {
              + 2.0 * A[1] * A[1];
     }
 
-    template <class T, class U>
-    inline auto A2_ddot_B2(const T A, const U B)
+    template <class S, class T>
+    inline auto A2_ddot_B2(const S* A, const T* B)
     {
         return A[0] * B[0]
              + A[3] * B[3]
              + 2.0 * A[1] * B[1];
+    }
+
+    template <class R, class S, class T>
+    inline void A2_dyadic_B2(const R* A, const S* B, T* C)
+    {
+        for (size_t i = 0; i < 2; ++i) {
+            for (size_t j = 0; j < 2; ++j) {
+                for (size_t k = 0; k < 2; ++k) {
+                    for (size_t l = 0; l < 2; ++l) {
+                        C[i * 8 + j * 4 + k * 2 + l] = A[i * 2 + j] * B[k * 2 + l];
+                    }
+                }
+            }
+        }
     }
 
 } // namespace pointer

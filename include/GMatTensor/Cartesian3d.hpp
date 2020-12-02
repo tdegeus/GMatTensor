@@ -216,7 +216,19 @@ inline auto Equivalent_deviatoric(const T& A)
 namespace pointer {
 
     template <class T>
-    inline void I2(T ret)
+    inline void O2(T* ret)
+    {
+        std::fill(&ret[0], &ret[0] + 9, T(0));
+    }
+
+    template <class T>
+    inline void O4(T* ret)
+    {
+        std::fill(&ret[0], &ret[0] + 81, T(0));
+    }
+
+    template <class T>
+    inline void I2(T* ret)
     {
         ret[0] = 1.0;
         ret[1] = 0.0;
@@ -230,9 +242,9 @@ namespace pointer {
     }
 
     template <class T>
-    inline void II(T ret)
+    inline void II(T* ret)
     {
-        std::fill(&ret[0], &ret[0] + 81, 0);
+        std::fill(&ret[0], &ret[0] + 81, T(0));
 
         for (size_t i = 0; i < 3; ++i) {
             for (size_t j = 0; j < 3; ++j) {
@@ -248,9 +260,9 @@ namespace pointer {
     }
 
     template <class T>
-    inline void I4(T ret)
+    inline void I4(T* ret)
     {
-        std::fill(&ret[0], &ret[0] + 81, 0);
+        std::fill(&ret[0], &ret[0] + 81, T(0));
 
         for (size_t i = 0; i < 3; ++i) {
             for (size_t j = 0; j < 3; ++j) {
@@ -266,9 +278,9 @@ namespace pointer {
     }
 
     template <class T>
-    inline void I4rt(T ret)
+    inline void I4rt(T* ret)
     {
-        std::fill(&ret[0], &ret[0] + 81, 0);
+        std::fill(&ret[0], &ret[0] + 81, T(0));
 
         for (size_t i = 0; i < 3; ++i) {
             for (size_t j = 0; j < 3; ++j) {
@@ -284,45 +296,41 @@ namespace pointer {
     }
 
     template <class T>
-    inline void I4s(T ret)
+    inline void I4s(T* ret)
     {
-        using value_type = typename std::remove_pointer<T>::type;
-
         I4(ret);
 
         std::array<double, 81> i4rt;
         I4rt(&i4rt[0]);
 
-        std::transform(&ret[0], &ret[0] + 81, &i4rt[0], &ret[0], std::plus<value_type>());
+        std::transform(&ret[0], &ret[0] + 81, &i4rt[0], &ret[0], std::plus<T>());
 
         std::transform(&ret[0], &ret[0] + 81, &ret[0],
-            std::bind(std::multiplies<value_type>(), std::placeholders::_1, 0.5));
+            std::bind(std::multiplies<T>(), std::placeholders::_1, 0.5));
     }
 
     template <class T>
-    inline void I4d(T ret)
+    inline void I4d(T* ret)
     {
-        using value_type = typename std::remove_pointer<T>::type;
-
         I4s(ret);
 
         std::array<double, 81> ii;
         II(&ii[0]);
 
         std::transform(&ii[0], &ii[0] + 81, &ii[0],
-            std::bind(std::divides<value_type>(), std::placeholders::_1, 3.0));
+            std::bind(std::divides<T>(), std::placeholders::_1, 3.0));
 
-        std::transform(&ret[0], &ret[0] + 81, &ii[0], &ret[0], std::minus<value_type>());
+        std::transform(&ret[0], &ret[0] + 81, &ii[0], &ret[0], std::minus<T>());
     }
 
     template <class T>
-    inline auto trace(const T A)
+    inline auto trace(const T* A)
     {
         return A[0] + A[4] + A[8];
     }
 
-    template <class T, class U>
-    inline auto hydrostatic_deviatoric(const T A, U ret)
+    template <class S, class T>
+    inline auto hydrostatic_deviatoric(const S* A, T* ret)
     {
         auto m = (A[0] + A[4] + A[8]) / 3.0;
         ret[0] = A[0] - m;
@@ -338,7 +346,7 @@ namespace pointer {
     }
 
     template <class T>
-    inline auto deviatoric_ddot_deviatoric(const T A)
+    inline auto deviatoric_ddot_deviatoric(const T* A)
     {
         auto m = (A[0] + A[4] + A[8]) / 3.0;
         return (A[0] - m) * (A[0] - m)
@@ -349,8 +357,8 @@ namespace pointer {
              + 2.0 * A[5] * A[5];
     }
 
-    template <class T, class U>
-    inline auto A2_ddot_B2(const T A, const U B)
+    template <class S, class T>
+    inline auto A2_ddot_B2(const S* A, const T* B)
     {
         return A[0] * B[0]
              + A[4] * B[4]
@@ -360,8 +368,8 @@ namespace pointer {
              + 2.0 * A[5] * B[5];
     }
 
-    template <class U, class V, class W>
-    inline void A2_dyadic_B2(const U A, const V B, W C)
+    template <class R, class S, class T>
+    inline void A2_dyadic_B2(const R* A, const S* B, T* C)
     {
         for (size_t i = 0; i < 3; ++i) {
             for (size_t j = 0; j < 3; ++j) {
