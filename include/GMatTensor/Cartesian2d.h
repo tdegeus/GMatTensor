@@ -129,9 +129,13 @@ namespace pointer {
     template <class T>
     inline auto deviatoric_ddot_deviatoric(const T* A);
 
-    // A ; B
+    // A : B
     template <class S, class T>
     inline auto A2_ddot_B2(const S* A, const T* B);
+
+    // A : B (both assumed symmetric)
+    template <class S, class T>
+    inline auto A2s_ddot_B2s(const S* A, const T* B);
 
     // A * B
     template <class R, class S, class T>

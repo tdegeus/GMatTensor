@@ -326,7 +326,7 @@ namespace pointer {
     template <class S, class T>
     inline auto hydrostatic_deviatoric(const S* A, T* ret)
     {
-        auto m = 0.5 * (A[0] + A[3]);
+        auto m = T(0.5) * (A[0] + A[3]);
         ret[0] = A[0] - m;
         ret[1] = A[1];
         ret[2] = A[2];
@@ -337,11 +337,10 @@ namespace pointer {
     template <class T>
     inline auto deviatoric_ddot_deviatoric(const T* A)
     {
-        auto m = 0.5 * (A[0] + A[3]);
+        auto m = T(0.5) * (A[0] + A[3]);
         return (A[0] - m) * (A[0] - m)
              + (A[3] - m) * (A[3] - m)
-             + A[1] * A[2]
-             + A[2] * A[1];
+             + T(2) * A[1] * A[2];
     }
 
     template <class S, class T>
@@ -351,6 +350,14 @@ namespace pointer {
              + A[3] * B[3]
              + A[1] * B[2]
              + A[2] * B[1];
+    }
+
+    template <class S, class T>
+    inline auto A2s_ddot_B2s(const S* A, const T* B)
+    {
+        return A[0] * B[0]
+             + A[3] * B[3]
+             + T(2) * A[1] * B[1];
     }
 
     template <class R, class S, class T>
