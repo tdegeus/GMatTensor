@@ -352,9 +352,12 @@ namespace pointer {
         return (A[0] - m) * (A[0] - m)
              + (A[4] - m) * (A[4] - m)
              + (A[8] - m) * (A[8] - m)
-             + 2.0 * A[1] * A[1]
-             + 2.0 * A[2] * A[2]
-             + 2.0 * A[5] * A[5];
+             + A[1] * A[3]
+             + A[2] * A[6]
+             + A[3] * A[1]
+             + A[5] * A[7]
+             + A[6] * A[2]
+             + A[7] * A[5];
     }
 
     template <class S, class T>
@@ -363,9 +366,12 @@ namespace pointer {
         return A[0] * B[0]
              + A[4] * B[4]
              + A[8] * B[8]
-             + 2.0 * A[1] * B[1]
-             + 2.0 * A[2] * B[2]
-             + 2.0 * A[5] * B[5];
+             + A[1] * B[3]
+             + A[2] * B[6]
+             + A[3] * B[1]
+             + A[5] * B[7]
+             + A[6] * B[2]
+             + A[7] * B[5];
     }
 
     template <class R, class S, class T>

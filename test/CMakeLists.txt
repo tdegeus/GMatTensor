@@ -15,7 +15,10 @@ find_package(xtensor REQUIRED)
 
 set(test_name "unit-tests")
 
-add_executable(${test_name} main.cpp Cartesian2d.cpp Cartesian3d.cpp)
+add_executable(${test_name}
+    main.cpp
+    Cartesian2d.cpp
+    Cartesian3d.cpp)
 
 target_link_libraries(${test_name} PRIVATE Catch2::Catch2 GMatTensor)
 target_link_libraries(${test_name} PRIVATE GMatTensor::compiler_warnings)

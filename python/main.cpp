@@ -7,7 +7,9 @@
 #include <pybind11/pybind11.h>
 #include <pyxtensor/pyxtensor.hpp>
 #include <GMatTensor/Cartesian2d.h>
+#include <GMatTensor/Cartesian2dSym.h>
 #include <GMatTensor/Cartesian3d.h>
+#include <GMatTensor/Cartesian3dSym.h>
 
 // Enable basic assertions on matrix shape
 // (doesn't cost a lot of time, but avoids segmentation faults)
@@ -64,6 +66,41 @@ void add_equivalent_deviatoric_overloads_2d(T& module)
         py::arg("A"));
 }
 
+// --------------
+// Cartesian2dSym
+// --------------
+
+template <class S, class T>
+void add_deviatoric_overloads_2ds(T& module)
+{
+    module.def(
+        "Deviatoric",
+        static_cast<S (*)(const S&)>(&GMatTensor::Cartesian2dSym::Deviatoric<S>),
+        "Deviatoric part of a(n) (array of) tensor(s).",
+        py::arg("A"));
+}
+
+template <class R, class S, class T>
+void add_hydrostatic_overloads_2ds(T& module)
+{
+    module.def(
+        "Hydrostatic",
+        static_cast<R (*)(const S&)>(&GMatTensor::Cartesian2dSym::Hydrostatic<S>),
+        "Hydrostatic part of a(n) (array of) tensor(s).",
+        py::arg("A"));
+}
+
+template <class R, class S, class T>
+void add_equivalent_deviatoric_overloads_2ds(T& module)
+{
+    module.def(
+        "Equivalent_deviatoric",
+        static_cast<R (*)(const S&)>(
+            &GMatTensor::Cartesian2dSym::Equivalent_deviatoric<S>),
+        "Equivalent_deviatoric part of a(n) (array of) tensor(s).",
+        py::arg("A"));
+}
+
 // -----------
 // Cartesian3d
 // -----------
@@ -113,6 +150,41 @@ void add_equivalent_deviatoric_overloads_3d(T& module)
         py::arg("A"));
 }
 
+// --------------
+// Cartesian3dSym
+// --------------
+
+template <class S, class T>
+void add_deviatoric_overloads_3ds(T& module)
+{
+    module.def(
+        "Deviatoric",
+        static_cast<S (*)(const S&)>(&GMatTensor::Cartesian3dSym::Deviatoric<S>),
+        "Deviatoric part of a (array of) tensor(s).",
+        py::arg("A"));
+}
+
+template <class R, class S, class T>
+void add_hydrostatic_overloads_3ds(T& module)
+{
+    module.def(
+        "Hydrostatic",
+        static_cast<R (*)(const S&)>(&GMatTensor::Cartesian3dSym::Hydrostatic<S>),
+        "Hydrostatic part of a (array of) tensor(s).",
+        py::arg("A"));
+}
+
+template <class R, class S, class T>
+void add_equivalent_deviatoric_overloads_3ds(T& module)
+{
+    module.def(
+        "Equivalent_deviatoric",
+        static_cast<R (*)(const S&)>(
+            &GMatTensor::Cartesian3dSym::Equivalent_deviatoric<S>),
+        "Equivalent_deviatoric part of a (array of) tensor(s).",
+        py::arg("A"));
+}
+
 PYBIND11_MODULE(GMatTensor, m)
 {
 
@@ -158,6 +230,36 @@ PYBIND11_MODULE(GMatTensor, m)
         construct_Array_2d<SM::Array<3>>(array3d);
     }
 
+    // -------------------------
+    // GMatTensor.Cartesian2dSym
+    // -------------------------
+
+    {
+        py::module sm = m.def_submodule("Cartesian2dSym", "2d Cartesian coordinates, symmetric");
+        namespace SM = GMatTensor::Cartesian2dSym;
+
+        // Unit tensors
+
+        sm.def("I2", &SM::I2, "Second order unit tensor.");
+        sm.def("II", &SM::II, "Fourth order tensor with the result of the dyadic product II.");
+        sm.def("I4", &SM::I4, "Fourth order unit tensor.");
+        sm.def("I4rt", &SM::I4rt, "Fourth right-transposed order unit tensor.");
+        sm.def("I4s", &SM::I4s, "Fourth order symmetric projection tensor.");
+        sm.def("I4d", &SM::I4d, "Fourth order deviatoric projection tensor.");
+
+        // Tensor algebra
+
+        add_deviatoric_overloads_2ds<xt::xtensor<double, 4>>(sm);
+        add_deviatoric_overloads_2ds<xt::xtensor<double, 3>>(sm);
+        add_deviatoric_overloads_2ds<xt::xtensor<double, 2>>(sm);
+        add_hydrostatic_overloads_2ds<xt::xtensor<double, 2>, xt::xtensor<double, 4>>(sm);
+        add_hydrostatic_overloads_2ds<xt::xtensor<double, 1>, xt::xtensor<double, 3>>(sm);
+        add_hydrostatic_overloads_2ds<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(sm);
+        add_equivalent_deviatoric_overloads_2ds<xt::xtensor<double, 2>, xt::xtensor<double, 4>>(sm);
+        add_equivalent_deviatoric_overloads_2ds<xt::xtensor<double, 1>, xt::xtensor<double, 3>>(sm);
+        add_equivalent_deviatoric_overloads_2ds<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(sm);
+    }
+
     // ----------------------
     // GMatTensor.Cartesian3d
     // ----------------------
@@ -196,5 +298,35 @@ PYBIND11_MODULE(GMatTensor, m)
         construct_Array_3d<SM::Array<1>>(array1d);
         construct_Array_3d<SM::Array<2>>(array2d);
         construct_Array_3d<SM::Array<3>>(array3d);
+    }
+
+    // -------------------------
+    // GMatTensor.Cartesian3dSym
+    // -------------------------
+
+    {
+        py::module ms = m.def_submodule("Cartesian3dSym", "3d Cartesian coordinates, symmetric");
+        namespace SM = GMatTensor::Cartesian3dSym;
+
+        // Unit tensors
+
+        ms.def("I2", &SM::I2, "Second order unit tensor.");
+        ms.def("II", &SM::II, "Fourth order tensor with the result of the dyadic product II.");
+        ms.def("I4", &SM::I4, "Fourth order unit tensor.");
+        ms.def("I4rt", &SM::I4rt, "Fourth right-transposed order unit tensor.");
+        ms.def("I4s", &SM::I4s, "Fourth order symmetric projection tensor.");
+        ms.def("I4d", &SM::I4d, "Fourth order deviatoric projection tensor.");
+
+        // Tensor algebra
+
+        add_deviatoric_overloads_3ds<xt::xtensor<double, 4>>(ms);
+        add_deviatoric_overloads_3ds<xt::xtensor<double, 3>>(ms);
+        add_deviatoric_overloads_3ds<xt::xtensor<double, 2>>(ms);
+        add_hydrostatic_overloads_3ds<xt::xtensor<double, 2>, xt::xtensor<double, 4>>(ms);
+        add_hydrostatic_overloads_3ds<xt::xtensor<double, 1>, xt::xtensor<double, 3>>(ms);
+        add_hydrostatic_overloads_3ds<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(ms);
+        add_equivalent_deviatoric_overloads_3ds<xt::xtensor<double, 2>, xt::xtensor<double, 4>>(ms);
+        add_equivalent_deviatoric_overloads_3ds<xt::xtensor<double, 1>, xt::xtensor<double, 3>>(ms);
+        add_equivalent_deviatoric_overloads_3ds<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(ms);
     }
 }
