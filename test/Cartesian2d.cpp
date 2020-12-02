@@ -3,12 +3,10 @@
 #include <xtensor/xrandom.hpp>
 #include <xtensor/xio.hpp>
 #include <GMatTensor/Cartesian2d.h>
-#include <GMatTensor/Cartesian2dSym.h>
 
 #define ISCLOSE(a,b) REQUIRE_THAT((a), Catch::WithinAbs((b), 1e-12));
 
 namespace GM = GMatTensor::Cartesian2d;
-namespace GMS = GMatTensor::Cartesian2dSym;
 
 namespace Prod2d {
 
