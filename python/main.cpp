@@ -168,12 +168,68 @@ PYBIND11_MODULE(GMatTensor, m)
 
         // Unit tensors
 
+        sm.def("O2", &SM::O2, "Second order null tensor.");
+        sm.def("O4", &SM::O4, "Fourth order null tensor.");
         sm.def("I2", &SM::I2, "Second order unit tensor.");
         sm.def("II", &SM::II, "Fourth order tensor with the result of the dyadic product II.");
         sm.def("I4", &SM::I4, "Fourth order unit tensor.");
         sm.def("I4rt", &SM::I4rt, "Fourth right-transposed order unit tensor.");
         sm.def("I4s", &SM::I4s, "Fourth order symmetric projection tensor.");
         sm.def("I4d", &SM::I4d, "Fourth order deviatoric projection tensor.");
+
+        // Tensor algebra
+
+        sm.def("trace", &SM::trace<xt::xtensor<double, 2>>, "Trace.", py::arg("A"));
+        sm.def("det", &SM::det<xt::xtensor<double, 2>>, "Determinant.", py::arg("A"));
+        sm.def("inv", &SM::inv<xt::xtensor<double, 2>>, "Inverse.", py::arg("A"));
+
+        sm.def(
+            "A2_ddot_B2",
+            &SM::A2_ddot_B2<xt::xtensor<double, 2>, xt::xtensor<double, 2>>,
+            "A : B.",
+            py::arg("A"),
+            py::arg("B"));
+
+        sm.def(
+            "A2s_ddot_B2s",
+            &SM::A2s_ddot_B2s<xt::xtensor<double, 2>, xt::xtensor<double, 2>>,
+            "A : B.",
+            py::arg("A"),
+            py::arg("B"));
+
+        sm.def(
+            "A2_dyadic_B2",
+            &SM::A2_dyadic_B2<xt::xtensor<double, 2>, xt::xtensor<double, 2>>,
+            "A * B.",
+            py::arg("A"),
+            py::arg("B"));
+
+        sm.def(
+            "A4_dot_B2",
+            &SM::A4_dot_B2<xt::xtensor<double, 4>, xt::xtensor<double, 2>>,
+            "A . B.",
+            py::arg("A"),
+            py::arg("B"));
+
+        sm.def(
+            "A2_dot_B2",
+            &SM::A2_dot_B2<xt::xtensor<double, 2>, xt::xtensor<double, 2>>,
+            "A . B.",
+            py::arg("A"),
+            py::arg("B"));
+
+        sm.def(
+            "A2_dot_A2T",
+            &SM::A2_dot_A2T<xt::xtensor<double, 2>>,
+            "A . A^T.",
+            py::arg("A"));
+
+        sm.def(
+            "A4_ddot_B2",
+            &SM::A4_ddot_B2<xt::xtensor<double, 4>, xt::xtensor<double, 2>>,
+            "A : B.",
+            py::arg("A"),
+            py::arg("B"));
 
         // Tensor algebra
 
