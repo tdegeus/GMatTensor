@@ -30,6 +30,7 @@ Tensor definitions supporting several GMat models.
     - [By hand](#by-hand)
     - [Using pkg-config](#using-pkg-config)
 - [Change-log](#change-log)
+    - [v0.4.0](#v040)
     - [v0.3.0](#v030)
     - [v0.2.0](#v020)
         - [Pointer API](#pointer-api)
@@ -287,6 +288,15 @@ Note that you have to take care of the *xtensor* dependency, the C++ version, op
 enabling *xsimd*, ...
 
 # Change-log
+
+## v0.4.0
+
+*   Introducing null tensors `GMatTensor::Cartesian3d::O2` and `GMatTensor::Cartesian3d::O4`
+    (also for Cartesian2d).
+*   Adding several new tensor operations / products.
+*   Adding more public xtensor interface for tensor products. 
+    The aim is mostly to allow the user to be quick and dirty, e.g. when testing.
+*   Formatting tests with the latter new API.
 
 ## v0.3.0
 
