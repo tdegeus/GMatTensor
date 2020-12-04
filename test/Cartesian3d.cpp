@@ -83,6 +83,36 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
         REQUIRE(xt::allclose(GM::A2_dyadic_B2(I2, I2), GM::II()));
     }
 
+    SECTION("A2_dot_B2")
+    {
+        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
+        REQUIRE(xt::allclose(GM::A2_dot_B2(A, GM::I2()), A));
+    }
+
+    SECTION("A2_dot_A2T")
+    {
+        double a = 1.1;
+
+        xt::xtensor<double, 2> A = {
+            {1.0, a, 0.0},
+            {0.0, 1.0, 0.0},
+            {0.0, 0.0, 1.0}};
+
+        xt::xtensor<double, 2> B = {
+            {1.0 + std::pow(a, 2.0), a, 0.0},
+            {a, 1.0, 0.0},
+            {0.0, 0.0, 1.0}};
+
+        REQUIRE(xt::allclose(GM::A2_dot_A2T(A), B));
+    }
+
+    SECTION("A4_ddot_B2")
+    {
+        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
+        auto Is = GM::I4s();
+        auto B = xt::eval(0.5 * (A + xt::transpose(A)));
+        REQUIRE(xt::allclose(GM::A4_ddot_B2(Is, A), B));
+    }
 
     SECTION("Deviatoric - Tensor2")
     {
@@ -275,12 +305,30 @@ TEST_CASE("GMatTensor::Cartesian3d::pointer", "Cartesian3d.h")
         REQUIRE(xt::allclose(C, B));
     }
 
-    SECTION("deviatoric_ddot_deviatoric")
+    SECTION("A4_ddot_B4_ddot_C4")
     {
-        auto A = GM::O2();
-        A(0, 1) = 1.0;
-        A(1, 0) = 1.0;
-        REQUIRE(GM::pointer::deviatoric_ddot_deviatoric(A.data()) == Approx(2.0));
+        xt::xtensor<double, 4> A = xt::random::randn<double>({3, 3, 3, 3});
+        xt::xtensor<double, 4> ret = xt::empty<double>({3, 3, 3, 3});
+        auto I = GM::I4();
+        GM::pointer::A4_ddot_B4_ddot_C4(I.data(), I.data(), A.data(), ret.data());
+        REQUIRE(xt::allclose(A, ret));
+    }
+
+    SECTION("A2_dot_B2_dot_C2T")
+    {
+        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
+        xt::xtensor<double, 2> ret = xt::empty<double>({3, 3});
+        auto I = GM::I2();
+        GM::pointer::A2_dot_B2_dot_C2T(I.data(), A.data(), I.data(), ret.data());
+        REQUIRE(xt::allclose(A, ret));
+    }
+
+    SECTION("A4_ddot_B2")
+    {
+        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
+        auto Is = GM::I4s();
+        auto B = xt::eval(0.5 * (A + xt::transpose(A)));
+        REQUIRE(xt::allclose(GM::A4_ddot_B2(Is, A), B));
     }
 
     SECTION("eigs - from_eigs")
