@@ -12,6 +12,18 @@
 namespace GMatTensor {
 namespace Cartesian2d {
 
+inline xt::xtensor<double, 2> O2()
+{
+    xt::xtensor<double, 2> ret = xt::zeros<double>({2, 2});
+    return ret;
+}
+
+inline xt::xtensor<double, 4> O4()
+{
+    xt::xtensor<double, 4> ret = xt::zeros<double>({2, 2, 2, 2});
+    return ret;
+}
+
 inline xt::xtensor<double, 2> I2()
 {
     return xt::xtensor<double, 2>({{1.0, 0.0},
@@ -83,6 +95,49 @@ inline xt::xtensor<double, 4> I4s()
 inline xt::xtensor<double, 4> I4d()
 {
     return I4s() - 0.5 * II();
+}
+
+template <class T>
+inline auto trace(const T& A)
+{
+    GMATTENSOR_ASSERT(xt::has_shape(A, {2, 2}));
+    return pointer::trace(A.data());
+}
+
+template <class S, class T>
+inline auto A2_ddot_B2(const S& A, const T& B)
+{
+    GMATTENSOR_ASSERT(xt::has_shape(A, {2, 2}));
+    GMATTENSOR_ASSERT(xt::has_shape(B, {2, 2}));
+    return pointer::A2_ddot_B2(A.data(), B.data());
+}
+
+template <class S, class T>
+inline auto A2s_ddot_B2s(const S& A, const T& B)
+{
+    GMATTENSOR_ASSERT(xt::has_shape(A, {2, 2}));
+    GMATTENSOR_ASSERT(xt::has_shape(B, {2, 2}));
+    return pointer::A2s_ddot_B2s(A.data(), B.data());
+}
+
+template <class S, class T>
+inline auto A2_dyadic_B2(const S& A, const T& B)
+{
+    GMATTENSOR_ASSERT(xt::has_shape(A, {2, 2}));
+    GMATTENSOR_ASSERT(xt::has_shape(B, {2, 2}));
+    xt::xtensor<double, 4> ret = xt::zeros<double>({2, 2, 2, 2});
+    pointer::A2_dyadic_B2(A.data(), B.data(), ret.data());
+    return ret;
+}
+
+template <class S, class T>
+inline auto A4_ddot_B2(const S& A, const T& B)
+{
+    GMATTENSOR_ASSERT(xt::has_shape(A, {2, 2, 2, 2}));
+    GMATTENSOR_ASSERT(xt::has_shape(B, {2, 2}));
+    xt::xtensor<double, 2> ret = xt::zeros<double>({2, 2});
+    pointer::A4_ddot_B2(A.data(), B.data(), ret.data());
+    return ret;
 }
 
 namespace detail {
@@ -217,13 +272,13 @@ namespace pointer {
     template <class T>
     inline void O2(T* ret)
     {
-        std::fill(&ret[0], &ret[0] + 4, T(0));
+        std::fill(ret, ret + 4, T(0));
     }
 
     template <class T>
     inline void O4(T* ret)
     {
-        std::fill(&ret[0], &ret[0] + 16, T(0));
+        std::fill(ret, ret + 16, T(0));
     }
 
     template <class T>
@@ -238,7 +293,7 @@ namespace pointer {
     template <class T>
     inline void II(T* ret)
     {
-        std::fill(&ret[0], &ret[0] + 16, T(0));
+        std::fill(ret, ret + 16, T(0));
 
         for (size_t i = 0; i < 2; ++i) {
             for (size_t j = 0; j < 2; ++j) {
@@ -256,7 +311,7 @@ namespace pointer {
     template <class T>
     inline void I4(T* ret)
     {
-        std::fill(&ret[0], &ret[0] + 16, T(0));
+        std::fill(ret, ret + 16, T(0));
 
         for (size_t i = 0; i < 2; ++i) {
             for (size_t j = 0; j < 2; ++j) {
@@ -274,7 +329,7 @@ namespace pointer {
     template <class T>
     inline void I4rt(T* ret)
     {
-        std::fill(&ret[0], &ret[0] + 16, T(0));
+        std::fill(ret, ret + 16, T(0));
 
         for (size_t i = 0; i < 2; ++i) {
             for (size_t j = 0; j < 2; ++j) {
@@ -297,9 +352,9 @@ namespace pointer {
         std::array<double, 16> i4rt;
         I4rt(&i4rt[0]);
 
-        std::transform(&ret[0], &ret[0] + 16, &i4rt[0], &ret[0], std::plus<T>());
+        std::transform(ret, ret + 16, &i4rt[0], ret, std::plus<T>());
 
-        std::transform(&ret[0], &ret[0] + 16, &ret[0],
+        std::transform(ret, ret + 16, ret,
             std::bind(std::multiplies<T>(), std::placeholders::_1, 0.5));
     }
 
@@ -314,7 +369,7 @@ namespace pointer {
         std::transform(&ii[0], &ii[0] + 16, &ii[0],
             std::bind(std::multiplies<T>(), std::placeholders::_1, 0.5));
 
-        std::transform(&ret[0], &ret[0] + 16, &ii[0], &ret[0], std::minus<T>());
+        std::transform(ret, ret + 16, &ii[0], ret, std::minus<T>());
     }
 
     template <class T>
@@ -326,7 +381,7 @@ namespace pointer {
     template <class S, class T>
     inline auto hydrostatic_deviatoric(const S* A, T* ret)
     {
-        auto m = T(0.5) * (A[0] + A[3]);
+        auto m = T(0.5) * trace(A);
         ret[0] = A[0] - m;
         ret[1] = A[1];
         ret[2] = A[2];
@@ -337,7 +392,7 @@ namespace pointer {
     template <class T>
     inline auto deviatoric_ddot_deviatoric(const T* A)
     {
-        auto m = T(0.5) * (A[0] + A[3]);
+        auto m = T(0.5) * trace(A);
         return (A[0] - m) * (A[0] - m)
              + (A[3] - m) * (A[3] - m)
              + T(2) * A[1] * A[2];
@@ -368,6 +423,22 @@ namespace pointer {
                 for (size_t k = 0; k < 2; ++k) {
                     for (size_t l = 0; l < 2; ++l) {
                         C[i * 8 + j * 4 + k * 2 + l] = A[i * 2 + j] * B[k * 2 + l];
+                    }
+                }
+            }
+        }
+    }
+
+    template <class R, class S, class T>
+    inline void A4_ddot_B2(const R* A, const S* B, T* ret)
+    {
+        std::fill(ret, ret + 4, T(0));
+
+        for (size_t i = 0; i < 2; i++) {
+            for (size_t j = 0; j < 2; j++) {
+                for (size_t k = 0; k < 2; k++) {
+                    for (size_t l = 0; l < 2; l++) {
+                        ret[i * 2 + j] += A[i * 8 + j * 4 + k * 2 + l] * B[l * 2 + k];
                     }
                 }
             }

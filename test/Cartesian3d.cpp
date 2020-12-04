@@ -323,14 +323,6 @@ TEST_CASE("GMatTensor::Cartesian3d::pointer", "Cartesian3d.h")
         REQUIRE(xt::allclose(A, ret));
     }
 
-    SECTION("A4_ddot_B2")
-    {
-        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
-        auto Is = GM::I4s();
-        auto B = xt::eval(0.5 * (A + xt::transpose(A)));
-        REQUIRE(xt::allclose(GM::A4_ddot_B2(Is, A), B));
-    }
-
     SECTION("eigs - from_eigs")
     {
         auto Is = GM::I4s();

@@ -18,12 +18,34 @@ namespace GMatTensor {
 namespace Cartesian2d {
 
 // Unit tensors
+inline xt::xtensor<double, 2> O2();
+inline xt::xtensor<double, 4> O4();
 inline xt::xtensor<double, 2> I2();
 inline xt::xtensor<double, 4> II();
 inline xt::xtensor<double, 4> I4();
 inline xt::xtensor<double, 4> I4rt();
 inline xt::xtensor<double, 4> I4s();
 inline xt::xtensor<double, 4> I4d();
+
+// Trace
+template <class T>
+inline auto trace(const T& A);
+
+// A : B
+template <class S, class T>
+inline auto A2_ddot_B2(const S& A, const T& B);
+
+// A : B
+template <class S, class T>
+inline auto A2s_ddot_B2s(const S& A, const T& B);
+
+// A * B
+template <class S, class T>
+inline auto A2_dyadic_B2(const S& A, const T& B);
+
+// A : B
+template <class S, class T>
+inline auto A4_ddot_B2(const S& A, const T& B);
 
 // Hydrostatic part of a tensor (== trace(A) / 2)
 template <class T, class U>
@@ -121,7 +143,8 @@ namespace pointer {
     template <class T>
     inline auto trace(const T* A);
 
-    // Hydrostatic and deviatoric decomposition of second order tensor
+    // Deviatoric decomposition of second order tensor
+    // Returns hydrostatic part
     template <class S, class T>
     inline auto hydrostatic_deviatoric(const S* A, T* ret);
 
@@ -133,13 +156,18 @@ namespace pointer {
     template <class S, class T>
     inline auto A2_ddot_B2(const S* A, const T* B);
 
-    // A : B (both assumed symmetric)
+    // A : B
+    // Symmetric tensors only, no assertion
     template <class S, class T>
     inline auto A2s_ddot_B2s(const S* A, const T* B);
 
     // A * B
     template <class R, class S, class T>
-    inline void A2_dyadic_B2(const R* A, const S* B, T* C);
+    inline void A2_dyadic_B2(const R* A, const S* B, T* ret);
+
+    // A : B
+    template <class R, class S, class T>
+    inline void A4_ddot_B2(const R* A, const S* B, T* ret);
 
 } // namespace pointer
 
