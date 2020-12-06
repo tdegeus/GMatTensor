@@ -65,6 +65,9 @@ T.W.J. de Geus (Tom) | tom@geus.me | www.geus.me |
 
 This library implements for a Cartesian coordinate frame in 2d or in 3d:
 
+*   Second (`I2`) and fourth (`I4`) order null tensors:
+    -   0<sub>ik</sub> = `02`<sub>ij</sub> *A*<sub>jk</sub>
+    -   0<sub>ij</sub> = `04`<sub>ijkl</sub> *A*<sub>lk</sub>
 *   Second (`I2`) and fourth (`I4`) order unit tensors:
     -   *A*<sub>ik</sub> = `I2`<sub>ij</sub> *A*<sub>jk</sub>
     -   *A*<sub>ij</sub> = `I4`<sub>ijkl</sub> *A*<sub>lk</sub>
