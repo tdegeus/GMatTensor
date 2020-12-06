@@ -12,6 +12,18 @@
 namespace GMatTensor {
 namespace Cartesian2d {
 
+inline xt::xtensor<double, 2> Random2()
+{
+    xt::xtensor<double, 2> ret = xt::random::randn<double>({2, 2});
+    return ret;
+}
+
+inline xt::xtensor<double, 4> Random4()
+{
+    xt::xtensor<double, 4> ret = xt::random::randn<double>({2, 2, 2, 2});
+    return ret;
+}
+
 inline xt::xtensor<double, 2> O2()
 {
     xt::xtensor<double, 2> ret = xt::zeros<double>({2, 2});

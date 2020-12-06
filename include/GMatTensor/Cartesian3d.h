@@ -18,8 +18,10 @@ namespace GMatTensor {
 namespace Cartesian3d {
 
 // Unit tensors
-inline xt::xtensor<double, 2> O2();
-inline xt::xtensor<double, 4> O4();
+inline xt::xtensor<double, 2> Random2(); // random tensor
+inline xt::xtensor<double, 4> Random4(); // random tensor
+inline xt::xtensor<double, 2> O2(); // null tensor
+inline xt::xtensor<double, 4> O4(); // null tensor
 inline xt::xtensor<double, 2> I2();
 inline xt::xtensor<double, 4> II();
 inline xt::xtensor<double, 4> I4();
