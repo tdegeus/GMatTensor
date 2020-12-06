@@ -4,29 +4,27 @@
 #include <xtensor/xio.hpp>
 #include <GMatTensor/Cartesian3d.h>
 
-#define ISCLOSE(a,b) REQUIRE_THAT((a), Catch::WithinAbs((b), 1e-12));
-
 namespace GM = GMatTensor::Cartesian3d;
 
 TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
 {
     SECTION("I4")
     {
-        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
+        auto A = xt::eval(xt::random::randn<double>({2, 2}));
         auto I = GM::I4();
         REQUIRE(xt::allclose(GM::A4_ddot_B2(I, A), A));
     }
 
     SECTION("I4s")
     {
-        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
+        auto A = xt::eval(xt::random::randn<double>({2, 2}));
         auto Is = GM::I4s();
         REQUIRE(xt::allclose(GM::A4_ddot_B2(Is, A), 0.5 * (A + xt::transpose(A))));
     }
 
     SECTION("I4d")
     {
-        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
+        auto A = xt::eval(xt::random::randn<double>({2, 2}));
         auto I = GM::I2();
         auto Id = GM::I4d();
         auto B = xt::eval(0.5 * (A + xt::transpose(A)));
@@ -35,7 +33,7 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
 
     SECTION("trace")
     {
-        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
+        auto A = xt::eval(xt::random::randn<double>({2, 2}));
         A(0, 0) = 1.0;
         A(1, 1) = 1.0;
         A(2, 2) = 1.0;
@@ -56,7 +54,7 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
 
     SECTION("inv - 2")
     {
-        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
+        auto A = xt::eval(xt::random::randn<double>({2, 2}));
         auto Ainv = GM::inv(A);
         REQUIRE(xt::allclose(GM::A2_dot_B2(A, Ainv), GM::I2()));
     }
@@ -85,7 +83,7 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
 
     SECTION("A2_dot_B2")
     {
-        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
+        auto A = xt::eval(xt::random::randn<double>({2, 2}));
         REQUIRE(xt::allclose(GM::A2_dot_B2(A, GM::I2()), A));
     }
 
@@ -108,7 +106,7 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
 
     SECTION("A4_ddot_B2")
     {
-        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
+        auto A = xt::eval(xt::random::randn<double>({2, 2}));
         auto Is = GM::I4s();
         auto B = xt::eval(0.5 * (A + xt::transpose(A)));
         REQUIRE(xt::allclose(GM::A4_ddot_B2(Is, A), B));
@@ -116,7 +114,7 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
 
     SECTION("Deviatoric - Tensor2")
     {
-        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
+        auto A = xt::eval(xt::random::randn<double>({2, 2}));
         auto B = A;
         double tr = B(0, 0) + B(1, 1) + B(2, 2);
         B(0, 0) -= tr / 3.0;
@@ -127,14 +125,14 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
 
     SECTION("Deviatoric - List")
     {
-        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
+        auto A = xt::eval(xt::random::randn<double>({2, 2}));
         auto B = A;
         double tr = B(0, 0) + B(1, 1) + B(2, 2);
         B(0, 0) -= tr / 3.0;
         B(1, 1) -= tr / 3.0;
         B(2, 2) -= tr / 3.0;
-        auto M = xt::xtensor<double,3>::from_shape({3, 3, 3});
-        auto R = xt::xtensor<double,3>::from_shape(M.shape());
+        auto M = xt::xtensor<double, 3>::from_shape({3, 3, 3});
+        auto R = xt::xtensor<double, 3>::from_shape(M.shape());
         for (size_t i = 0; i < M.shape(0); ++i) {
             xt::view(M, i, xt::all(), xt::all()) = static_cast<double>(i) * A;
             xt::view(R, i, xt::all(), xt::all()) = static_cast<double>(i) * B;
@@ -144,14 +142,14 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
 
     SECTION("Deviatoric - Matrix")
     {
-        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
+        auto A = xt::eval(xt::random::randn<double>({2, 2}));
         auto B = A;
         double tr = B(0, 0) + B(1, 1) + B(2, 2);
         B(0, 0) -= tr / 3.0;
         B(1, 1) -= tr / 3.0;
         B(2, 2) -= tr / 3.0;
-        auto M = xt::xtensor<double,4>::from_shape({3, 4, 3, 3});
-        auto R = xt::xtensor<double,4>::from_shape(M.shape());
+        auto M = xt::xtensor<double, 4>::from_shape({3, 4, 3, 3});
+        auto R = xt::xtensor<double, 4>::from_shape(M.shape());
         for (size_t i = 0; i < M.shape(0); ++i) {
             for (size_t j = 0; j < M.shape(1); ++j) {
                 xt::view(M, i, j, xt::all(), xt::all()) = static_cast<double>(i * M.shape(1) + j) * A;
@@ -163,7 +161,7 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
 
     SECTION("Hydrostatic - Tensor2")
     {
-        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
+        auto A = xt::eval(xt::random::randn<double>({2, 2}));
         A(0, 0) = 1.0;
         A(1, 1) = 1.0;
         A(2, 2) = 1.0;
@@ -172,12 +170,12 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
 
     SECTION("Hydrostatic - List")
     {
-        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
+        auto A = xt::eval(xt::random::randn<double>({2, 2}));
         A(0, 0) = 1.0;
         A(1, 1) = 1.0;
         A(2, 2) = 1.0;
-        auto M = xt::xtensor<double,3>::from_shape({3, 3, 3});
-        auto R = xt::xtensor<double,1>::from_shape({M.shape(0)});
+        auto M = xt::xtensor<double, 3>::from_shape({3, 3, 3});
+        auto R = xt::xtensor<double, 1>::from_shape({M.shape(0)});
         for (size_t i = 0; i < M.shape(0); ++i) {
             xt::view(M, i, xt::all(), xt::all()) = static_cast<double>(i) * A;
             R(i) = static_cast<double>(i);
@@ -187,12 +185,12 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
 
     SECTION("Hydrostatic - Matrix")
     {
-        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
+        auto A = xt::eval(xt::random::randn<double>({2, 2}));
         A(0, 0) = 1.0;
         A(1, 1) = 1.0;
         A(2, 2) = 1.0;
-        auto M = xt::xtensor<double,4>::from_shape({3, 4, 3, 3});
-        auto R = xt::xtensor<double,2>::from_shape({M.shape(0), M.shape(1)});
+        auto M = xt::xtensor<double, 4>::from_shape({3, 4, 3, 3});
+        auto R = xt::xtensor<double, 2>::from_shape({M.shape(0), M.shape(1)});
         for (size_t i = 0; i < M.shape(0); ++i) {
             for (size_t j = 0; j < M.shape(1); ++j) {
                 xt::view(M, i, j, xt::all(), xt::all()) = static_cast<double>(i * M.shape(1) + j) * A;
@@ -215,8 +213,8 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
         auto A = GM::O2();
         A(0, 1) = 1.0;
         A(1, 0) = 1.0;
-        auto M = xt::xtensor<double,3>::from_shape({3, 3, 3});
-        auto R = xt::xtensor<double,1>::from_shape({M.shape(0)});
+        auto M = xt::xtensor<double, 3>::from_shape({3, 3, 3});
+        auto R = xt::xtensor<double, 1>::from_shape({M.shape(0)});
         for (size_t i = 0; i < M.shape(0); ++i) {
             xt::view(M, i, xt::all(), xt::all()) = static_cast<double>(i) * A;
             R(i) = static_cast<double>(i) * std::sqrt(2.0);
@@ -229,8 +227,8 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
         auto A = GM::O2();
         A(0, 1) = 1.0;
         A(1, 0) = 1.0;
-        auto M = xt::xtensor<double,4>::from_shape({3, 4, 3, 3});
-        auto R = xt::xtensor<double,2>::from_shape({M.shape(0), M.shape(1)});
+        auto M = xt::xtensor<double, 4>::from_shape({3, 4, 3, 3});
+        auto R = xt::xtensor<double, 2>::from_shape({M.shape(0), M.shape(1)});
         for (size_t i = 0; i < M.shape(0); ++i) {
             for (size_t j = 0; j < M.shape(1); ++j) {
                 xt::view(M, i, j, xt::all(), xt::all()) = static_cast<double>(i * M.shape(1) + j) * A;
@@ -293,9 +291,9 @@ TEST_CASE("GMatTensor::Cartesian3d::pointer", "Cartesian3d.h")
 
     SECTION("hydrostatic_deviatoric")
     {
-        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
-        xt::xtensor<double, 2> B = A;
-        xt::xtensor<double, 2> C = A;
+        auto A = xt::eval(xt::random::randn<double>({2, 2}));
+        auto B = A;
+        auto C = A;
         double tr = B(0, 0) + B(1, 1) + B(2, 2);
         B(0, 0) -= tr / 3.0;
         B(1, 1) -= tr / 3.0;
@@ -307,8 +305,8 @@ TEST_CASE("GMatTensor::Cartesian3d::pointer", "Cartesian3d.h")
 
     SECTION("A4_ddot_B4_ddot_C4")
     {
-        xt::xtensor<double, 4> A = xt::random::randn<double>({3, 3, 3, 3});
-        xt::xtensor<double, 4> ret = xt::empty<double>({3, 3, 3, 3});
+        auto A = xt::eval(xt::random::randn<double>({3, 3, 3, 3}));
+        auto ret = GM::O4();
         auto I = GM::I4();
         GM::pointer::A4_ddot_B4_ddot_C4(I.data(), I.data(), A.data(), ret.data());
         REQUIRE(xt::allclose(A, ret));
@@ -316,8 +314,8 @@ TEST_CASE("GMatTensor::Cartesian3d::pointer", "Cartesian3d.h")
 
     SECTION("A2_dot_B2_dot_C2T")
     {
-        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
-        xt::xtensor<double, 2> ret = xt::empty<double>({3, 3});
+        auto A = xt::eval(xt::random::randn<double>({2, 2}));
+        auto ret = GM::O2();
         auto I = GM::I2();
         GM::pointer::A2_dot_B2_dot_C2T(I.data(), A.data(), I.data(), ret.data());
         REQUIRE(xt::allclose(A, ret));
@@ -326,8 +324,8 @@ TEST_CASE("GMatTensor::Cartesian3d::pointer", "Cartesian3d.h")
     SECTION("eigs - from_eigs")
     {
         auto Is = GM::I4s();
-        xt::xtensor<double, 2> A = xt::random::randn<double>({3, 3});
-        xt::xtensor<double, 2> C = xt::zeros<double>({3, 3});
+        auto A = xt::eval(xt::random::randn<double>({2, 2}));
+        auto C = GM::O2();
         A = GM::A4_ddot_B2(Is, A);
         xt::xtensor<double, 1> vals = xt::zeros<double>({3});
         xt::xtensor<double, 2> vecs = xt::zeros<double>({3, 3});
