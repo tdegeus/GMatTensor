@@ -11,6 +11,7 @@
 #include <xtensor/xadapt.hpp>
 #include <xtensor/xnoalias.hpp>
 #include <xtensor/xview.hpp>
+#include <xtensor/xrandom.hpp>
 
 #include "config.h"
 
