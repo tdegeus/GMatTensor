@@ -146,14 +146,23 @@ namespace pointer {
     template <class T>
     inline auto trace(const T* A);
 
+    // trace(A) / 2
+    template <class T>
+    inline auto hydrostatic(const T* A);
+
     // Deviatoric decomposition of second order tensor
     // Returns hydrostatic part
+    // "ret" may be the same as "A"
     template <class S, class T>
     inline auto hydrostatic_deviatoric(const S* A, T* ret);
 
     // dev(A) : dev(A)
     template <class T>
     inline auto deviatoric_ddot_deviatoric(const T* A);
+
+    // sqrt(dev(A) : dev(A))
+    template <class T>
+    inline auto norm_deviatoric(const T* A);
 
     // A : B
     template <class S, class T>

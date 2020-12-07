@@ -161,92 +161,91 @@ namespace detail {
         using shape_type = typename T::shape_type;
         static_assert(xt::has_fixed_rank_t<T>::value, "Only fixed rank allowed.");
         static_assert(xt::get_rank<T>::value >= 2, "Rank too low.");
-        constexpr static size_t rank = xt::get_rank<T>::value;
+        constexpr static size_t rank = xt::get_rank<T>::value - 2;
 
         template <class S>
-        static size_t toMatrixSize(const S& shape)
+        static size_t toSizeT0(const S& shape)
         {
             using ST = typename S::value_type;
             return std::accumulate(shape.cbegin(), shape.cend() - 2, ST(1), std::multiplies<ST>());
         }
 
         template <class S>
-        static std::array<size_t, rank - 2> toMatrixShape(const S& shape)
+        static std::array<size_t, rank> toShapeT0(const S& shape)
         {
-            std::array<size_t, rank - 2> ret;
+            std::array<size_t, rank> ret;
             std::copy(shape.cbegin(), shape.cend() - 2, ret.begin());
             return ret;
         }
 
         template <class S>
-        static std::array<size_t, rank> toShape(const S& shape)
+        static std::array<size_t, rank + 2> toShapeT2(const S& shape)
         {
-            std::array<size_t, rank> ret;
+            std::array<size_t, rank + 2> ret;
             std::copy(shape.cbegin(), shape.cend() - 2, ret.begin());
-            ret[rank - 2] = 2;
-            ret[rank - 1] = 2;
+            ret[rank] = 2;
+            ret[rank + 1] = 2;
             return ret;
         }
 
-        static void hydrostatic_no_alloc(const T& A, xt::xtensor<value_type, rank - 2>& B)
+        static void hydrostatic_no_alloc(const T& A, xt::xtensor<value_type, rank>& ret)
         {
-            GMATTENSOR_ASSERT(xt::has_shape(A, toShape(A.shape())));
-            GMATTENSOR_ASSERT(xt::has_shape(B, toMatrixShape(A.shape())));
+            GMATTENSOR_ASSERT(xt::has_shape(A, toShapeT2(A.shape())));
+            GMATTENSOR_ASSERT(xt::has_shape(ret, toShapeT0(A.shape())));
             #pragma omp parallel for
-            for (size_t i = 0; i < toMatrixSize(A.shape()); ++i) {
-                B.data()[i] = 0.5 * pointer::trace(&A.data()[i * 4]);
+            for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
+                ret.data()[i] = pointer::hydrostatic(&A.data()[i * 4]);
             }
         }
 
-        static void deviatoric_no_alloc(const T& A, xt::xtensor<value_type, rank>& B)
+        static void equivalent_deviatoric_no_alloc(const T& A, xt::xtensor<value_type, rank>& ret)
         {
-            GMATTENSOR_ASSERT(xt::has_shape(A, toShape(A.shape())));
-            GMATTENSOR_ASSERT(xt::has_shape(A, B.shape()));
+            GMATTENSOR_ASSERT(xt::has_shape(A, toShapeT2(A.shape())));
+            GMATTENSOR_ASSERT(xt::has_shape(ret, toShapeT0(A.shape())));
             #pragma omp parallel for
-            for (size_t i = 0; i < toMatrixSize(A.shape()); ++i) {
-                pointer::hydrostatic_deviatoric(&A.data()[i * 4], &B.data()[i * 4]);
+            for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
+                ret.data()[i] = pointer::norm_deviatoric(&A.data()[i * 4]);
             }
         }
 
-        static void equivalent_deviatoric_no_alloc(const T& A, xt::xtensor<value_type, rank - 2>& B)
+        static void deviatoric_no_alloc(const T& A, xt::xtensor<value_type, rank + 2>& ret)
         {
-            GMATTENSOR_ASSERT(xt::has_shape(A, toShape(A.shape())));
-            GMATTENSOR_ASSERT(xt::has_shape(B, toMatrixShape(A.shape())));
+            GMATTENSOR_ASSERT(xt::has_shape(A, toShapeT2(A.shape())));
+            GMATTENSOR_ASSERT(xt::has_shape(A, ret.shape()));
             #pragma omp parallel for
-            for (size_t i = 0; i < toMatrixSize(A.shape()); ++i) {
-                auto b = pointer::deviatoric_ddot_deviatoric(&A.data()[i * 4]);
-                B.data()[i] = std::sqrt(b);
+            for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
+                pointer::hydrostatic_deviatoric(&A.data()[i * 4], &ret.data()[i * 4]);
             }
         }
 
         static auto hydrostatic_alloc(const T& A)
         {
-            xt::xtensor<value_type, rank - 2> B = xt::empty<value_type>(toMatrixShape(A.shape()));
-            hydrostatic_no_alloc(A, B);
-            return B;
-        }
-
-        static auto deviatoric_alloc(const T& A)
-        {
-            xt::xtensor<value_type, rank> B = xt::empty<value_type>(A.shape());
-            deviatoric_no_alloc(A, B);
-            return B;
+            xt::xtensor<value_type, rank> ret = xt::empty<value_type>(toShapeT0(A.shape()));
+            hydrostatic_no_alloc(A, ret);
+            return ret;
         }
 
         static auto equivalent_deviatoric_alloc(const T& A)
         {
-            xt::xtensor<value_type, rank - 2> B = xt::empty<value_type>(toMatrixShape(A.shape()));
-            equivalent_deviatoric_no_alloc(A, B);
-            return B;
+            xt::xtensor<value_type, rank> ret = xt::empty<value_type>(toShapeT0(A.shape()));
+            equivalent_deviatoric_no_alloc(A, ret);
+            return ret;
+        }
+
+        static auto deviatoric_alloc(const T& A)
+        {
+            xt::xtensor<value_type, rank + 2> ret = xt::empty<value_type>(A.shape());
+            deviatoric_no_alloc(A, ret);
+            return ret;
         }
     };
 
 } // namespace detail
 
 template <class T, class U>
-inline void hydrostatic(const T& A, U& B)
+inline void hydrostatic(const T& A, U& ret)
 {
-    return detail::equiv_impl<T>::hydrostatic_no_alloc(A, B);
+    return detail::equiv_impl<T>::hydrostatic_no_alloc(A, ret);
 }
 
 template <class T>
@@ -256,9 +255,9 @@ inline auto Hydrostatic(const T& A)
 }
 
 template <class T, class U>
-inline void deviatoric(const T& A, U& B)
+inline void deviatoric(const T& A, U& ret)
 {
-    return detail::equiv_impl<T>::deviatoric_no_alloc(A, B);
+    return detail::equiv_impl<T>::deviatoric_no_alloc(A, ret);
 }
 
 template <class T>
@@ -268,9 +267,9 @@ inline auto Deviatoric(const T& A)
 }
 
 template <class T, class U>
-inline void equivalent_deviatoric(const T& A, U& B)
+inline void equivalent_deviatoric(const T& A, U& ret)
 {
-    return detail::equiv_impl<T>::equivalent_deviatoric_no_alloc(A, B);
+    return detail::equiv_impl<T>::equivalent_deviatoric_no_alloc(A, ret);
 }
 
 template <class T>
@@ -390,10 +389,16 @@ namespace pointer {
         return A[0] + A[3];
     }
 
+    template <class T>
+    inline auto hydrostatic(const T* A)
+    {
+        return T(0.5) * trace(A);
+    }
+
     template <class S, class T>
     inline auto hydrostatic_deviatoric(const S* A, T* ret)
     {
-        auto m = T(0.5) * trace(A);
+        auto m = hydrostatic(A);
         ret[0] = A[0] - m;
         ret[1] = A[1];
         ret[2] = A[2];
@@ -404,10 +409,16 @@ namespace pointer {
     template <class T>
     inline auto deviatoric_ddot_deviatoric(const T* A)
     {
-        auto m = T(0.5) * trace(A);
+        auto m = hydrostatic(A);
         return (A[0] - m) * (A[0] - m)
              + (A[3] - m) * (A[3] - m)
              + T(2) * A[1] * A[2];
+    }
+
+    template <class T>
+    inline auto norm_deviatoric(const T* A)
+    {
+        return std::sqrt(deviatoric_ddot_deviatoric(A));
     }
 
     template <class S, class T>
