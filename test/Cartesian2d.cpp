@@ -151,15 +151,15 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
         REQUIRE(xt::allclose(GM::Hydrostatic(M), R));
     }
 
-    SECTION("Equivalent_deviatoric - Tensor2")
+    SECTION("Norm_deviatoric - Tensor2")
     {
         auto A = GM::O2();
         A(0, 1) = 1.0;
         A(1, 0) = 1.0;
-        REQUIRE(GM::Equivalent_deviatoric(A)() == Approx(std::sqrt(2.0)));
+        REQUIRE(GM::Norm_deviatoric(A)() == Approx(std::sqrt(2.0)));
     }
 
-    SECTION("Equivalent_deviatoric - List")
+    SECTION("Norm_deviatoric - List")
     {
         auto A = GM::O2();
         A(0, 1) = 1.0;
@@ -170,10 +170,10 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
             xt::view(M, i, xt::all(), xt::all()) = static_cast<double>(i) * A;
             R(i) = static_cast<double>(i) * std::sqrt(2.0);
         }
-        REQUIRE(xt::allclose(GM::Equivalent_deviatoric(M), R));
+        REQUIRE(xt::allclose(GM::Norm_deviatoric(M), R));
     }
 
-    SECTION("Equivalent_deviatoric - Matrix")
+    SECTION("Norm_deviatoric - Matrix")
     {
         auto A = GM::O2();
         A(0, 1) = 1.0;
@@ -186,7 +186,7 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
                 R(i, j) = static_cast<double>(i * M.shape(1) + j) * std::sqrt(2.0);
             }
         }
-        REQUIRE(xt::allclose(GM::Equivalent_deviatoric(M), R));
+        REQUIRE(xt::allclose(GM::Norm_deviatoric(M), R));
     }
 }
 

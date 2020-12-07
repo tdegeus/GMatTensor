@@ -218,14 +218,14 @@ inline auto Hydrostatic(const T& A)
 }
 
 template <class T, class U>
-inline void equivalent_deviatoric(const T& A, U& ret)
+inline void norm_deviatoric(const T& A, U& ret)
 {
     return detail::impl_A2<T, 3>::ret0(A, ret,
         [](const auto& a){ return pointer::norm_deviatoric(a); });
 }
 
 template <class T>
-inline auto Equivalent_deviatoric(const T& A)
+inline auto Norm_deviatoric(const T& A)
 {
     return detail::impl_A2<T, 3>::ret0(A,
         [](const auto& a){ return pointer::norm_deviatoric(a); });

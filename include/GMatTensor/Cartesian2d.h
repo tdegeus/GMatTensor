@@ -64,12 +64,12 @@ inline void deviatoric(const T& A, U& ret);
 template <class T>
 inline auto Deviatoric(const T& A);
 
-// Equivalent value of the tensor's deviator: (dev(A))_ij (dev(A))_ji
+// Norm of the tensor's deviator: sqrt((dev(A))_ij (dev(A))_ji)
 template <class T, class U>
-inline void equivalent_deviatoric(const T& A, U& ret);
+inline void norm_deviatoric(const T& A, U& ret);
 
 template <class T>
-inline auto Equivalent_deviatoric(const T& A);
+inline auto Norm_deviatoric(const T& A);
 
 // Array of tensors: shape (..., d, d), e.g. (R, S, T, d, d)
 template <size_t N>

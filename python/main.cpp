@@ -54,13 +54,12 @@ void add_hydrostatic_overloads_2d(T& module)
 }
 
 template <class R, class S, class T>
-void add_equivalent_deviatoric_overloads_2d(T& module)
+void add_norm_deviatoric_overloads_2d(T& module)
 {
     module.def(
-        "Equivalent_deviatoric",
-        static_cast<R (*)(const S&)>(
-            &GMatTensor::Cartesian2d::Equivalent_deviatoric<S>),
-        "Equivalent_deviatoric part of a(n) (array of) tensor(s).",
+        "Norm_deviatoric",
+        static_cast<R (*)(const S&)>(&GMatTensor::Cartesian2d::Norm_deviatoric<S>),
+        "Norm of the deviatoric part of a(n) (array of) tensor(s).",
         py::arg("A"));
 }
 
@@ -103,13 +102,12 @@ void add_hydrostatic_overloads_3d(T& module)
 }
 
 template <class R, class S, class T>
-void add_equivalent_deviatoric_overloads_3d(T& module)
+void add_norm_deviatoric_overloads_3d(T& module)
 {
     module.def(
-        "Equivalent_deviatoric",
-        static_cast<R (*)(const S&)>(
-            &GMatTensor::Cartesian3d::Equivalent_deviatoric<S>),
-        "Equivalent_deviatoric part of a (array of) tensor(s).",
+        "Norm_deviatoric",
+        static_cast<R (*)(const S&)>(&GMatTensor::Cartesian3d::Norm_deviatoric<S>),
+        "Norm of the deviatoric part of a(n) (array of) tensor(s).",
         py::arg("A"));
 }
 
@@ -190,9 +188,9 @@ PYBIND11_MODULE(GMatTensor, m)
         add_hydrostatic_overloads_2d<xt::xtensor<double, 2>, xt::xtensor<double, 4>>(sm);
         add_hydrostatic_overloads_2d<xt::xtensor<double, 1>, xt::xtensor<double, 3>>(sm);
         add_hydrostatic_overloads_2d<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(sm);
-        add_equivalent_deviatoric_overloads_2d<xt::xtensor<double, 2>, xt::xtensor<double, 4>>(sm);
-        add_equivalent_deviatoric_overloads_2d<xt::xtensor<double, 1>, xt::xtensor<double, 3>>(sm);
-        add_equivalent_deviatoric_overloads_2d<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(sm);
+        add_norm_deviatoric_overloads_2d<xt::xtensor<double, 2>, xt::xtensor<double, 4>>(sm);
+        add_norm_deviatoric_overloads_2d<xt::xtensor<double, 1>, xt::xtensor<double, 3>>(sm);
+        add_norm_deviatoric_overloads_2d<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(sm);
 
         // Array
 
@@ -318,9 +316,9 @@ PYBIND11_MODULE(GMatTensor, m)
         add_hydrostatic_overloads_3d<xt::xtensor<double, 2>, xt::xtensor<double, 4>>(sm);
         add_hydrostatic_overloads_3d<xt::xtensor<double, 1>, xt::xtensor<double, 3>>(sm);
         add_hydrostatic_overloads_3d<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(sm);
-        add_equivalent_deviatoric_overloads_3d<xt::xtensor<double, 2>, xt::xtensor<double, 4>>(sm);
-        add_equivalent_deviatoric_overloads_3d<xt::xtensor<double, 1>, xt::xtensor<double, 3>>(sm);
-        add_equivalent_deviatoric_overloads_3d<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(sm);
+        add_norm_deviatoric_overloads_3d<xt::xtensor<double, 2>, xt::xtensor<double, 4>>(sm);
+        add_norm_deviatoric_overloads_3d<xt::xtensor<double, 1>, xt::xtensor<double, 3>>(sm);
+        add_norm_deviatoric_overloads_3d<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(sm);
 
         // Array
 
