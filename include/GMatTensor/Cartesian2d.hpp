@@ -305,19 +305,19 @@ namespace pointer {
     }
 
     template <class T>
-    inline auto trace(const T* A)
+    inline T trace(const T* A)
     {
         return A[0] + A[3];
     }
 
     template <class T>
-    inline auto hydrostatic(const T* A)
+    inline T hydrostatic(const T* A)
     {
         return T(0.5) * trace(A);
     }
 
     template <class T>
-    inline auto hydrostatic_deviatoric(const T* A, T* ret)
+    inline T hydrostatic_deviatoric(const T* A, T* ret)
     {
         T m = hydrostatic(A);
         ret[0] = A[0] - m;
@@ -328,7 +328,7 @@ namespace pointer {
     }
 
     template <class T>
-    inline auto deviatoric_ddot_deviatoric(const T* A)
+    inline T deviatoric_ddot_deviatoric(const T* A)
     {
         T m = hydrostatic(A);
         return (A[0] - m) * (A[0] - m)
@@ -337,13 +337,13 @@ namespace pointer {
     }
 
     template <class T>
-    inline auto norm_deviatoric(const T* A)
+    inline T norm_deviatoric(const T* A)
     {
         return std::sqrt(deviatoric_ddot_deviatoric(A));
     }
 
-    template <class S, class T>
-    inline auto A2_ddot_B2(const S* A, const T* B)
+    template <class T>
+    inline T A2_ddot_B2(const T* A, const T* B)
     {
         return A[0] * B[0]
              + A[3] * B[3]
@@ -351,30 +351,30 @@ namespace pointer {
              + A[2] * B[1];
     }
 
-    template <class S, class T>
-    inline auto A2s_ddot_B2s(const S* A, const T* B)
+    template <class T>
+    inline T A2s_ddot_B2s(const T* A, const T* B)
     {
         return A[0] * B[0]
              + A[3] * B[3]
              + T(2) * A[1] * B[1];
     }
 
-    template <class R, class S, class T>
-    inline void A2_dyadic_B2(const R* A, const S* B, T* C)
+    template <class T>
+    inline void A2_dyadic_B2(const T* A, const T* B, T* ret)
     {
         for (size_t i = 0; i < 2; ++i) {
             for (size_t j = 0; j < 2; ++j) {
                 for (size_t k = 0; k < 2; ++k) {
                     for (size_t l = 0; l < 2; ++l) {
-                        C[i * 8 + j * 4 + k * 2 + l] = A[i * 2 + j] * B[k * 2 + l];
+                        ret[i * 8 + j * 4 + k * 2 + l] = A[i * 2 + j] * B[k * 2 + l];
                     }
                 }
             }
         }
     }
 
-    template <class R, class S, class T>
-    inline void A4_ddot_B2(const R* A, const S* B, T* ret)
+    template <class T>
+    inline void A4_ddot_B2(const T* A, const T* B, T* ret)
     {
         std::fill(ret, ret + 4, T(0));
 

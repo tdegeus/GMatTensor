@@ -164,84 +164,84 @@ namespace pointer {
 
     // Trace of second order tensor
     template <class T>
-    inline auto trace(const T* A);
+    inline T trace(const T* A);
 
     // trace(A) / 3
     template <class T>
-    inline auto hydrostatic(const T* A);
+    inline T hydrostatic(const T* A);
 
     // Determinant
     template <class T>
-    inline auto det(const T* A);
+    inline T det(const T* A);
 
     // inv(A)
     // Returns determinant
-    template <class S, class T>
-    inline auto inv(const S* A, T* ret);
+    template <class T>
+    inline T inv(const T* A, T* ret);
 
     // Deviatoric decomposition of second order tensor
     // Returns hydrostatic part
     // "ret" may be the same as "A"
     template <class T>
-    inline auto hydrostatic_deviatoric(const T* A, T* ret);
+    inline T hydrostatic_deviatoric(const T* A, T* ret);
 
     // dev(A) : dev(A)
     template <class T>
-    inline auto deviatoric_ddot_deviatoric(const T* A);
+    inline T deviatoric_ddot_deviatoric(const T* A);
 
     // sqrt(dev(A) : dev(A))
     template <class T>
-    inline auto norm_deviatoric(const T* A);
+    inline T norm_deviatoric(const T* A);
 
     // A : B
-    template <class S, class T>
-    inline auto A2_ddot_B2(const S* A, const T* B);
+    template <class T>
+    inline T A2_ddot_B2(const T* A, const T* B);
 
     // A : B
     // Symmetric tensors only, no assertion
-    template <class S, class T>
-    inline auto A2s_ddot_B2s(const S* A, const T* B);
+    template <class T>
+    inline T A2s_ddot_B2s(const T* A, const T* B);
 
     // A * B
-    template <class R, class S, class T>
-    inline void A2_dyadic_B2(const R* A, const S* B, T* ret);
+    template <class T>
+    inline void A2_dyadic_B2(const T* A, const T* B, T* ret);
 
     // A . B
-    template <class R, class S, class T>
-    inline void A4_dot_B2(const R* A, const S* B, T* ret);
+    template <class T>
+    inline void A4_dot_B2(const T* A, const T* B, T* ret);
 
     // A . B
-    template <class R, class S, class T>
-    inline void A2_dot_B2(const R* A, const S* B, T* ret);
+    template <class T>
+    inline void A2_dot_B2(const T* A, const T* B, T* ret);
 
     // A . A^T
-    template <class S, class T>
-    inline void A2_dot_A2T(const S* A, T* ret);
+    template <class T>
+    inline void A2_dot_A2T(const T* A, T* ret);
 
     // A : B
-    template <class R, class S, class T>
-    inline void A4_ddot_B2(const R* A, const S* B, T* ret);
+    template <class T>
+    inline void A4_ddot_B2(const T* A, const T* B, T* ret);
 
     // A : B : C
-    template <class R, class S, class T, class U>
-    inline void A4_ddot_B4_ddot_C4(const R* A, const S* B, const T* C, U* ret);
+    template <class T>
+    inline void A4_ddot_B4_ddot_C4(const T* A, const T* B, const T* C, T* ret);
 
     // A . B . C^T
-    template <class R, class S, class T, class U>
-    inline void A2_dot_B2_dot_C2T(const R* A, const S* B, const T* C, U* ret);
+    template <class T>
+    inline void A2_dot_B2_dot_C2T(const T* A, const T* B, const T* C, T* ret);
 
     // Get eigenvalues/-vectors such that "A_ij = lambda^a v^a_i v^a_j"
     // Symmetric tensors only, no assertion
     // Storage:
     // - lambda^a = val[a]
     // - v^a = vec[:, a]
-    template <class U, class V, class W>
-    void eigs(const U* A, V* vec, W* val);
+    template <class T>
+    void eigs(const T* A, T* vec, T* val);
 
     // Reconstruct tensor from eigenvalues/-vectors (reverse operation of "eigs")
     // Symmetric tensors only, no assertion
-    template <class U, class V, class W>
-    void from_eigs(const U* vec, const V* val, W* ret);
+    template <class T>
+    void from_eigs(const T* vec, const T* val, T* ret);
 
 } // namespace pointer
 

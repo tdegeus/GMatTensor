@@ -494,28 +494,28 @@ namespace pointer {
     }
 
     template <class T>
-    inline auto trace(const T* A)
+    inline T trace(const T* A)
     {
         return A[0] + A[4] + A[8];
     }
 
     template <class T>
-    inline auto hydrostatic(const T* A)
+    inline T hydrostatic(const T* A)
     {
         return trace(A) / T(3);
     }
 
     template <class T>
-    inline auto det(const T* A)
+    inline T det(const T* A)
     {
         return (A[0] * A[4] * A[8] + A[1] * A[5] * A[6] + A[2] * A[3] * A[7]) -
                (A[2] * A[4] * A[6] + A[1] * A[3] * A[8] + A[0] * A[5] * A[7]);
     }
 
-    template <class S, class T>
-    inline auto inv(const S* A, T* ret)
+    template <class T>
+    inline T inv(const T* A, T* ret)
     {
-        auto D = det(A);
+        T D = det(A);
         ret[0] = (A[4] * A[8] - A[5] * A[7]) / D;
         ret[1] = (A[2] * A[7] - A[1] * A[8]) / D;
         ret[2] = (A[1] * A[5] - A[2] * A[4]) / D;
@@ -529,7 +529,7 @@ namespace pointer {
     }
 
     template <class T>
-    inline auto hydrostatic_deviatoric(const T* A, T* ret)
+    inline T hydrostatic_deviatoric(const T* A, T* ret)
     {
         T m = hydrostatic(A);
         ret[0] = A[0] - m;
@@ -545,7 +545,7 @@ namespace pointer {
     }
 
     template <class T>
-    inline auto deviatoric_ddot_deviatoric(const T* A)
+    inline T deviatoric_ddot_deviatoric(const T* A)
     {
         T m = hydrostatic(A);
         return (A[0] - m) * (A[0] - m)
@@ -557,13 +557,13 @@ namespace pointer {
     }
 
     template <class T>
-    inline auto norm_deviatoric(const T* A)
+    inline T norm_deviatoric(const T* A)
     {
         return std::sqrt(deviatoric_ddot_deviatoric(A));
     }
 
-    template <class S, class T>
-    inline auto A2_ddot_B2(const S* A, const T* B)
+    template <class T>
+    inline T A2_ddot_B2(const T* A, const T* B)
     {
         return A[0] * B[0]
              + A[4] * B[4]
@@ -576,8 +576,8 @@ namespace pointer {
              + A[7] * B[5];
     }
 
-    template <class S, class T>
-    inline auto A2s_ddot_B2s(const S* A, const T* B)
+    template <class T>
+    inline T A2s_ddot_B2s(const T* A, const T* B)
     {
         return A[0] * B[0]
              + A[4] * B[4]
@@ -587,8 +587,8 @@ namespace pointer {
              + T(2) * A[5] * B[5];
     }
 
-    template <class R, class S, class T>
-    inline void A2_dyadic_B2(const R* A, const S* B, T* ret)
+    template <class T>
+    inline void A2_dyadic_B2(const T* A, const T* B, T* ret)
     {
         for (size_t i = 0; i < 3; ++i) {
             for (size_t j = 0; j < 3; ++j) {
@@ -601,8 +601,8 @@ namespace pointer {
         }
     }
 
-    template <class R, class S, class T>
-    inline void A4_dot_B2(const R* A, const S* B, T* ret)
+    template <class T>
+    inline void A4_dot_B2(const T* A, const T* B, T* ret)
     {
         std::fill(ret, ret + 81, T(0));
 
@@ -621,8 +621,8 @@ namespace pointer {
         }
     }
 
-    template <class R, class S, class T>
-    inline void A2_dot_B2(const R* A, const S* B, T* ret)
+    template <class T>
+    inline void A2_dot_B2(const T* A, const T* B, T* ret)
     {
         std::fill(ret, ret + 9, T(0));
 
@@ -635,8 +635,8 @@ namespace pointer {
         }
     }
 
-    template <class S, class T>
-    inline void A2_dot_A2T(const S* A, T* ret)
+    template <class T>
+    inline void A2_dot_A2T(const T* A, T* ret)
     {
         ret[0] = A[0] * A[0] + A[1] * A[1] + A[2] * A[2];
         ret[1] = A[0] * A[3] + A[1] * A[4] + A[2] * A[5];
@@ -649,8 +649,8 @@ namespace pointer {
         ret[7] = ret[5];
     }
 
-    template <class R, class S, class T>
-    inline void A4_ddot_B2(const R* A, const S* B, T* ret)
+    template <class T>
+    inline void A4_ddot_B2(const T* A, const T* B, T* ret)
     {
         std::fill(ret, ret + 9, T(0));
 
@@ -665,8 +665,8 @@ namespace pointer {
         }
     }
 
-    template <class R, class S, class T, class U>
-    inline void A4_ddot_B4_ddot_C4(const R* A, const S* B, const T* C, U* ret)
+    template <class T>
+    inline void A4_ddot_B4_ddot_C4(const T* A, const T* B, const T* C, T* ret)
     {
         std::fill(ret, ret + 81, T(0));
 
@@ -692,8 +692,8 @@ namespace pointer {
         }
     }
 
-    template <class R, class S, class T, class U>
-    inline void A2_dot_B2_dot_C2T(const R* A, const S* B, const T* C, U* ret)
+    template <class T>
+    inline void A2_dot_B2_dot_C2T(const T* A, const T* B, const T* C, T* ret)
     {
         std::fill(ret, ret + 9, T(0));
 
@@ -708,8 +708,8 @@ namespace pointer {
         }
     }
 
-    template <class U, class V, class W>
-    void eigs(const U* A, V* vec, W* val)
+    template <class T>
+    void eigs(const T* A, T* vec, T* val)
     {
         double a[3][3];
         double Q[3][3];
@@ -727,8 +727,8 @@ namespace pointer {
         std::copy(&w[0], &w[0] + 3, val);
     }
 
-    template <class U, class V, class W>
-    void from_eigs(const U* vec, const V* val, W* ret)
+    template <class T>
+    void from_eigs(const T* vec, const T* val, T* ret)
     {
         ret[0] = val[0] * vec[0] * vec[0] + val[1] * vec[1] * vec[1] + val[2] * vec[2] * vec[2];
         ret[1] = val[0] * vec[0] * vec[3] + val[1] * vec[1] * vec[4] + val[2] * vec[2] * vec[5];
