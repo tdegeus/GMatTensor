@@ -153,8 +153,8 @@ namespace pointer {
     // Deviatoric decomposition of second order tensor
     // Returns hydrostatic part
     // "ret" may be the same as "A"
-    template <class S, class T>
-    inline auto hydrostatic_deviatoric(const S* A, T* ret);
+    template <class T>
+    inline auto hydrostatic_deviatoric(const T* A, T* ret);
 
     // dev(A) : dev(A)
     template <class T>
