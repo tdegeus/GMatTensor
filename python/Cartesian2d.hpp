@@ -65,7 +65,7 @@ void add2d_A2s_ddot_B2s(M& module)
     module.def(
         "A2s_ddot_B2s",
         static_cast<R (*)(const T&, const T&)>(&GMatTensor::Cartesian2d::A2s_ddot_B2s<T>),
-        "Product 'A : B' for two (arrays of) 2nd-order tensors.",
+        "Product 'A : B' for two (arrays of) symmetric 2nd-order tensors (no assertion).",
         py::arg("A"),
         py::arg("B"));
 }

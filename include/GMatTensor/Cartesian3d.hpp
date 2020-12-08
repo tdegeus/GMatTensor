@@ -197,6 +197,20 @@ inline auto Inv(const T& A)
 }
 
 template <class T, class R>
+inline void logs(const T& A, R& ret)
+{
+    return detail::impl_A2<T, 3>::ret2(A, ret,
+        [](const auto& a, const auto& r){ return pointer::logs(a, r); });
+}
+
+template <class T>
+inline auto Logs(const T& A)
+{
+    return detail::impl_A2<T, 3>::ret2(A,
+        [](const auto& a, const auto& r){ return pointer::logs(a, r); });
+}
+
+template <class T, class R>
 inline void A2_dot_A2T(const T& A, R& ret)
 {
     return detail::impl_A2<T, 3>::ret2(A, ret,
@@ -762,6 +776,18 @@ namespace pointer {
         ret[3] = ret[1];
         ret[6] = ret[2];
         ret[7] = ret[5];
+    }
+
+    template <class T>
+    inline void logs(const T* A, T* ret)
+    {
+        std::array<double, 3> val;
+        std::array<double, 9> vec;
+        eigs(&A[0], &vec[0], &val[0]);
+        for (size_t j = 0; j < 3; ++j) {
+            val[j] = std::log(val[j]);
+        }
+        from_eigs(&vec[0], &val[0], &ret[0]);
     }
 
 } // namespace pointer

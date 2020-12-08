@@ -75,7 +75,7 @@ void add3d_A2s_ddot_B2s(M& module)
     module.def(
         "A2s_ddot_B2s",
         static_cast<R (*)(const T&, const T&)>(&GMatTensor::Cartesian3d::A2s_ddot_B2s<T>),
-        "Product 'A : B' for two (arrays of) 2nd-order tensors.",
+        "Product 'A : B' for two (arrays of) symmetric 2nd-order tensors (no assertion).",
         py::arg("A"),
         py::arg("B"));
 }
@@ -107,6 +107,16 @@ void add3d_Inv(M& module)
         "Inv",
         static_cast<T (*)(const T&)>(&GMatTensor::Cartesian3d::Inv<T>),
         "Inverse of a (array of) tensor(s).",
+        py::arg("A"));
+}
+
+template <class T, class M>
+void add3d_Logs(M& module)
+{
+    module.def(
+        "Logs",
+        static_cast<T (*)(const T&)>(&GMatTensor::Cartesian3d::Logs<T>),
+        "Log of a (array of) symmetric 2nd-order tensor(s) (no assertion).",
         py::arg("A"));
 }
 
@@ -205,6 +215,9 @@ void init_Cartesian3d(py::module& m)
     add3d_Inv<xt::xtensor<double, 4>>(m);
     add3d_Inv<xt::xtensor<double, 3>>(m);
     add3d_Inv<xt::xtensor<double, 2>>(m);
+    add3d_Logs<xt::xtensor<double, 4>>(m);
+    add3d_Logs<xt::xtensor<double, 3>>(m);
+    add3d_Logs<xt::xtensor<double, 2>>(m);
     add3d_A2_dot_A2T<xt::xtensor<double, 4>>(m);
     add3d_A2_dot_A2T<xt::xtensor<double, 3>>(m);
     add3d_A2_dot_A2T<xt::xtensor<double, 2>>(m);

@@ -58,6 +58,23 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
         REQUIRE(xt::allclose(GM::A2_dot_B2(A, GM::Inv(A)), GM::I2()));
     }
 
+    SECTION("Logs - Tensor2")
+    {
+        double gamma = 0.02;
+
+        xt::xtensor<double, 2> F = {
+            {1.0 + gamma, 0.0, 0.0},
+            {0.0, 1.0 / (1.0 + gamma), 0.0},
+            {0.0, 0.0, 1.0}};
+
+        xt::xtensor<double, 2> Eps = {
+            {std::log(1.0 + gamma), 0.0, 0.0},
+            {0.0, - std::log(1.0 + gamma), 0.0},
+            {0.0, 0.0, 0.0}};
+
+        REQUIRE(xt::allclose(GM::Logs(F), Eps));
+    }
+
     SECTION("A2_ddot_B2")
     {
         auto A = GM::O2();

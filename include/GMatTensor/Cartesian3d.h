@@ -59,6 +59,7 @@ template <class T>
 inline auto A2_ddot_B2(const T& A, const T& B);
 
 // A : B
+// Symmetric tensors only, no assertion
 template <class T, class R>
 inline void A2s_ddot_B2s(const T& A, const T& B, R& ret);
 
@@ -85,6 +86,14 @@ inline void inv(const T& A, R& ret);
 
 template <class T>
 inline auto Inv(const T& A);
+
+// log(A)
+// Symmetric tensors only, no assertion
+template <class T, class R>
+inline void logs(const T& A, R& ret);
+
+template <class T>
+inline auto Logs(const T& A);
 
 // A . A^T
 template <class T, class R>
@@ -274,6 +283,12 @@ namespace pointer {
     // Symmetric tensors only, no assertion
     template <class T>
     void from_eigs(const T* vec, const T* val, T* ret);
+
+    // log(A)
+    // Symmetric tensors only, no assertion
+    // "ret" may be the same as "A"
+    template <class T>
+    void logs(const T* A, T* ret);
 
 } // namespace pointer
 

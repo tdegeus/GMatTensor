@@ -52,6 +52,7 @@ template <class T>
 inline auto A2_ddot_B2(const T& A, const T& B);
 
 // A : B
+// Symmetric tensors only, no assertion
 template <class T, class R>
 inline void A2s_ddot_B2s(const T& A, const T& B, R& ret);
 
