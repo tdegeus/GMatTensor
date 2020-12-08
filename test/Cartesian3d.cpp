@@ -37,26 +37,25 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
         A(0, 0) = 1.0;
         A(1, 1) = 1.0;
         A(2, 2) = 1.0;
-        REQUIRE(GM::trace(A) == Approx(3.0));
+        REQUIRE(GM::Trace(A)() == Approx(3.0));
     }
 
     SECTION("det")
     {
         auto A = GM::I2();
-        REQUIRE(GM::det(A) == Approx(1.0));
+        REQUIRE(GM::Det(A)() == Approx(1.0));
     }
 
     SECTION("inv - 1")
     {
         auto A = GM::I2();
-        REQUIRE(xt::allclose(A, GM::inv(A)));
+        REQUIRE(xt::allclose(A, GM::Inv(A)));
     }
 
     SECTION("inv - 2")
     {
         auto A = GM::Random2();
-        auto Ainv = GM::inv(A);
-        REQUIRE(xt::allclose(GM::A2_dot_B2(A, Ainv), GM::I2()));
+        REQUIRE(xt::allclose(GM::A2_dot_B2(A, GM::Inv(A)), GM::I2()));
     }
 
     SECTION("A2_ddot_B2")
@@ -64,7 +63,7 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
         auto A = GM::O2();
         A(0, 1) = 1.0;
         A(1, 0) = 1.0;
-        REQUIRE(GM::A2_ddot_B2(A, A) == Approx(2.0));
+        REQUIRE(GM::A2_ddot_B2(A, A)() == Approx(2.0));
     }
 
     SECTION("A2s_ddot_B2s")
@@ -72,7 +71,7 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
         auto A = GM::O2();
         A(0, 1) = 1.0;
         A(1, 0) = 1.0;
-        REQUIRE(GM::A2s_ddot_B2s(A, A) == Approx(2.0));
+        REQUIRE(GM::A2s_ddot_B2s(A, A)() == Approx(2.0));
     }
 
     SECTION("A2_dyadic_B2")

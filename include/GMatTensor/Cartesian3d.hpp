@@ -15,6 +15,7 @@ namespace Cartesian3d {
 
 namespace detail {
     using GMatTensor::detail::impl_A2;
+    using GMatTensor::detail::impl_A4;
 } // namespace detail
 
 inline xt::xtensor<double, 2> Random2()
@@ -115,96 +116,22 @@ inline xt::xtensor<double, 4> I4d()
     return I4s() - II() / 3.0;
 }
 
-template <class T>
-inline auto trace(const T& A)
+template <class T, class R>
+inline void trace(const T& A, R& ret)
 {
-    GMATTENSOR_ASSERT(xt::has_shape(A, {3, 3}));
-    return pointer::trace(A.data());
+    return detail::impl_A2<T, 3>::ret0(A, ret,
+        [](const auto& a){ return pointer::trace(a); });
 }
 
 template <class T>
-inline auto det(const T& A)
+inline auto Trace(const T& A)
 {
-    GMATTENSOR_ASSERT(xt::has_shape(A, {3, 3}));
-    return pointer::det(A.data());
+    return detail::impl_A2<T, 3>::ret0(A,
+        [](const auto& a){ return pointer::trace(a); });
 }
 
-template <class T>
-inline auto inv(const T& A)
-{
-    GMATTENSOR_ASSERT(xt::has_shape(A, {3, 3}));
-    xt::xtensor<double, 2> ret = xt::zeros<double>({3, 3});
-    pointer::inv(A.data(), ret.data());
-    return ret;
-}
-
-template <class S, class T>
-inline auto A2_ddot_B2(const S& A, const T& B)
-{
-    GMATTENSOR_ASSERT(xt::has_shape(A, {3, 3}));
-    GMATTENSOR_ASSERT(xt::has_shape(B, {3, 3}));
-    return pointer::A2_ddot_B2(A.data(), B.data());
-}
-
-template <class S, class T>
-inline auto A2s_ddot_B2s(const S& A, const T& B)
-{
-    GMATTENSOR_ASSERT(xt::has_shape(A, {3, 3}));
-    GMATTENSOR_ASSERT(xt::has_shape(B, {3, 3}));
-    return pointer::A2s_ddot_B2s(A.data(), B.data());
-}
-
-template <class S, class T>
-inline auto A2_dyadic_B2(const S& A, const T& B)
-{
-    GMATTENSOR_ASSERT(xt::has_shape(A, {3, 3}));
-    GMATTENSOR_ASSERT(xt::has_shape(B, {3, 3}));
-    xt::xtensor<double, 4> ret = xt::zeros<double>({3, 3, 3, 3});
-    pointer::A2_dyadic_B2(A.data(), B.data(), ret.data());
-    return ret;
-}
-
-template <class S, class T>
-inline auto A4_dot_B2(const S& A, const T& B)
-{
-    GMATTENSOR_ASSERT(xt::has_shape(A, {3, 3, 3, 3}));
-    GMATTENSOR_ASSERT(xt::has_shape(B, {3, 3}));
-    xt::xtensor<double, 4> ret = xt::zeros<double>({3, 3, 3, 3});
-    pointer::A4_dot_B2(A.data(), B.data(), ret.data());
-    return ret;
-}
-
-template <class S, class T>
-inline auto A2_dot_B2(const S& A, const T& B)
-{
-    GMATTENSOR_ASSERT(xt::has_shape(A, {3, 3}));
-    GMATTENSOR_ASSERT(xt::has_shape(B, {3, 3}));
-    xt::xtensor<double, 2> ret = xt::zeros<double>({3, 3});
-    pointer::A2_dot_B2(A.data(), B.data(), ret.data());
-    return ret;
-}
-
-template <class T>
-inline auto A2_dot_A2T(const T& A)
-{
-    GMATTENSOR_ASSERT(xt::has_shape(A, {3, 3}));
-    xt::xtensor<double, 2> ret = xt::zeros<double>({3, 3});
-    pointer::A2_dot_A2T(A.data(), ret.data());
-    return ret;
-}
-
-template <class S, class T>
-inline auto A4_ddot_B2(const S& A, const T& B)
-{
-    GMATTENSOR_ASSERT(xt::has_shape(A, {3, 3, 3, 3}));
-    GMATTENSOR_ASSERT(xt::has_shape(B, {3, 3}));
-    xt::xtensor<double, 2> ret = xt::zeros<double>({3, 3});
-    pointer::A4_ddot_B2(A.data(), B.data(), ret.data());
-    return ret;
-}
-
-template <class T, class U>
-inline void hydrostatic(const T& A, U& ret)
+template <class T, class R>
+inline void hydrostatic(const T& A, R& ret)
 {
     return detail::impl_A2<T, 3>::ret0(A, ret,
         [](const auto& a){ return pointer::hydrostatic(a); });
@@ -217,8 +144,50 @@ inline auto Hydrostatic(const T& A)
         [](const auto& a){ return pointer::hydrostatic(a); });
 }
 
-template <class T, class U>
-inline void norm_deviatoric(const T& A, U& ret)
+template <class T, class R>
+inline void det(const T& A, R& ret)
+{
+    return detail::impl_A2<T, 3>::ret0(A, ret,
+        [](const auto& a){ return pointer::det(a); });
+}
+
+template <class T>
+inline auto Det(const T& A)
+{
+    return detail::impl_A2<T, 3>::ret0(A,
+        [](const auto& a){ return pointer::det(a); });
+}
+
+template <class T, class R>
+inline void A2_ddot_B2(const T& A, const T& B, R& ret)
+{
+    return detail::impl_A2<T, 3>::B2_ret0(A, B, ret,
+        [](const auto& a, const auto& b){ return pointer::A2_ddot_B2(a, b); });
+}
+
+template <class T>
+inline auto A2_ddot_B2(const T& A, const T& B)
+{
+    return detail::impl_A2<T, 3>::B2_ret0(A, B,
+        [](const auto& a, const auto& b){ return pointer::A2_ddot_B2(a, b); });
+}
+
+template <class T, class R>
+inline void A2s_ddot_B2s(const T& A, const T& B, R& ret)
+{
+    return detail::impl_A2<T, 3>::B2_ret0(A, B, ret,
+        [](const auto& a, const auto& b){ return pointer::A2s_ddot_B2s(a, b); });
+}
+
+template <class T>
+inline auto A2s_ddot_B2s(const T& A, const T& B)
+{
+    return detail::impl_A2<T, 3>::B2_ret0(A, B,
+        [](const auto& a, const auto& b){ return pointer::A2s_ddot_B2s(a, b); });
+}
+
+template <class T, class R>
+inline void norm_deviatoric(const T& A, R& ret)
 {
     return detail::impl_A2<T, 3>::ret0(A, ret,
         [](const auto& a){ return pointer::norm_deviatoric(a); });
@@ -231,8 +200,8 @@ inline auto Norm_deviatoric(const T& A)
         [](const auto& a){ return pointer::norm_deviatoric(a); });
 }
 
-template <class T, class U>
-inline void deviatoric(const T& A, U& ret)
+template <class T, class R>
+inline void deviatoric(const T& A, R& ret)
 {
     return detail::impl_A2<T, 3>::ret2(A, ret,
         [](const auto& a, const auto& r){ return pointer::hydrostatic_deviatoric(a, r); });
@@ -244,6 +213,92 @@ inline auto Deviatoric(const T& A)
     return detail::impl_A2<T, 3>::ret2(A,
         [](const auto& a, const auto& r){ return pointer::hydrostatic_deviatoric(a, r); });
 }
+
+template <class T, class R>
+inline void inv(const T& A, R& ret)
+{
+    return detail::impl_A2<T, 3>::ret2(A, ret,
+        [](const auto& a, const auto& r){ return pointer::inv(a, r); });
+}
+
+template <class T>
+inline auto Inv(const T& A)
+{
+    return detail::impl_A2<T, 3>::ret2(A,
+        [](const auto& a, const auto& r){ return pointer::inv(a, r); });
+}
+
+template <class T, class R>
+inline void A2_dot_A2T(const T& A, R& ret)
+{
+    return detail::impl_A2<T, 3>::ret2(A, ret,
+        [](const auto& a, const auto& r){ return pointer::A2_dot_A2T(a, r); });
+}
+
+template <class T>
+inline auto A2_dot_A2T(const T& A)
+{
+    return detail::impl_A2<T, 3>::ret2(A,
+        [](const auto& a, const auto& r){ return pointer::A2_dot_A2T(a, r); });
+}
+
+template <class T, class R>
+inline void A2_dot_B2(const T& A, const T& B, R& ret)
+{
+    return detail::impl_A2<T, 3>::B2_ret2(A, B, ret,
+        [](const auto& a, const auto& b, const auto& r){ return pointer::A2_dot_B2(a, b, r); });
+}
+
+template <class T>
+inline auto A2_dot_B2(const T& A, const T& B)
+{
+    return detail::impl_A2<T, 3>::B2_ret2(A, B,
+        [](const auto& a, const auto& b, const auto& r){ return pointer::A2_dot_B2(a, b, r); });
+}
+
+template <class T, class R>
+inline void A2_dyadic_B2(const T& A, const T& B, R& ret)
+{
+    return detail::impl_A2<T, 3>::B2_ret4(A, B, ret,
+        [](const auto& a, const auto& b, const auto& r){ return pointer::A2_dyadic_B2(a, b, r); });
+}
+
+template <class T>
+inline auto A2_dyadic_B2(const T& A, const T& B)
+{
+    return detail::impl_A2<T, 3>::B2_ret4(A, B,
+        [](const auto& a, const auto& b, const auto& r){ return pointer::A2_dyadic_B2(a, b, r); });
+}
+
+template <class T, class U, class R>
+inline void A4_ddot_B2(const T& A, const U& B, R& ret)
+{
+    return detail::impl_A4<T, 3>::B2_ret2(A, B, ret,
+        [](const auto& a, const auto& b, const auto& r){ return pointer::A4_ddot_B2(a, b, r); });
+}
+
+template <class T, class U>
+inline auto A4_ddot_B2(const T& A, const U& B)
+{
+    return detail::impl_A4<T, 3>::B2_ret2(A, B,
+        [](const auto& a, const auto& b, const auto& r){ return pointer::A4_ddot_B2(a, b, r); });
+}
+
+template <class T, class U, class R>
+inline auto A4_dot_B2(const T& A, const U& B, R& ret)
+{
+    return detail::impl_A4<T, 3>::B2_ret4(A, B, ret,
+        [](const auto& a, const auto& b, const auto& r){ return pointer::A4_dot_B2(a, b, r); });
+}
+
+template <class T, class U>
+inline auto A4_dot_B2(const T& A, const U& B)
+{
+    return detail::impl_A4<T, 3>::B2_ret4(A, B,
+        [](const auto& a, const auto& b, const auto& r){ return pointer::A4_dot_B2(a, b, r); });
+}
+
+
 
 namespace pointer {
 

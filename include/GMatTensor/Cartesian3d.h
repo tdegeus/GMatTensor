@@ -31,65 +31,95 @@ inline xt::xtensor<double, 4> I4s();
 inline xt::xtensor<double, 4> I4d();
 
 // Trace
+template <class T, class R>
+inline void trace(const T& A, R& ret);
+
 template <class T>
-inline auto trace(const T& A);
-
-// Determinant
-template <class T>
-inline auto det(const T& A);
-
-// inv(A)
-template <class T>
-inline auto inv(const T& A);
-
-// A : B
-template <class S, class T>
-inline auto A2_ddot_B2(const S& A, const T& B);
-
-// A : B
-template <class S, class T>
-inline auto A2s_ddot_B2s(const S& A, const T& B);
-
-// A * B
-template <class S, class T>
-inline auto A2_dyadic_B2(const S& A, const T& B);
-
-// A . B
-template <class S, class T>
-inline auto A4_dot_B2(const S& A, const T& B);
-
-// A . B
-template <class S, class T>
-inline auto A2_dot_B2(const S& A, const T& B);
-
-// A . A^T
-template <class T>
-inline auto A2_dot_A2T(const T& A);
-
-// A : B
-template <class S, class T>
-inline auto A4_ddot_B2(const S& A, const T& B);
+inline auto Trace(const T& A);
 
 // Hydrostatic part of a tensor (== trace(A) / 3)
-template <class T, class U>
-inline void hydrostatic(const T& A, U& ret);
+template <class T, class R>
+inline void hydrostatic(const T& A, R& ret);
 
 template <class T>
 inline auto Hydrostatic(const T& A);
 
+// Determinant
+template <class T, class R>
+inline void det(const T& A, R& ret);
+
+template <class T>
+inline auto Det(const T& A);
+
+// A : B
+template <class T, class R>
+inline void A2_ddot_B2(const T& A, const T& B, R& ret);
+
+template <class T>
+inline auto A2_ddot_B2(const T& A, const T& B);
+
+// A : B
+template <class T, class R>
+inline void A2s_ddot_B2s(const T& A, const T& B, R& ret);
+
+template <class T>
+inline auto A2s_ddot_B2s(const T& A, const T& B);
+
+// Norm of the tensor's deviator: sqrt((dev(A))_ij (dev(A))_ji)
+template <class T, class R>
+inline void norm_deviatoric(const T& A, R& ret);
+
+template <class T>
+inline auto Norm_deviatoric(const T& A);
+
 // Deviatoric part of a tensor (== A - Hydrostatic(A) * I2)
-template <class T, class U>
-inline void deviatoric(const T& A, U& ret);
+template <class T, class R>
+inline void deviatoric(const T& A, R& ret);
 
 template <class T>
 inline auto Deviatoric(const T& A);
 
-// Norm of the tensor's deviator: sqrt((dev(A))_ij (dev(A))_ji)
-template <class T, class U>
-inline void norm_deviatoric(const T& A, U& ret);
+// inv(A)
+template <class T, class R>
+inline void inv(const T& A, R& ret);
 
 template <class T>
-inline auto Norm_deviatoric(const T& A);
+inline auto Inv(const T& A);
+
+// A . A^T
+template <class T, class R>
+inline void A2_dot_A2T(const T& A, R& ret);
+
+template <class T>
+inline auto A2_dot_A2T(const T& A);
+
+// A . B
+template <class T, class R>
+inline void A2_dot_B2(const T& A, R& ret);
+
+template <class T>
+inline auto A2_dot_B2(const T& A);
+
+// A * B
+template <class T, class R>
+inline void A2_dyadic_B2(const T& A, const T& B, R& ret);
+
+template <class T>
+inline auto A2_dyadic_B2(const T& A, const T& B);
+
+// A : B
+template <class T, class U, class R>
+inline void A4_ddot_B2(const T& A, const U& B, R& ret);
+
+template <class T, class U>
+inline auto A4_ddot_B2(const T& A, const U& B);
+
+// A . B
+template <class T, class U, class R>
+inline void A4_dot_B2(const T& A, const U& B, R& ret);
+
+template <class T, class U>
+inline auto A4_dot_B2(const T& A, const U& B);
 
 // Array of tensors: shape (..., d, d), e.g. (R, S, T, d, d)
 template <size_t N>

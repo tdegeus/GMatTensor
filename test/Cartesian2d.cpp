@@ -36,7 +36,7 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
         auto A = GM::Random2();
         A(0, 0) = 1.0;
         A(1, 1) = 1.0;
-        REQUIRE(GM::trace(A) == Approx(2.0));
+        REQUIRE(GM::Trace(A)() == Approx(2.0));
     }
 
     SECTION("A2_ddot_B2")
@@ -44,7 +44,7 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
         auto A = GM::O2();
         A(0, 1) = 1.0;
         A(1, 0) = 1.0;
-        REQUIRE(GM::A2_ddot_B2(A, A) == Approx(2.0));
+        REQUIRE(GM::A2_ddot_B2(A, A)() == Approx(2.0));
     }
 
     SECTION("A2s_ddot_B2s")
@@ -52,7 +52,7 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
         auto A = GM::O2();
         A(0, 1) = 1.0;
         A(1, 0) = 1.0;
-        REQUIRE(GM::A2s_ddot_B2s(A, A) == Approx(2.0));
+        REQUIRE(GM::A2s_ddot_B2s(A, A)() == Approx(2.0));
     }
 
     SECTION("A2_dyadic_B2")
