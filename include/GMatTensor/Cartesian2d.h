@@ -101,6 +101,8 @@ public:
     std::array<size_t, N> shape() const;
 
     // Array of unit tensors, shape (..., d, d), e.g. (R, S, T, d, d)
+    xt::xtensor<double, N + 2> O2() const;
+    xt::xtensor<double, N + 4> O4() const;
     xt::xtensor<double, N + 2> I2() const;
     xt::xtensor<double, N + 4> II() const;
     xt::xtensor<double, N + 4> I4() const;

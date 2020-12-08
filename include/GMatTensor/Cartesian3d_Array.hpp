@@ -37,21 +37,39 @@ inline std::array<size_t, N> Array<N>::shape() const
 }
 
 template <size_t N>
+inline xt::xtensor<double, N + 2> Array<N>::O2() const
+{
+    xt::xtensor<double, N + 2> ret = xt::empty<double>(m_shape_tensor2);
+
+    #pragma omp parallel for
+    for (size_t i = 0; i < m_size; ++i) {
+        Cartesian3d::pointer::O2(&ret.data()[i * m_stride_tensor2]);
+    }
+
+    return ret;
+}
+
+template <size_t N>
+inline xt::xtensor<double, N + 4> Array<N>::O4() const
+{
+    xt::xtensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
+
+    #pragma omp parallel for
+    for (size_t i = 0; i < m_size; ++i) {
+        Cartesian3d::pointer::O4(&ret.data()[i * m_stride_tensor4]);
+    }
+
+    return ret;
+}
+
+template <size_t N>
 inline xt::xtensor<double, N + 2> Array<N>::I2() const
 {
     xt::xtensor<double, N + 2> ret = xt::empty<double>(m_shape_tensor2);
 
-    #pragma omp parallel
-    {
-        auto unit = Cartesian3d::I2();
-        auto shape = xt::xshape<m_ndim, m_ndim>();
-        size_t stride = m_stride_tensor2;
-
-        #pragma omp for
-        for (size_t i = 0; i < m_size; ++i) {
-            auto view = xt::adapt(&ret.data()[i * stride], shape);
-            xt::noalias(view) = unit;
-        }
+    #pragma omp parallel for
+    for (size_t i = 0; i < m_size; ++i) {
+        Cartesian3d::pointer::I2(&ret.data()[i * m_stride_tensor2]);
     }
 
     return ret;
@@ -62,17 +80,9 @@ inline xt::xtensor<double, N + 4> Array<N>::II() const
 {
     xt::xtensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
 
-    #pragma omp parallel
-    {
-        auto unit = Cartesian3d::II();
-        auto shape = xt::xshape<m_ndim, m_ndim, m_ndim, m_ndim>();
-        size_t stride = m_stride_tensor4;
-
-        #pragma omp for
-        for (size_t i = 0; i < m_size; ++i) {
-            auto view = xt::adapt(&ret.data()[i * stride], shape);
-            xt::noalias(view) = unit;
-        }
+    #pragma omp parallel for
+    for (size_t i = 0; i < m_size; ++i) {
+        Cartesian3d::pointer::II(&ret.data()[i * m_stride_tensor4]);
     }
 
     return ret;
@@ -83,17 +93,9 @@ inline xt::xtensor<double, N + 4> Array<N>::I4() const
 {
     xt::xtensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
 
-    #pragma omp parallel
-    {
-        auto unit = Cartesian3d::I4();
-        auto shape = xt::xshape<m_ndim, m_ndim, m_ndim, m_ndim>();
-        size_t stride = m_stride_tensor4;
-
-        #pragma omp for
-        for (size_t i = 0; i < m_size; ++i) {
-            auto view = xt::adapt(&ret.data()[i * stride], shape);
-            xt::noalias(view) = unit;
-        }
+    #pragma omp parallel for
+    for (size_t i = 0; i < m_size; ++i) {
+        Cartesian3d::pointer::I4(&ret.data()[i * m_stride_tensor4]);
     }
 
     return ret;
@@ -104,17 +106,9 @@ inline xt::xtensor<double, N + 4> Array<N>::I4rt() const
 {
     xt::xtensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
 
-    #pragma omp parallel
-    {
-        auto unit = Cartesian3d::I4rt();
-        auto shape = xt::xshape<m_ndim, m_ndim, m_ndim, m_ndim>();
-        size_t stride = m_stride_tensor4;
-
-        #pragma omp for
-        for (size_t i = 0; i < m_size; ++i) {
-            auto view = xt::adapt(&ret.data()[i * stride], shape);
-            xt::noalias(view) = unit;
-        }
+    #pragma omp parallel for
+    for (size_t i = 0; i < m_size; ++i) {
+        Cartesian3d::pointer::I4rt(&ret.data()[i * m_stride_tensor4]);
     }
 
     return ret;
@@ -125,17 +119,9 @@ inline xt::xtensor<double, N + 4> Array<N>::I4s() const
 {
     xt::xtensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
 
-    #pragma omp parallel
-    {
-        auto unit = Cartesian3d::I4s();
-        auto shape = xt::xshape<m_ndim, m_ndim, m_ndim, m_ndim>();
-        size_t stride = m_stride_tensor4;
-
-        #pragma omp for
-        for (size_t i = 0; i < m_size; ++i) {
-            auto view = xt::adapt(&ret.data()[i * stride], shape);
-            xt::noalias(view) = unit;
-        }
+    #pragma omp parallel for
+    for (size_t i = 0; i < m_size; ++i) {
+        Cartesian3d::pointer::I4s(&ret.data()[i * m_stride_tensor4]);
     }
 
     return ret;
@@ -146,17 +132,9 @@ inline xt::xtensor<double, N + 4> Array<N>::I4d() const
 {
     xt::xtensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
 
-    #pragma omp parallel
-    {
-        auto unit = Cartesian3d::I4d();
-        auto shape = xt::xshape<m_ndim, m_ndim, m_ndim, m_ndim>();
-        size_t stride = m_stride_tensor4;
-
-        #pragma omp for
-        for (size_t i = 0; i < m_size; ++i) {
-            auto view = xt::adapt(&ret.data()[i * stride], shape);
-            xt::noalias(view) = unit;
-        }
+    #pragma omp parallel for
+    for (size_t i = 0; i < m_size; ++i) {
+        Cartesian3d::pointer::I4d(&ret.data()[i * m_stride_tensor4]);
     }
 
     return ret;

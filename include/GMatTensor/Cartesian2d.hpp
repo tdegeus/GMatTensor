@@ -44,75 +44,44 @@ inline xt::xtensor<double, 4> O4()
 
 inline xt::xtensor<double, 2> I2()
 {
-    return xt::xtensor<double, 2>({{1.0, 0.0},
-                                   {0.0, 1.0}});
+    xt::xtensor<double, 2> ret = xt::empty<double>({2, 2});
+    pointer::I2(ret.data());
+    return ret;
 }
 
 inline xt::xtensor<double, 4> II()
 {
-    xt::xtensor<double, 4> ret = xt::zeros<double>({2, 2, 2, 2});
-
-    for (size_t i = 0; i < 2; ++i) {
-        for (size_t j = 0; j < 2; ++j) {
-            for (size_t k = 0; k < 2; ++k) {
-                for (size_t l = 0; l < 2; ++l) {
-                    if (i == j && k == l) {
-                        ret(i, j, k, l) = 1.0;
-                    }
-                }
-            }
-        }
-    }
-
+    xt::xtensor<double, 4> ret = xt::empty<double>({2, 2, 2, 2});
+    pointer::II(ret.data());
     return ret;
 }
 
 inline xt::xtensor<double, 4> I4()
 {
-    xt::xtensor<double, 4> ret = xt::zeros<double>({2, 2, 2, 2});
-
-    for (size_t i = 0; i < 2; ++i) {
-        for (size_t j = 0; j < 2; ++j) {
-            for (size_t k = 0; k < 2; ++k) {
-                for (size_t l = 0; l < 2; ++l) {
-                    if (i == l && j == k) {
-                        ret(i, j, k, l) = 1.0;
-                    }
-                }
-            }
-        }
-    }
-
+    xt::xtensor<double, 4> ret = xt::empty<double>({2, 2, 2, 2});
+    pointer::I4(ret.data());
     return ret;
 }
 
 inline xt::xtensor<double, 4> I4rt()
 {
-    xt::xtensor<double, 4> ret = xt::zeros<double>({2, 2, 2, 2});
-
-    for (size_t i = 0; i < 2; ++i) {
-        for (size_t j = 0; j < 2; ++j) {
-            for (size_t k = 0; k < 2; ++k) {
-                for (size_t l = 0; l < 2; ++l) {
-                    if (i == k && j == l) {
-                        ret(i, j, k, l) = 1.0;
-                    }
-                }
-            }
-        }
-    }
-
+    xt::xtensor<double, 4> ret = xt::empty<double>({2, 2, 2, 2});
+    pointer::I4rt(ret.data());
     return ret;
 }
 
 inline xt::xtensor<double, 4> I4s()
 {
-    return 0.5 * (I4() + I4rt());
+    xt::xtensor<double, 4> ret = xt::empty<double>({2, 2, 2, 2});
+    pointer::I4s(ret.data());
+    return ret;
 }
 
 inline xt::xtensor<double, 4> I4d()
 {
-    return I4s() - 0.5 * II();
+    xt::xtensor<double, 4> ret = xt::empty<double>({2, 2, 2, 2});
+    pointer::I4d(ret.data());
+    return ret;
 }
 
 template <class T, class R>
