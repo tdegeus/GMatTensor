@@ -123,6 +123,7 @@ or for nd-arrays of (x)tensors (include a 'plain' tensor with array rank 0).
     Returns: 2nd-order tensor (e.g. `(R, S, T, d, d)`).
     -   dev(*A*) = `A` - `Hydrostatic(A)` * `I2`
     -   dev(*A*) = `Deviatoric(A)`
+    -   sym(*A*) = `Sym(A)`
     -   *A*<sup>-1</sup> = `Inv(A)`
     -   log(*A*) = `Logs(A)`
         (tensor assumed symmetric, no assertion).
@@ -268,11 +269,11 @@ The following targets are available:
     Includes *GMatTensor* and the *xtensor* dependency.
 
 *   `GMatTensor::assert`
-    Enables assertions by defining `GMATELASTOPLASTICQPOT_ENABLE_ASSERT`.
+    Enables assertions by defining `GMATTENSOR_ENABLE_ASSERT`.
 
 *   `GMatTensor::debug`
     Enables all assertions by defining 
-    `GMATELASTOPLASTICQPOT_ENABLE_ASSERT` and `XTENSOR_ENABLE_ASSERT`.
+    `GMATTENSOR_ENABLE_ASSERT` and `XTENSOR_ENABLE_ASSERT`.
 
 *   `GMatTensor::compiler_warings`
     Enables compiler warnings (generic).
@@ -322,6 +323,8 @@ enabling *xsimd*, ...
 
 ## v0.5.0
 
+*   Extending tests.
+*   Added `Sym`.
 *   Added `A2_dot_B2` to *Cartesian2d*.
 *   API change: **all** functions that return output, including scalars, now start
     with a capital letter.
