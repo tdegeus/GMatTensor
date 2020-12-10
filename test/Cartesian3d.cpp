@@ -8,54 +8,318 @@ namespace GM = GMatTensor::Cartesian3d;
 
 TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
 {
-    SECTION("I4")
+    SECTION("I4 - Tensor")
     {
         auto A = GM::Random2();
         auto I = GM::I4();
         REQUIRE(xt::allclose(GM::A4_ddot_B2(I, A), A));
     }
 
-    SECTION("I4s")
+    SECTION("I4 - Array")
+    {
+        auto N = GM::Array<3>({4, 2, 3});
+        auto M = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
+        for (size_t i = 0; i < M.shape(0); ++i) {
+            for (size_t j = 0; j < M.shape(1); ++j) {
+                for (size_t k = 0; k < M.shape(2); ++k) {
+                    xt::view(M, i, j, k, xt::all(), xt::all()) = GM::Random2();
+                }
+            }
+        }
+        REQUIRE(xt::allclose(GM::A4_ddot_B2(N.I4(), M), M));
+    }
+
+    SECTION("I4s - Tensor")
     {
         auto A = GM::Random2();
         auto Is = GM::I4s();
         REQUIRE(xt::allclose(GM::A4_ddot_B2(Is, A), 0.5 * (A + xt::transpose(A))));
     }
 
-    SECTION("I4d")
+    SECTION("I4s - Array")
+    {
+        auto N = GM::Array<3>({4, 2, 3});
+        auto M = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
+        auto R = xt::xtensor<double, 5>::from_shape(M.shape());
+        for (size_t i = 0; i < M.shape(0); ++i) {
+            for (size_t j = 0; j < M.shape(1); ++j) {
+                for (size_t k = 0; k < M.shape(2); ++k) {
+                    auto A = GM::Random2();
+                    auto B = GM::Sym(A);
+                    xt::view(M, i, j, k, xt::all(), xt::all()) = A;
+                    xt::view(R, i, j, k, xt::all(), xt::all()) = B;
+                }
+            }
+        }
+        REQUIRE(xt::allclose(GM::A4_ddot_B2(N.I4s(), M), R));
+    }
+
+    SECTION("I4d - Tensor")
     {
         auto A = GM::Random2();
         auto I = GM::I2();
         auto Id = GM::I4d();
-        auto B = xt::eval(0.5 * (A + xt::transpose(A)));
+        auto B = GM::Sym(A);
         REQUIRE(xt::allclose(GM::A4_ddot_B2(Id, A), B - GM::Hydrostatic(B) * I));
     }
 
-    SECTION("trace")
+    SECTION("I4d - Array")
     {
-        auto A = GM::Random2();
-        A(0, 0) = 1.0;
-        A(1, 1) = 1.0;
-        A(2, 2) = 1.0;
-        REQUIRE(GM::Trace(A)() == Approx(3.0));
+        auto N = GM::Array<3>({4, 2, 3});
+        auto M = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
+        auto R = xt::xtensor<double, 5>::from_shape(M.shape());
+        for (size_t i = 0; i < M.shape(0); ++i) {
+            for (size_t j = 0; j < M.shape(1); ++j) {
+                for (size_t k = 0; k < M.shape(2); ++k) {
+                    auto A = GM::Random2();
+                    auto B = xt::eval(0.5 * (A + xt::transpose(A)));
+                    auto I = GM::I2();
+                    xt::view(M, i, j, k, xt::all(), xt::all()) = A;
+                    xt::view(R, i, j, k, xt::all(), xt::all()) = B - GM::Hydrostatic(B) * I;
+                }
+            }
+        }
+        REQUIRE(xt::allclose(GM::A4_ddot_B2(N.I4d(), M), R));
+        REQUIRE(xt::allclose(GM::A4_ddot_B2(N.I4d(), M), GM::Deviatoric(GM::Sym(M))));
     }
 
-    SECTION("det")
+    SECTION("Trace - Tensor")
+    {
+        auto A = GM::Random2();
+        REQUIRE(GM::Trace(A)() == Approx(A(0, 0) + A(1, 1) + A(2, 2)));
+    }
+
+    SECTION("Trace - Array")
+    {
+        auto M = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
+        auto R = xt::xtensor<double, 3>::from_shape({4, 2, 3});
+        for (size_t i = 0; i < M.shape(0); ++i) {
+            for (size_t j = 0; j < M.shape(1); ++j) {
+                for (size_t k = 0; k < M.shape(2); ++k) {
+                    auto A = GM::Random2();
+                    xt::view(M, i, j, k, xt::all(), xt::all()) = A;
+                    xt::view(R, i, j, k) = A(0, 0) + A(1, 1) + A(2, 2);
+                }
+            }
+        }
+        REQUIRE(xt::allclose(GM::Trace(M), R));
+    }
+
+    SECTION("Hydrostatic - Tensor")
+    {
+        auto A = GM::Random2();
+        REQUIRE(GM::Hydrostatic(A)() == Approx((A(0, 0) + A(1, 1) + A(2, 2)) / 3.0));
+    }
+
+    SECTION("Hydrostatic - Array")
+    {
+        auto M = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
+        auto R = xt::xtensor<double, 3>::from_shape({4, 2, 3});
+        for (size_t i = 0; i < M.shape(0); ++i) {
+            for (size_t j = 0; j < M.shape(1); ++j) {
+                for (size_t k = 0; k < M.shape(2); ++k) {
+                    auto A = GM::Random2();
+                    xt::view(M, i, j, k, xt::all(), xt::all()) = A;
+                    xt::view(R, i, j, k) = (A(0, 0) + A(1, 1) + A(2, 2)) / 3.0;
+                }
+            }
+        }
+        REQUIRE(xt::allclose(GM::Hydrostatic(M), R));
+    }
+
+    SECTION("Det - Tensor")
     {
         auto A = GM::I2();
         REQUIRE(GM::Det(A)() == Approx(1.0));
     }
 
-    SECTION("inv - 1")
+    SECTION("Det - Array")
+    {
+        auto M = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
+        auto R = xt::xtensor<double, 3>::from_shape({4, 2, 3});
+        for (size_t i = 0; i < M.shape(0); ++i) {
+            for (size_t j = 0; j < M.shape(1); ++j) {
+                for (size_t k = 0; k < M.shape(2); ++k) {
+                    auto A = GM::Random2();
+                    xt::view(M, i, j, k, xt::all(), xt::all()) = GM::I2();
+                    xt::view(R, i, j, k) = 1.0;
+                }
+            }
+        }
+        REQUIRE(xt::allclose(GM::Det(M), R));
+    }
+
+    SECTION("A2_ddot_B2 - Tensor")
+    {
+        auto A = GM::O2();
+        A(0, 1) = 1.0;
+        A(1, 0) = 1.0;
+        auto r = 2.0;
+        REQUIRE(GM::A2_ddot_B2(A, A)() == Approx(r));
+    }
+
+    SECTION("A2_ddot_B2 - Array")
+    {
+        auto A = GM::O2();
+        A(0, 1) = 1.0;
+        A(1, 0) = 1.0;
+        auto r = 2.0;
+
+        auto M = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
+        auto R = xt::xtensor<double, 3>::from_shape({4, 2, 3});
+        for (size_t i = 0; i < M.shape(0); ++i) {
+            for (size_t j = 0; j < M.shape(1); ++j) {
+                for (size_t k = 0; k < M.shape(2); ++k) {
+                    xt::view(M, i, j, k, xt::all(), xt::all()) = A;
+                    xt::view(R, i, j, k) = r;
+                }
+            }
+        }
+        REQUIRE(xt::allclose(GM::A2_ddot_B2(M, M), R));
+    }
+
+    SECTION("A2s_ddot_B2s - Tensor")
+    {
+        auto A = GM::O2();
+        A(0, 1) = 1.0;
+        A(1, 0) = 1.0;
+        auto r = 2.0;
+        REQUIRE(GM::A2s_ddot_B2s(A, A)() == Approx(r));
+    }
+
+    SECTION("A2s_ddot_B2s - Array")
+    {
+        auto A = GM::O2();
+        A(0, 1) = 1.0;
+        A(1, 0) = 1.0;
+        auto r = 2.0;
+
+        auto M = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
+        auto R = xt::xtensor<double, 3>::from_shape({4, 2, 3});
+        for (size_t i = 0; i < M.shape(0); ++i) {
+            for (size_t j = 0; j < M.shape(1); ++j) {
+                for (size_t k = 0; k < M.shape(2); ++k) {
+                    xt::view(M, i, j, k, xt::all(), xt::all()) = A;
+                    xt::view(R, i, j, k) = r;
+                }
+            }
+        }
+        REQUIRE(xt::allclose(GM::A2s_ddot_B2s(M, M), R));
+    }
+
+    SECTION("Norm_deviatoric - Tensor")
+    {
+        auto A = GM::O2();
+        A(0, 1) = 1.0;
+        A(1, 0) = 1.0;
+        auto r = std::sqrt(2.0);
+        REQUIRE(GM::Norm_deviatoric(A)() == Approx(r));
+    }
+
+    SECTION("Norm_deviatoric - Array")
+    {
+        auto A = GM::O2();
+        A(0, 1) = 1.0;
+        A(1, 0) = 1.0;
+        auto r = std::sqrt(2.0);
+
+        auto M = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
+        auto R = xt::xtensor<double, 3>::from_shape({4, 2, 3});
+        for (size_t i = 0; i < M.shape(0); ++i) {
+            for (size_t j = 0; j < M.shape(1); ++j) {
+                for (size_t k = 0; k < M.shape(2); ++k) {
+                    xt::view(M, i, j, k, xt::all(), xt::all()) = A;
+                    xt::view(R, i, j, k) = r;
+                }
+            }
+        }
+        REQUIRE(xt::allclose(GM::Norm_deviatoric(M), R));
+    }
+
+    SECTION("Deviatoric - Tensor2")
+    {
+        auto A = GM::Random2();
+        auto B = A;
+        double tr = B(0, 0) + B(1, 1) + B(2, 2);
+        B(0, 0) -= tr / 3.0;
+        B(1, 1) -= tr / 3.0;
+        B(2, 2) -= tr / 3.0;
+        REQUIRE(xt::allclose(GM::Deviatoric(A), B));
+    }
+
+    SECTION("Deviatoric - Array")
+    {
+        auto A = GM::Random2();
+        auto B = A;
+        double tr = B(0, 0) + B(1, 1) + B(2, 2);
+        B(0, 0) -= tr / 3.0;
+        B(1, 1) -= tr / 3.0;
+        B(2, 2) -= tr / 3.0;
+
+        auto M = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
+        auto R = xt::xtensor<double, 5>::from_shape(M.shape());
+        xt::xtensor<double, 3> r = xt::random::rand<double>({4, 2, 3});
+        for (size_t i = 0; i < M.shape(0); ++i) {
+            for (size_t j = 0; j < M.shape(1); ++j) {
+                for (size_t k = 0; k < M.shape(2); ++k) {
+                    xt::view(M, i, j, k, xt::all(), xt::all()) = r(i, j, k) * A;
+                    xt::view(R, i, j, k, xt::all(), xt::all()) = r(i, j, k) * B;
+                }
+            }
+        }
+        REQUIRE(xt::allclose(GM::Deviatoric(M), R));
+    }
+
+    SECTION("Sym - Tensor2")
+    {
+        auto A = GM::Random2();
+        auto B = 0.5 * (A + xt::transpose(A));
+        REQUIRE(xt::allclose(GM::Sym(A), B));
+    }
+
+    SECTION("Sym - Array")
+    {
+        auto A = GM::Random2();
+        auto B = 0.5 * (A + xt::transpose(A));
+        auto M = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
+        auto R = xt::xtensor<double, 5>::from_shape(M.shape());
+        xt::xtensor<double, 3> r = xt::random::rand<double>({4, 2, 3});
+        for (size_t i = 0; i < M.shape(0); ++i) {
+            for (size_t j = 0; j < M.shape(1); ++j) {
+                for (size_t k = 0; k < M.shape(2); ++k) {
+                    xt::view(M, i, j, k, xt::all(), xt::all()) = r(i, j, k) * A;
+                    xt::view(R, i, j, k, xt::all(), xt::all()) = r(i, j, k) * B;
+                }
+            }
+        }
+        REQUIRE(xt::allclose(GM::Sym(M), R));
+    }
+
+    SECTION("Inv - Tensor")
     {
         auto A = GM::I2();
         REQUIRE(xt::allclose(A, GM::Inv(A)));
     }
 
-    SECTION("inv - 2")
+    SECTION("Inv - Tensor - 2")
     {
         auto A = GM::Random2();
         REQUIRE(xt::allclose(GM::A2_dot_B2(A, GM::Inv(A)), GM::I2()));
+    }
+
+    SECTION("Inv - Array")
+    {
+        auto N = GM::Array<3>({4, 2, 3});
+        auto M = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
+        xt::xtensor<double, 3> r = xt::random::rand<double>({4, 2, 3});
+        for (size_t i = 0; i < M.shape(0); ++i) {
+            for (size_t j = 0; j < M.shape(1); ++j) {
+                for (size_t k = 0; k < M.shape(2); ++k) {
+                    xt::view(M, i, j, k, xt::all(), xt::all()) = GM::Random2();
+                }
+            }
+        }
+        REQUIRE(xt::allclose(GM::A2_dot_B2(M, GM::Inv(M)), N.I2()));
     }
 
     SECTION("Logs - Tensor2")
@@ -75,35 +339,36 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
         REQUIRE(xt::allclose(GM::Logs(F), Eps));
     }
 
-    SECTION("A2_ddot_B2")
+    SECTION("Logs - Array")
     {
-        auto A = GM::O2();
-        A(0, 1) = 1.0;
-        A(1, 0) = 1.0;
-        REQUIRE(GM::A2_ddot_B2(A, A)() == Approx(2.0));
+        auto M = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
+        auto R = xt::xtensor<double, 5>::from_shape(M.shape());
+        xt::xtensor<double, 3> r = xt::random::rand<double>({4, 2, 3});
+        for (size_t i = 0; i < M.shape(0); ++i) {
+            for (size_t j = 0; j < M.shape(1); ++j) {
+                for (size_t k = 0; k < M.shape(2); ++k) {
+
+                    double gamma = r(i, j, k);
+
+                    xt::xtensor<double, 2> F = {
+                        {1.0 + gamma, 0.0, 0.0},
+                        {0.0, 1.0 / (1.0 + gamma), 0.0},
+                        {0.0, 0.0, 1.0}};
+
+                    xt::xtensor<double, 2> Eps = {
+                        {std::log(1.0 + gamma), 0.0, 0.0},
+                        {0.0, - std::log(1.0 + gamma), 0.0},
+                        {0.0, 0.0, 0.0}};
+
+                    xt::view(M, i, j, k, xt::all(), xt::all()) = F;
+                    xt::view(R, i, j, k, xt::all(), xt::all()) = Eps;
+                }
+            }
+        }
+        REQUIRE(xt::allclose(GM::Logs(M), R));
     }
 
-    SECTION("A2s_ddot_B2s")
-    {
-        auto A = GM::O2();
-        A(0, 1) = 1.0;
-        A(1, 0) = 1.0;
-        REQUIRE(GM::A2s_ddot_B2s(A, A)() == Approx(2.0));
-    }
-
-    SECTION("A2_dyadic_B2")
-    {
-        auto I2 = GM::I2();
-        REQUIRE(xt::allclose(GM::A2_dyadic_B2(I2, I2), GM::II()));
-    }
-
-    SECTION("A2_dot_B2")
-    {
-        auto A = GM::Random2();
-        REQUIRE(xt::allclose(GM::A2_dot_B2(A, GM::I2()), A));
-    }
-
-    SECTION("A2_dot_A2T")
+    SECTION("A2_dot_A2T - Tensor2")
     {
         double a = 1.1;
 
@@ -120,7 +385,68 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
         REQUIRE(xt::allclose(GM::A2_dot_A2T(A), B));
     }
 
-    SECTION("A4_ddot_B2")
+    SECTION("A2_dot_A2T - Array")
+    {
+        auto M = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
+        auto R = xt::xtensor<double, 5>::from_shape(M.shape());
+        xt::xtensor<double, 3> r = xt::random::rand<double>({4, 2, 3});
+        for (size_t i = 0; i < M.shape(0); ++i) {
+            for (size_t j = 0; j < M.shape(1); ++j) {
+                for (size_t k = 0; k < M.shape(2); ++k) {
+
+                    double a = r(i, j, k);
+
+                    xt::xtensor<double, 2> A = {
+                        {1.0, a, 0.0},
+                        {0.0, 1.0, 0.0},
+                        {0.0, 0.0, 1.0}};
+
+                    xt::xtensor<double, 2> B = {
+                        {1.0 + std::pow(a, 2.0), a, 0.0},
+                        {a, 1.0, 0.0},
+                        {0.0, 0.0, 1.0}};
+
+                    xt::view(M, i, j, k, xt::all(), xt::all()) = A;
+                    xt::view(R, i, j, k, xt::all(), xt::all()) = B;
+                }
+            }
+        }
+        REQUIRE(xt::allclose(GM::A2_dot_A2T(M), R));
+    }
+
+    SECTION("A2_dot_B2 - Tensor2")
+    {
+        auto A = GM::Random2();
+        REQUIRE(xt::allclose(GM::A2_dot_B2(A, GM::I2()), A));
+    }
+
+    SECTION("A2_dot_B2 - Array")
+    {
+        auto N = GM::Array<3>({4, 2, 3});
+        auto M = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
+        for (size_t i = 0; i < M.shape(0); ++i) {
+            for (size_t j = 0; j < M.shape(1); ++j) {
+                for (size_t k = 0; k < M.shape(2); ++k) {
+                    xt::view(M, i, j, k, xt::all(), xt::all()) = GM::Random2();
+                }
+            }
+        }
+        REQUIRE(xt::allclose(GM::A2_dot_B2(M, N.I2()), M));
+    }
+
+    SECTION("A2_dyadic_B2 - Tensor")
+    {
+        auto I2 = GM::I2();
+        REQUIRE(xt::allclose(GM::A2_dyadic_B2(I2, I2), GM::II()));
+    }
+
+    SECTION("A2_dyadic_B2 - Array")
+    {
+        auto N = GM::Array<3>({4, 2, 3});
+        REQUIRE(xt::allclose(GM::A2_dyadic_B2(N.I2(), N.I2()), N.II()));
+    }
+
+    SECTION("A4_ddot_B2 - Tensor2")
     {
         auto A = GM::Random2();
         auto Is = GM::I4s();
@@ -128,197 +454,24 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
         REQUIRE(xt::allclose(GM::A4_ddot_B2(Is, A), B));
     }
 
-    SECTION("Deviatoric - Tensor2")
+    SECTION("A4_ddot_B2 - Array")
     {
-        auto A = GM::Random2();
-        auto B = A;
-        double tr = B(0, 0) + B(1, 1) + B(2, 2);
-        B(0, 0) -= tr / 3.0;
-        B(1, 1) -= tr / 3.0;
-        B(2, 2) -= tr / 3.0;
-        REQUIRE(xt::allclose(GM::Deviatoric(A), B));
-    }
-
-    SECTION("Deviatoric - List")
-    {
-        auto A = GM::Random2();
-        auto B = A;
-        double tr = B(0, 0) + B(1, 1) + B(2, 2);
-        B(0, 0) -= tr / 3.0;
-        B(1, 1) -= tr / 3.0;
-        B(2, 2) -= tr / 3.0;
-        auto M = xt::xtensor<double, 3>::from_shape({3, 3, 3});
-        auto R = xt::xtensor<double, 3>::from_shape(M.shape());
-        for (size_t i = 0; i < M.shape(0); ++i) {
-            xt::view(M, i, xt::all(), xt::all()) = static_cast<double>(i) * A;
-            xt::view(R, i, xt::all(), xt::all()) = static_cast<double>(i) * B;
-        }
-        REQUIRE(xt::allclose(GM::Deviatoric(M), R));
-    }
-
-    SECTION("Deviatoric - Matrix")
-    {
-        auto A = GM::Random2();
-        auto B = A;
-        double tr = B(0, 0) + B(1, 1) + B(2, 2);
-        B(0, 0) -= tr / 3.0;
-        B(1, 1) -= tr / 3.0;
-        B(2, 2) -= tr / 3.0;
-        auto M = xt::xtensor<double, 4>::from_shape({3, 4, 3, 3});
-        auto R = xt::xtensor<double, 4>::from_shape(M.shape());
+        auto N = GM::Array<3>({4, 2, 3});
+        auto M = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
         for (size_t i = 0; i < M.shape(0); ++i) {
             for (size_t j = 0; j < M.shape(1); ++j) {
-                xt::view(M, i, j, xt::all(), xt::all()) = static_cast<double>(i * M.shape(1) + j) * A;
-                xt::view(R, i, j, xt::all(), xt::all()) = static_cast<double>(i * M.shape(1) + j) * B;
+                for (size_t k = 0; k < M.shape(2); ++k) {
+                    xt::view(M, i, j, k, xt::all(), xt::all()) = GM::Random2();
+                }
             }
         }
-        REQUIRE(xt::allclose(GM::Deviatoric(M), R));
-    }
-
-    SECTION("Hydrostatic - Tensor2")
-    {
-        auto A = GM::Random2();
-        A(0, 0) = 1.0;
-        A(1, 1) = 1.0;
-        A(2, 2) = 1.0;
-        REQUIRE(GM::Hydrostatic(A)() == Approx(1.0));
-    }
-
-    SECTION("Hydrostatic - List")
-    {
-        auto A = GM::Random2();
-        A(0, 0) = 1.0;
-        A(1, 1) = 1.0;
-        A(2, 2) = 1.0;
-        auto M = xt::xtensor<double, 3>::from_shape({3, 3, 3});
-        auto R = xt::xtensor<double, 1>::from_shape({M.shape(0)});
-        for (size_t i = 0; i < M.shape(0); ++i) {
-            xt::view(M, i, xt::all(), xt::all()) = static_cast<double>(i) * A;
-            R(i) = static_cast<double>(i);
-        }
-        REQUIRE(xt::allclose(GM::Hydrostatic(M), R));
-    }
-
-    SECTION("Hydrostatic - Matrix")
-    {
-        auto A = GM::Random2();
-        A(0, 0) = 1.0;
-        A(1, 1) = 1.0;
-        A(2, 2) = 1.0;
-        auto M = xt::xtensor<double, 4>::from_shape({3, 4, 3, 3});
-        auto R = xt::xtensor<double, 2>::from_shape({M.shape(0), M.shape(1)});
-        for (size_t i = 0; i < M.shape(0); ++i) {
-            for (size_t j = 0; j < M.shape(1); ++j) {
-                xt::view(M, i, j, xt::all(), xt::all()) = static_cast<double>(i * M.shape(1) + j) * A;
-                R(i, j) = static_cast<double>(i * M.shape(1) + j);
-            }
-        }
-        REQUIRE(xt::allclose(GM::Hydrostatic(M), R));
-    }
-
-    SECTION("Norm_deviatoric - Tensor2")
-    {
-        auto A = GM::O2();
-        A(0, 1) = 1.0;
-        A(1, 0) = 1.0;
-        REQUIRE(GM::Norm_deviatoric(A)() == Approx(std::sqrt(2.0)));
-    }
-
-    SECTION("Norm_deviatoric - List")
-    {
-        auto A = GM::O2();
-        A(0, 1) = 1.0;
-        A(1, 0) = 1.0;
-        auto M = xt::xtensor<double, 3>::from_shape({3, 3, 3});
-        auto R = xt::xtensor<double, 1>::from_shape({M.shape(0)});
-        for (size_t i = 0; i < M.shape(0); ++i) {
-            xt::view(M, i, xt::all(), xt::all()) = static_cast<double>(i) * A;
-            R(i) = static_cast<double>(i) * std::sqrt(2.0);
-        }
-        REQUIRE(xt::allclose(GM::Norm_deviatoric(M), R));
-    }
-
-    SECTION("Norm_deviatoric - Matrix")
-    {
-        auto A = GM::O2();
-        A(0, 1) = 1.0;
-        A(1, 0) = 1.0;
-        auto M = xt::xtensor<double, 4>::from_shape({3, 4, 3, 3});
-        auto R = xt::xtensor<double, 2>::from_shape({M.shape(0), M.shape(1)});
-        for (size_t i = 0; i < M.shape(0); ++i) {
-            for (size_t j = 0; j < M.shape(1); ++j) {
-                xt::view(M, i, j, xt::all(), xt::all()) = static_cast<double>(i * M.shape(1) + j) * A;
-                R(i, j) = static_cast<double>(i * M.shape(1) + j) * std::sqrt(2.0);
-            }
-        }
-        REQUIRE(xt::allclose(GM::Norm_deviatoric(M), R));
+        REQUIRE(xt::allclose(GM::A4_ddot_B2(N.I4s(), M), GM::Sym(M)));
+        REQUIRE(xt::allclose(GM::A4_ddot_B2(N.I4d(), M), GM::Deviatoric(GM::Sym(M))));
     }
 }
 
 TEST_CASE("GMatTensor::Cartesian3d::pointer", "Cartesian3d.h")
 {
-    SECTION("I2")
-    {
-        auto i = GM::I2();
-        auto r = GM::O2();
-        GM::pointer::I2(r.data());
-        REQUIRE(xt::allclose(i, r));
-    }
-
-    SECTION("II")
-    {
-        auto i = GM::II();
-        auto r = GM::O4();
-        GM::pointer::II(r.data());
-        REQUIRE(xt::allclose(i, r));
-    }
-
-    SECTION("I4")
-    {
-        auto i = GM::I4();
-        auto r = GM::O4();
-        GM::pointer::I4(r.data());
-        REQUIRE(xt::allclose(i, r));
-    }
-
-    SECTION("I4rt")
-    {
-        auto i = GM::I4rt();
-        auto r = GM::O4();
-        GM::pointer::I4rt(r.data());
-        REQUIRE(xt::allclose(i, r));
-    }
-
-    SECTION("I4s")
-    {
-        auto i = GM::I4s();
-        auto r = GM::O4();
-        GM::pointer::I4s(r.data());
-        REQUIRE(xt::allclose(i, r));
-    }
-
-    SECTION("I4d")
-    {
-        auto i = GM::I4d();
-        auto r = GM::O4();
-        GM::pointer::I4d(r.data());
-        REQUIRE(xt::allclose(i, r));
-    }
-
-    SECTION("Hydrostatic_deviatoric")
-    {
-        auto A = GM::Random2();
-        auto B = A;
-        auto C = A;
-        double tr = B(0, 0) + B(1, 1) + B(2, 2);
-        B(0, 0) -= tr / 3.0;
-        B(1, 1) -= tr / 3.0;
-        B(2, 2) -= tr / 3.0;
-        double m = GM::pointer::Hydrostatic_deviatoric(A.data(), C.data());
-        REQUIRE(m == Approx(tr / 3.0));
-        REQUIRE(xt::allclose(C, B));
-    }
-
     SECTION("A4_ddot_B4_ddot_C4")
     {
         auto A = GM::Random4();
