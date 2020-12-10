@@ -183,6 +183,20 @@ inline auto Deviatoric(const T& A)
 }
 
 template <class T, class R>
+inline void sym(const T& A, R& ret)
+{
+    return detail::impl_A2<T, 3>::ret2(A, ret,
+        [](const auto& a, const auto& r){ return pointer::sym(a, r); });
+}
+
+template <class T>
+inline auto Sym(const T& A)
+{
+    return detail::impl_A2<T, 3>::ret2(A,
+        [](const auto& a, const auto& r){ return pointer::sym(a, r); });
+}
+
+template <class T, class R>
 inline void inv(const T& A, R& ret)
 {
     return detail::impl_A2<T, 3>::ret2(A, ret,
@@ -547,6 +561,20 @@ namespace pointer {
     {
         return (A[0] * A[4] * A[8] + A[1] * A[5] * A[6] + A[2] * A[3] * A[7]) -
                (A[2] * A[4] * A[6] + A[1] * A[3] * A[8] + A[0] * A[5] * A[7]);
+    }
+
+    template <class T>
+    inline void sym(const T* A, T* ret)
+    {
+        ret[0] = A[0];
+        ret[1] = 0.5 * (A[1] + A[3]);
+        ret[2] = 0.5 * (A[2] + A[6]);
+        ret[3] = ret[1];
+        ret[4] = A[4];
+        ret[5] = 0.5 * (A[5] + A[7]);
+        ret[6] = ret[2];
+        ret[7] = ret[5];
+        ret[8] = A[8];
     }
 
     template <class T>

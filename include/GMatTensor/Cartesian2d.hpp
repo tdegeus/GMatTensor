@@ -169,6 +169,20 @@ inline auto Deviatoric(const T& A)
 }
 
 template <class T, class R>
+inline void sym(const T& A, R& ret)
+{
+    return detail::impl_A2<T, 2>::ret2(A, ret,
+        [](const auto& a, const auto& r){ return pointer::sym(a, r); });
+}
+
+template <class T>
+inline auto Sym(const T& A)
+{
+    return detail::impl_A2<T, 2>::ret2(A,
+        [](const auto& a, const auto& r){ return pointer::sym(a, r); });
+}
+
+template <class T, class R>
 inline void A2_dot_B2(const T& A, const T& B, R& ret)
 {
     return detail::impl_A2<T, 2>::B2_ret2(A, B, ret,
@@ -325,6 +339,15 @@ namespace pointer {
     inline T Hydrostatic(const T* A)
     {
         return T(0.5) * Trace(A);
+    }
+
+    template <class T>
+    inline void sym(const T* A, T* ret)
+    {
+        ret[0] = A[0];
+        ret[1] = 0.5 * (A[1] + A[2]);
+        ret[2] = ret[1];
+        ret[3] = A[3];
     }
 
     template <class T>

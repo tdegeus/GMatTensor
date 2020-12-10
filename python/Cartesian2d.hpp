@@ -81,6 +81,16 @@ void add2d_Norm_deviatoric(M& module)
 }
 
 template <class T, class M>
+void add2d_Sym(M& module)
+{
+    module.def(
+        "Sym",
+        static_cast<T (*)(const T&)>(&GMatTensor::Cartesian2d::Sym<T>),
+        "Symmetric part of a(n) (array of) 2nd-order tensor(s).",
+        py::arg("A"));
+}
+
+template <class T, class M>
 void add2d_Deviatoric(M& module)
 {
     module.def(
@@ -158,6 +168,9 @@ void init_Cartesian2d(py::module& m)
     add2d_Deviatoric<xt::xtensor<double, 4>>(m);
     add2d_Deviatoric<xt::xtensor<double, 3>>(m);
     add2d_Deviatoric<xt::xtensor<double, 2>>(m);
+    add2d_Sym<xt::xtensor<double, 4>>(m);
+    add2d_Sym<xt::xtensor<double, 3>>(m);
+    add2d_Sym<xt::xtensor<double, 2>>(m);
     add2d_A2_dot_B2<xt::xtensor<double, 4>>(m);
     add2d_A2_dot_B2<xt::xtensor<double, 3>>(m);
     add2d_A2_dot_B2<xt::xtensor<double, 2>>(m);

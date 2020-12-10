@@ -73,6 +73,14 @@ inline void deviatoric(const T& A, R& ret);
 template <class T>
 inline auto Deviatoric(const T& A);
 
+// Symmetric part of a tensor (== A - Hydrostatic(A) * I2)
+// "ret" may be the same as "A"
+template <class T, class R>
+inline void sym(const T& A, R& ret);
+
+template <class T>
+inline auto Sym(const T& A);
+
 // A . B
 template <class T, class R>
 inline void A2_dot_B2(const T& A, const T& B, R& ret);
@@ -174,6 +182,11 @@ namespace pointer {
     // trace(A) / 2
     template <class T>
     inline T Hydrostatic(const T* A);
+
+    // Symmetrise tensor
+    // "ret" may be the same as "A"
+    template <class T>
+    inline void sym(const T* A, T* ret);
 
     // Deviatoric decomposition of second order tensor
     // Returns hydrostatic part

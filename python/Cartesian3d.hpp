@@ -101,6 +101,16 @@ void add3d_Deviatoric(M& module)
 }
 
 template <class T, class M>
+void add3d_Sym(M& module)
+{
+    module.def(
+        "Sym",
+        static_cast<T (*)(const T&)>(&GMatTensor::Cartesian3d::Sym<T>),
+        "Symmetric part of a (array of) tensor(s).",
+        py::arg("A"));
+}
+
+template <class T, class M>
 void add3d_Inv(M& module)
 {
     module.def(
@@ -212,6 +222,9 @@ void init_Cartesian3d(py::module& m)
     add3d_Deviatoric<xt::xtensor<double, 4>>(m);
     add3d_Deviatoric<xt::xtensor<double, 3>>(m);
     add3d_Deviatoric<xt::xtensor<double, 2>>(m);
+    add3d_Sym<xt::xtensor<double, 4>>(m);
+    add3d_Sym<xt::xtensor<double, 3>>(m);
+    add3d_Sym<xt::xtensor<double, 2>>(m);
     add3d_Inv<xt::xtensor<double, 4>>(m);
     add3d_Inv<xt::xtensor<double, 3>>(m);
     add3d_Inv<xt::xtensor<double, 2>>(m);
