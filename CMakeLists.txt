@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.0)
 
 # Basic settings
@@ -7,7 +6,8 @@ cmake_minimum_required(VERSION 3.0)
 project(GMatTensor)
 
 option(BUILD_TESTS "${PROJECT_NAME} Build tests" OFF)
-option(BUILD_EXAMPLES "${PROJECT_NAME} Build examples" OFF)
+option(BUILD_DOCS "${PROJECT_NAME} Build docs" OFF)
+option(CHECK_DOCS "${PROJECT_NAME} Check docs (throw error for every warning)" OFF)
 
 # Version
 # =======
@@ -84,11 +84,54 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/GMatTensor.pc"
 # ==========
 
 include("GMatTensorConfig.cmake")
-
-set(CTEST_TEST_TARGET_ALIAS RUN_ALL_TESTS)
 include(CTest)
+
+# Tests
 
 if(BUILD_TESTS)
     enable_testing()
     add_subdirectory(test)
+endif()
+
+# Check docs: only this library, throw error for every warning
+
+if(CHECK_DOCS)
+    find_package(Doxygen REQUIRED)
+
+    set(DOXYGEN_EXCLUDE_SYMBOLS detail)
+    set(DOXYGEN_CASE_SENSE_NAMES YES)
+    set(DOXYGEN_QUIET YES)
+    set(WARN_AS_ERROR YES)
+
+    set(DOXYGEN_ALIASES
+        "rst=\\verbatim embed:rst:leading-asterisk"
+        "endrst=\\endverbatim"
+        "license=@par License:")
+
+    doxygen_add_docs(check_docs "${CMAKE_CURRENT_SOURCE_DIR}/include")
+endif()
+
+# Build docs: include dependencies
+
+if(BUILD_DOCS)
+    find_package(Doxygen REQUIRED)
+
+    set(DOXYGEN_EXCLUDE_SYMBOLS detail)
+    set(DOXYGEN_GENERATE_TREEVIEW YES)
+    set(DOXYGEN_CASE_SENSE_NAMES YES)
+    set(DOXYGEN_JAVADOC_AUTOBRIEF YES)
+    set(DOXYGEN_MACRO_EXPANSION YES)
+    set(DOXYGEN_PREDEFINED IN_DOXYGEN)
+    set(DOXYGEN_SOURCE_BROWSER YES)
+    set(DOXYGEN_QUIET YES)
+    set(DOXYGEN_WARN_IF_UNDOCUMENTED NO)
+
+    set(DOXYGEN_ALIASES
+        "rst=\\verbatim embed:rst:leading-asterisk"
+        "endrst=\\endverbatim"
+        "license=@par License:")
+
+    set(DOXYGEN_STRIP_FROM_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include")
+
+    doxygen_add_docs(docs "${CMAKE_CURRENT_SOURCE_DIR}/include")
 endif()
