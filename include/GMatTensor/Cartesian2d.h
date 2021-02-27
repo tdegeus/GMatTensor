@@ -1,7 +1,9 @@
-/*
+/**
+2d Cartesian coordinate system.
 
-(c - MIT) T.W.J. de Geus (Tom) | www.geus.me | github.com/tdegeus/GMatTensor
-
+\file Cartesian2d.h
+\copyright Copyright 2020. Tom de Geus. All rights reserved.
+\license This project is released under the GNU Public License (MIT).
 */
 
 #ifndef GMATTENSOR_CARTESIAN2D_H
@@ -19,12 +21,58 @@
 namespace GMatTensor {
 namespace Cartesian2d {
 
-// Unit tensors
-inline xt::xtensor<double, 2> Random2(); // random tensor
-inline xt::xtensor<double, 4> Random4(); // random tensor
-inline xt::xtensor<double, 2> O2(); // null tensor
-inline xt::xtensor<double, 4> O4(); // null tensor
+/**
+Random 2nd-order tensor (for example for use in testing).
+
+\return [2, 2] array.
+*/
+inline xt::xtensor<double, 2> Random2();
+
+/**
+Random 4th-order tensor (for example for use in testing).
+
+\return [2, 2, 2, 2] array.
+*/
+inline xt::xtensor<double, 4> Random4();
+
+/**
+2nd-order null tensor (all components equal to zero).
+
+\return [2, 2] array.
+*/
+inline xt::xtensor<double, 2> O2();
+
+/**
+4th-order null tensor (all components equal to zero).
+
+\return [2, 2, 2, 2] array.
+*/
+inline xt::xtensor<double, 4> O4();
+
+/**
+2nd-order identity tensor:
+
+    I_{ij} = \delta_{ij}
+
+such that:
+
+    I_{ij} A_{jk} = A_{ik}
+
+\return [2, 2] array.
+*/
 inline xt::xtensor<double, 2> I2();
+
+/**
+Dyadic product between two 2nd-order identity tensors (see I2())
+
+    (II)_{ijkl} = \delta_{ij} \delta_{kl}
+
+such that:
+
+    (II)_{ijkl} A_{kl} = tr(A) I_{ij}
+
+\return [2, 2, 2, 2] array.
+*/
 inline xt::xtensor<double, 4> II();
 inline xt::xtensor<double, 4> I4();
 inline xt::xtensor<double, 4> I4rt();
