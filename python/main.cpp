@@ -19,6 +19,10 @@ PYBIND11_MODULE(GMatTensor, m)
 {
     m.doc() = "Tensor operations and unit tensors support GMat models";
 
+    m.def("version",
+          &GMatTensor::version,
+          "Return version string.");
+
     {
         py::module sm = m.def_submodule("Cartesian2d", "2d Cartesian coordinates");
         init_Cartesian2d(sm);
