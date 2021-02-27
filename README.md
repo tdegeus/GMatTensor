@@ -1,6 +1,9 @@
 # GMatTensor
 
 [![CI](https://github.com/tdegeus/GMatTensor/workflows/CI/badge.svg)](https://github.com/tdegeus/GMatTensor/actions)
+[![Doxygen -> gh-pages](https://github.com/tdegeus/GMatTensor/workflows/gh-pages/badge.svg)](https://tdegeus.github.io/GMatTensor)
+[![Conda Version](https://img.shields.io/conda/vn/conda-forge/gmattensor.svg)](https://anaconda.org/conda-forge/gmattensor)
+[![Conda Version](https://img.shields.io/conda/vn/conda-forge/python-gmattensor.svg)](https://anaconda.org/conda-forge/python-gmattensor)
 
 Tensor definitions supporting several GMat models.
 
