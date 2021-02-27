@@ -5,13 +5,13 @@ import re
 import os
 import pybind11
 import pyxtensor
+from os import environ
 
-header = open('include/GMatTensor/config.h', 'r').read()
-major = re.split(r'(.*)(\#define GMATTENSOR_VERSION_MAJOR\ )([0-9]+)(.*)', header)[3]
-minor = re.split(r'(.*)(\#define GMATTENSOR_VERSION_MINOR\ )([0-9]+)(.*)', header)[3]
-patch = re.split(r'(.*)(\#define GMATTENSOR_VERSION_PATCH\ )([0-9]+)(.*)', header)[3]
+version = environ.get('PKG_VERSION')
 
-__version__ = '.'.join([major, minor, patch])
+if version is None:
+    from setuptools_scm import get_version
+    version = get_version()
 
 include_dirs = [
     os.path.abspath('include/'),
@@ -23,11 +23,15 @@ include_dirs = [
 build = pyxtensor.BuildExt
 
 xsimd = pyxtensor.find_xsimd()
+
 if xsimd:
     if len(xsimd) > 0:
         include_dirs += [xsimd]
         build.c_opts['unix'] += ['-march=native', '-DXTENSOR_USE_XSIMD']
         build.c_opts['msvc'] += ['/DXTENSOR_USE_XSIMD']
+
+build.c_opts['unix'] += ['-DGMATTENSOR_VERSION="{0:s}"'.format(version)]
+build.c_opts['msvc'] += ['/DGMATTENSOR_VERSION="{0:s}"'.format(version)]
 
 ext_modules = [Extension(
     'GMatTensor',
@@ -40,7 +44,7 @@ setup(
     description = 'Tensor operations and unit tensors support GMat models',
     long_description = 'Tensor operations and unit tensors support GMat models',
     keywords = 'GMat; Tensors',
-    version = __version__,
+    version = version,
     license = 'MIT',
     author = 'Tom de Geus',
     author_email = 'tom@geus.me',
