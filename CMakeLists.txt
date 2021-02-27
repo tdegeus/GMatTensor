@@ -12,21 +12,17 @@ option(BUILD_EXAMPLES "${PROJECT_NAME} Build examples" OFF)
 # Version
 # =======
 
-file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/include/GMatTensor/config.h"
-             _GMAT_version_defines
-     REGEX "#define GMATTENSOR_VERSION_(MAJOR|MINOR|PATCH)")
+IF(DEFINED ENV{PKG_VERSION})
+    set(GMATTENSOR_VERSION $ENV{PKG_VERSION})
+else()
+    execute_process(
+        COMMAND python -c "from setuptools_scm import get_version; print(get_version())"
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        OUTPUT_VARIABLE GMATTENSOR_VERSION
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
 
-foreach(ver ${_GMAT_version_defines})
-    if(ver MATCHES "#define GMATTENSOR_VERSION_(MAJOR|MINOR|PATCH) +([^ ]+)$")
-        set(_GMAT_VERSION_${CMAKE_MATCH_1}
-            "${CMAKE_MATCH_2}"
-            CACHE INTERNAL "")
-    endif()
-endforeach()
-
-set(_GMAT_VERSION ${_GMAT_VERSION_MAJOR}.${_GMAT_VERSION_MINOR}.${_GMAT_VERSION_PATCH})
-
-message(STATUS "Building GMatTensor v${_GMAT_VERSION}")
+message(STATUS "Building GMatTensor ${GMATTENSOR_VERSION}")
 
 # Set target
 # ==========
@@ -50,6 +46,13 @@ include(GNUInstallDirs)
 
 install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/" DESTINATION include)
 
+configure_file("include/${PROJECT_NAME}/version.h"
+               "${CMAKE_CURRENT_BINARY_DIR}/version.h"
+                @ONLY)
+
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/version.h"
+        DESTINATION "include/${PROJECT_NAME}/")
+
 install(TARGETS GMatTensor EXPORT GMatTensor-targets)
 
 install(
@@ -62,7 +65,7 @@ unset(CMAKE_SIZEOF_VOID_P)
 
 write_basic_package_version_file(
     "${CMAKE_CURRENT_BINARY_DIR}/GMatTensorConfigVersion.cmake"
-    VERSION ${_GMAT_VERSION}
+    VERSION ${GMATTENSOR_VERSION}
     COMPATIBILITY AnyNewerVersion)
 
 set(CMAKE_SIZEOF_VOID_P ${_GMAT})

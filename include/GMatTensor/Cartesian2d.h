@@ -14,6 +14,7 @@
 #include <xtensor/xrandom.hpp>
 
 #include "config.h"
+#include "version.h"
 
 namespace GMatTensor {
 namespace Cartesian2d {
