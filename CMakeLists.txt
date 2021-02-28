@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.1)
 
 # Basic settings
 # ==============
@@ -56,33 +56,33 @@ install(TARGETS GMatTensor EXPORT GMatTensor-targets)
 
 install(
     EXPORT GMatTensor-targets
-    FILE GMatTensorTargets.cmake
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/GMatTensor")
+    FILE "${PROJECT_NAME}Targets.cmake"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
 
 set(_GMAT ${CMAKE_SIZEOF_VOID_P})
 unset(CMAKE_SIZEOF_VOID_P)
 
 write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/GMatTensorConfigVersion.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
     VERSION ${GMATTENSOR_VERSION}
     COMPATIBILITY AnyNewerVersion)
 
 set(CMAKE_SIZEOF_VOID_P ${_GMAT})
 
-install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/GMatTensorConfig.cmake"
-              "${CMAKE_CURRENT_BINARY_DIR}/GMatTensorConfigVersion.cmake"
-        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/GMatTensor")
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}Config.cmake"
+              "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
 
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/GMatTensor.pc.in"
-               "${CMAKE_CURRENT_BINARY_DIR}/GMatTensor.pc" @ONLY)
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.pc.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc" @ONLY)
 
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/GMatTensor.pc"
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc"
         DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig/")
 
 # Add builds
 # ==========
 
-include("GMatTensorConfig.cmake")
+include("${PROJECT_NAME}Config.cmake")
 include(CTest)
 
 # Tests
@@ -129,6 +129,8 @@ if(BUILD_DOCS)
         "rst=\\verbatim embed:rst:leading-asterisk"
         "endrst=\\endverbatim"
         "license=@par License:")
+
+    set(DOXYGEN_STRIP_FROM_INC_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
     set(DOXYGEN_STRIP_FROM_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
