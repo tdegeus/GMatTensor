@@ -21,3 +21,4 @@ dependencies:
 
   # build docs
   - doxygen
+  - mathjax
