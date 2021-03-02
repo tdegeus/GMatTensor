@@ -1,7 +1,7 @@
 /**
 \file version.hpp
 \copyright Copyright 2020. Tom de Geus. All rights reserved.
-\license This project is released under the GNU Public License (MIT).
+\license This project is released under the MIT License.
 */
 
 #ifndef GMATTENSOR_VERSION_HPP

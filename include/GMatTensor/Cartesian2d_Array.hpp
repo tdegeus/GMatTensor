@@ -1,7 +1,9 @@
-/*
+/**
+Implementation of Cartesian2d.h
 
-(c - MIT) T.W.J. de Geus (Tom) | www.geus.me | github.com/tdegeus/GMatTensor
-
+\file Cartesian3d_Array.hpp
+\copyright Copyright 2020. Tom de Geus. All rights reserved.
+\license This project is released under the MIT License.
 */
 
 #ifndef GMATTENSOR_CARTESIAN2D_ARRAY_HPP

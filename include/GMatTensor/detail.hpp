@@ -1,7 +1,9 @@
-/*
+/**
+Implementation details.
 
-(c - MIT) T.W.J. de Geus (Tom) | www.geus.me | github.com/tdegeus/GMatTensor
-
+\file detail.hpp
+\copyright Copyright 2020. Tom de Geus. All rights reserved.
+\license This project is released under the MIT License.
 */
 
 #ifndef GMATTENSOR_DETAIL_HPP

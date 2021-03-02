@@ -124,6 +124,7 @@ if(BUILD_DOCS)
     set(DOXYGEN_SOURCE_BROWSER YES)
     set(DOXYGEN_QUIET YES)
     set(DOXYGEN_WARN_IF_UNDOCUMENTED NO)
+    set(DOXYGEN_USE_MATHJAX YES)
 
     set(DOXYGEN_ALIASES
         "rst=\\verbatim embed:rst:leading-asterisk"
