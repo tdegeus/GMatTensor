@@ -7,7 +7,10 @@
 
 Tensor definitions supporting several GMat models.
 
-# Contests
+- Getting started: this readme.
+- Documentation: https://tdegeus.github.io/GMatTensor
+
+# Contents
 
 <!-- MarkdownTOC -->
 
