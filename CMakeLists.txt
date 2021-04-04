@@ -1,28 +1,24 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.1..3.19)
 
 # Basic settings
 # ==============
 
 project(GMatTensor)
 
-option(BUILD_TESTS "${PROJECT_NAME} Build tests" OFF)
-option(BUILD_DOCS "${PROJECT_NAME} Build docs" OFF)
-option(CHECK_DOCS "${PROJECT_NAME} Check docs (throw error for every warning)" OFF)
+option(BUILD_TESTS "${PROJECT_NAME}: Build tests" OFF)
+option(BUILD_DOCS "${PROJECT_NAME}: Build docs" OFF)
+option(CHECK_DOCS "${PROJECT_NAME}: Check docs (throw error for every warning)" OFF)
 
 # Version
 # =======
 
-IF(DEFINED ENV{PKG_VERSION})
-    set(GMATTENSOR_VERSION $ENV{PKG_VERSION})
-else()
-    execute_process(
-        COMMAND python -c "from setuptools_scm import get_version; print(get_version())"
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        OUTPUT_VARIABLE GMATTENSOR_VERSION
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-endif()
+execute_process(
+    COMMAND python -c "from setuptools_scm import get_version; print(get_version())"
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE GMATTENSOR_VERSION
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-message(STATUS "Building GMatTensor ${GMATTENSOR_VERSION}")
+message(STATUS "Building ${PROJECT_NAME} ${GMATTENSOR_VERSION}")
 
 # Set target
 # ==========
@@ -133,8 +129,6 @@ if(BUILD_DOCS)
         "license=@par License:")
 
     set(DOXYGEN_STRIP_FROM_INC_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include")
-
     set(DOXYGEN_STRIP_FROM_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include")
-
     doxygen_add_docs(docs "${CMAKE_CURRENT_SOURCE_DIR}/include")
 endif()
