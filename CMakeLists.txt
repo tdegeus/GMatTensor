@@ -15,23 +15,23 @@ option(CHECK_DOCS "${PROJECT_NAME}: Check docs (throw error for every warning)" 
 execute_process(
     COMMAND python -c "from setuptools_scm import get_version; print(get_version())"
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_VARIABLE GMATTENSOR_VERSION
+    OUTPUT_VARIABLE ${PROJECT_NAME}_VERSION
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-message(STATUS "Building ${PROJECT_NAME} ${GMATTENSOR_VERSION}")
+message(STATUS "Building ${PROJECT_NAME} ${${PROJECT_NAME}_VERSION}")
 
 # Set target
 # ==========
 
 find_package(xtensor REQUIRED)
 
-add_library(GMatTensor INTERFACE)
+add_library(${PROJECT_NAME} INTERFACE)
 
-target_include_directories(GMatTensor INTERFACE
+target_include_directories(${PROJECT_NAME} INTERFACE
     $<INSTALL_INTERFACE:include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 
-target_link_libraries(GMatTensor INTERFACE xtensor)
+target_link_libraries(${PROJECT_NAME} INTERFACE xtensor)
 
 # Installation
 # ============
@@ -48,22 +48,22 @@ configure_file("include/${PROJECT_NAME}/version.h"
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/version.h"
         DESTINATION "include/${PROJECT_NAME}/")
 
-install(TARGETS GMatTensor EXPORT GMatTensor-targets)
+install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}-targets)
 
 install(
-    EXPORT GMatTensor-targets
+    EXPORT ${PROJECT_NAME}-targets
     FILE "${PROJECT_NAME}Targets.cmake"
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
 
-set(_GMAT ${CMAKE_SIZEOF_VOID_P})
+set(_${PROJECT_NAME} ${CMAKE_SIZEOF_VOID_P})
 unset(CMAKE_SIZEOF_VOID_P)
 
 write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
-    VERSION ${GMATTENSOR_VERSION}
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Version.cmake"
+    VERSION ${${PROJECT_NAME}_VERSION}
     COMPATIBILITY AnyNewerVersion)
 
-set(CMAKE_SIZEOF_VOID_P ${_GMAT})
+set(CMAKE_SIZEOF_VOID_P ${_${PROJECT_NAME}})
 
 install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}Config.cmake"
               "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
