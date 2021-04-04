@@ -51,4 +51,9 @@ The advantage is that:
 #define GMATTENSOR_ASSERT(expr)
 #endif
 
+/**
+Tensor products / operations.
+*/
+namespace GMatTensor { }
+
 #endif
