@@ -171,15 +171,6 @@ See A4_ddot_B2(), Deviatoric().
 inline xt::xtensor<double, 4> I4d();
 
 /**
-Same as Trace() but writes to externally allocated output.
-
-\param A [..., 2, 2] array.
-\param ret output [...] array.
-*/
-template <class T, class R>
-inline void trace(const T& A, R& ret);
-
-/**
 Trace or 2nd-order tensor.
 
 \f$ tr(A) = A_{ii} \f$
@@ -193,13 +184,13 @@ template <class T>
 inline auto Trace(const T& A);
 
 /**
-Same as Hydrostatic() but writes to externally allocated output.
+Same as Trace() but writes to externally allocated output.
 
 \param A [..., 2, 2] array.
 \param ret output [...] array.
 */
 template <class T, class R>
-inline void hydrostatic(const T& A, R& ret);
+inline void trace(const T& A, R& ret);
 
 /**
 Hydrostatic part of a tensor
@@ -216,14 +207,13 @@ template <class T>
 inline auto Hydrostatic(const T& A);
 
 /**
-Same as A2_ddot_B2(const T& A, const T& B) but writes to externally allocated output.
+Same as Hydrostatic() but writes to externally allocated output.
 
 \param A [..., 2, 2] array.
-\param B [..., 2, 2] array.
 \param ret output [...] array.
 */
 template <class T, class R>
-inline void A2_ddot_B2(const T& A, const T& B, R& ret);
+inline void hydrostatic(const T& A, R& ret);
 
 /**
 Double tensor contraction
@@ -244,14 +234,14 @@ template <class T>
 inline auto A2_ddot_B2(const T& A, const T& B);
 
 /**
-Same as A2s_ddot_B2s(const T& A, const T& B) but writes to externally allocated output.
+Same as A2_ddot_B2(const T& A, const T& B) but writes to externally allocated output.
 
 \param A [..., 2, 2] array.
 \param B [..., 2, 2] array.
 \param ret output [...] array.
 */
 template <class T, class R>
-inline void A2s_ddot_B2s(const T& A, const T& B, R& ret);
+inline void A2_ddot_B2(const T& A, const T& B, R& ret);
 
 /**
 Same as A2_ddot_B2(const T& A, const T& B, R& ret) but for symmetric tensors.
@@ -267,13 +257,14 @@ template <class T>
 inline auto A2s_ddot_B2s(const T& A, const T& B);
 
 /**
-Same as Norm_deviatoric()  but writes to externally allocated output.
+Same as A2s_ddot_B2s(const T& A, const T& B) but writes to externally allocated output.
 
 \param A [..., 2, 2] array.
-\param ret output [...] array
+\param B [..., 2, 2] array.
+\param ret output [...] array.
 */
 template <class T, class R>
-inline void norm_deviatoric(const T& A, R& ret);
+inline void A2s_ddot_B2s(const T& A, const T& B, R& ret);
 
 /**
 Norm of the tensor's deviator:
@@ -289,13 +280,13 @@ template <class T>
 inline auto Norm_deviatoric(const T& A);
 
 /**
-Same as Deviatoric() but writes to externally allocated output.
+Same as Norm_deviatoric()  but writes to externally allocated output.
 
 \param A [..., 2, 2] array.
-\param ret output [..., 2, 2] array.
+\param ret output [...] array
 */
 template <class T, class R>
-inline void deviatoric(const T& A, R& ret);
+inline void norm_deviatoric(const T& A, R& ret);
 
 /**
 Deviatoric part of a tensor:
@@ -312,13 +303,13 @@ template <class T>
 inline auto Deviatoric(const T& A);
 
 /**
-Same as Sym() but writes to externally allocated output.
+Same as Deviatoric() but writes to externally allocated output.
 
 \param A [..., 2, 2] array.
-\param ret output [..., 2, 2] array, may be the same reference as ``A``.
+\param ret output [..., 2, 2] array.
 */
 template <class T, class R>
-inline void sym(const T& A, R& ret);
+inline void deviatoric(const T& A, R& ret);
 
 /**
 Symmetric part of a tensor:
@@ -338,14 +329,13 @@ template <class T>
 inline auto Sym(const T& A);
 
 /**
-Same as A2_dot_B2(const T& A, const T& B) but writes to externally allocated output.
+Same as Sym() but writes to externally allocated output.
 
 \param A [..., 2, 2] array.
-\param B [..., 2, 2] array.
-\param ret output [..., 2, 2] array.
+\param ret output [..., 2, 2] array, may be the same reference as ``A``.
 */
 template <class T, class R>
-inline void A2_dot_B2(const T& A, const T& B, R& ret);
+inline void sym(const T& A, R& ret);
 
 /**
 Dot-product (single tensor contraction)
@@ -366,14 +356,14 @@ template <class T>
 inline auto A2_dot_B2(const T& A, const T& B);
 
 /**
-Same as A2_dyadic_B2(const T& A, const T& B) but writes to externally allocated output.
+Same as A2_dot_B2(const T& A, const T& B) but writes to externally allocated output.
 
 \param A [..., 2, 2] array.
 \param B [..., 2, 2] array.
-\param ret output [..., 2, 2, 2, 2] array.
+\param ret output [..., 2, 2] array.
 */
 template <class T, class R>
-inline void A2_dyadic_B2(const T& A, const T& B, R& ret);
+inline void A2_dot_B2(const T& A, const T& B, R& ret);
 
 /**
 Dyadic product
@@ -394,14 +384,14 @@ template <class T>
 inline auto A2_dyadic_B2(const T& A, const T& B);
 
 /**
-Same as A4_ddot_B2(const T& A, const U& B) but writes to externally allocated output.
+Same as A2_dyadic_B2(const T& A, const T& B) but writes to externally allocated output.
 
-\param A [..., 2, 2, 2, 2] array.
+\param A [..., 2, 2] array.
 \param B [..., 2, 2] array.
-\param ret output [..., 2, 2] array.
+\param ret output [..., 2, 2, 2, 2] array.
 */
-template <class T, class U, class R>
-inline void A4_ddot_B2(const T& A, const U& B, R& ret);
+template <class T, class R>
+inline void A2_dyadic_B2(const T& A, const T& B, R& ret);
 
 /**
 Double tensor contraction
@@ -420,6 +410,16 @@ To write to allocated data use A4_ddot_B2(const T& A, const U& B, R& ret).
 */
 template <class T, class U>
 inline auto A4_ddot_B2(const T& A, const U& B);
+
+/**
+Same as A4_ddot_B2(const T& A, const U& B) but writes to externally allocated output.
+
+\param A [..., 2, 2, 2, 2] array.
+\param B [..., 2, 2] array.
+\param ret output [..., 2, 2] array.
+*/
+template <class T, class U, class R>
+inline void A4_ddot_B2(const T& A, const U& B, R& ret);
 
 /**
 Array of tensors:
