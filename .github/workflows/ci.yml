@@ -80,8 +80,3 @@ jobs:
       if: runner.os == 'Linux'
       working-directory: build
       run: make docs
-
-    - name: Check doxygen-docs (error on warning)
-      if: runner.os == 'Linux'
-      working-directory: build
-      run: make check_docs
