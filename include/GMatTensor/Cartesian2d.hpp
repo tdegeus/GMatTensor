@@ -1,7 +1,7 @@
 /**
 Implementation of Cartesian2d.h
 
-\file Cartesian2d.hpp
+\file GMatTensor/Cartesian2d.hpp
 \copyright Copyright 2020. Tom de Geus. All rights reserved.
 \license This project is released under the MIT License.
 */

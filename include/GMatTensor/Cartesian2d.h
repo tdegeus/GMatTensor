@@ -1,7 +1,7 @@
 /**
 2d Cartesian coordinate system.
 
-\file Cartesian2d.h
+\file GMatTensor/Cartesian2d.h
 \copyright Copyright 2020. Tom de Geus. All rights reserved.
 \license This project is released under the MIT License.
 */
@@ -280,7 +280,7 @@ template <class T>
 inline auto Norm_deviatoric(const T& A);
 
 /**
-Same as Norm_deviatoric()  but writes to externally allocated output.
+Same as Norm_deviatoric() but writes to externally allocated output.
 
 \param A [..., 2, 2] array.
 \param ret output [...] array

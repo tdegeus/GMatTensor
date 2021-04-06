@@ -1,7 +1,7 @@
 /**
 Implementation of Cartesian3d.h
 
-\file Cartesian3d.hpp
+\file GMatTensor/Cartesian3d.hpp
 \copyright Copyright 2020. Tom de Geus. All rights reserved.
 \license This project is released under the MIT License.
 */
