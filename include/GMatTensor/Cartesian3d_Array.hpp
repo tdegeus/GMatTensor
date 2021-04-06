@@ -1,7 +1,7 @@
 /**
-Implementation of Cartesian3d.h
+Implementation of GMatTensor/Cartesian3d.h
 
-\file GMatTensor/Cartesian3d_Array.hpp
+\file
 \copyright Copyright 2020. Tom de Geus. All rights reserved.
 \license This project is released under the MIT License.
 */

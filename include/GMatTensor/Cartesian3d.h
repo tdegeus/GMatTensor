@@ -1,7 +1,7 @@
 /**
 3d Cartesian coordinate system.
 
-\file GMatTensor/Cartesian3d.h
+\file
 \copyright Copyright 2020. Tom de Geus. All rights reserved.
 \license This project is released under the MIT License.
 */

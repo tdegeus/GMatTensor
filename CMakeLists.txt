@@ -7,7 +7,6 @@ project(GMatTensor)
 
 option(BUILD_TESTS "${PROJECT_NAME}: Build tests" OFF)
 option(BUILD_DOCS "${PROJECT_NAME}: Build docs" OFF)
-option(CHECK_DOCS "${PROJECT_NAME}: Check docs (throw error for every warning)" OFF)
 
 # Version
 # =======
@@ -59,8 +58,8 @@ set(_${PROJECT_NAME} ${CMAKE_SIZEOF_VOID_P})
 unset(CMAKE_SIZEOF_VOID_P)
 
 write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Version.cmake"
-    VERSION ${${PROJECT_NAME}_VERSION}
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+    VERSION "${${PROJECT_NAME}_VERSION}"
     COMPATIBILITY AnyNewerVersion)
 
 set(CMAKE_SIZEOF_VOID_P ${_${PROJECT_NAME}})
@@ -88,26 +87,6 @@ if(BUILD_TESTS)
     add_subdirectory(test)
 endif()
 
-# Check docs: only this library, throw error for every warning
-
-if(CHECK_DOCS)
-    find_package(Doxygen REQUIRED)
-
-    set(DOXYGEN_EXCLUDE_SYMBOLS detail)
-    set(DOXYGEN_CASE_SENSE_NAMES YES)
-    set(DOXYGEN_USE_MATHJAX YES)
-    set(DOXYGEN_QUIET YES)
-    set(DOXYGEN_WARN_IF_UNDOCUMENTED YES)
-    set(DOXYGEN_WARN_AS_ERROR YES)
-
-    set(DOXYGEN_ALIASES
-        "rst=\\verbatim embed:rst:leading-asterisk"
-        "endrst=\\endverbatim"
-        "license=@par License:")
-
-    doxygen_add_docs(check_docs "${CMAKE_CURRENT_SOURCE_DIR}/include")
-endif()
-
 # Build docs: include dependencies
 
 if(BUILD_DOCS)
@@ -122,6 +101,7 @@ if(BUILD_DOCS)
     set(DOXYGEN_SOURCE_BROWSER YES)
     set(DOXYGEN_QUIET YES)
     set(DOXYGEN_WARN_IF_UNDOCUMENTED YES)
+    set(DOXYGEN_WARN_AS_ERROR YES)
 
     set(DOXYGEN_HTML_EXTRA_STYLESHEET
         "${CMAKE_CURRENT_SOURCE_DIR}/docs/doxystyle/doxygen-awesome.css"

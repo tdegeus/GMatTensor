@@ -1,7 +1,7 @@
 /**
 Version information.
 
-\file GMatTensor/version.h
+\file
 \copyright Copyright 2020. Tom de Geus. All rights reserved.
 \license This project is released under the MIT License.
 */
@@ -31,7 +31,7 @@ Tip: use the environment variable ``SETUPTOOLS_SCM_PRETEND_VERSION``
 to overwrite the automatic version.
 */
 #ifndef GMATTENSOR_VERSION
-#define GMATTENSOR_VERSION "@GMATTENSOR_VERSION@"
+#define GMATTENSOR_VERSION "@GMatTensor_VERSION@"
 #endif
 
 namespace GMatTensor {
