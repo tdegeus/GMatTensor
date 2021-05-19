@@ -31,7 +31,7 @@ Tip: use the environment variable ``SETUPTOOLS_SCM_PRETEND_VERSION``
 to overwrite the automatic version.
 */
 #ifndef GMATTENSOR_VERSION
-#define GMATTENSOR_VERSION "@GMatTensor_VERSION@"
+#define GMATTENSOR_VERSION "@PROJECT_VERSION@"
 #endif
 
 namespace GMatTensor {

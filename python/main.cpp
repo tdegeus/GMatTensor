@@ -5,7 +5,10 @@
 */
 
 #include <pybind11/pybind11.h>
-#include <pyxtensor/pyxtensor.hpp>
+#define FORCE_IMPORT_ARRAY
+#include <xtensor-python/pyarray.hpp>
+#include <xtensor-python/pytensor.hpp>
+
 #include "Cartesian2d.hpp"
 #include "Cartesian3d.hpp"
 
@@ -17,6 +20,8 @@ namespace py = pybind11;
 
 PYBIND11_MODULE(GMatTensor, m)
 {
+    xt::import_numpy();
+
     m.doc() = "Tensor operations and unit tensors support GMat models";
 
     m.def("version",

@@ -13,7 +13,7 @@ dependencies:
 
   # Python API
   - python
-  - pyxtensor
+  - xtensor-python
 
   # run tests
   - catch2
