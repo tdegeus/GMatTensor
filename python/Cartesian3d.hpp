@@ -34,7 +34,7 @@ void add3d_Trace(M& module)
 {
     module.def(
         "Trace",
-        py::overload_cast<const T&>(&GMatTensor::Cartesian3d::Trace<T>),
+        static_cast<R (*)(const T&)>(&GMatTensor::Cartesian3d::Trace),
         "Trace of a(n) (array of) 2nd-order tensor(s).",
         py::arg("A"));
 }
@@ -44,7 +44,7 @@ void add3d_trace(M& module)
 {
     module.def(
         "trace",
-        py::overload_cast<const T&, R&>(&GMatTensor::Cartesian3d::trace<T, R>),
+        static_cast<void (*)(const T&, R&)>(&GMatTensor::Cartesian3d::trace),
         "Trace of a(n) (array of) 2nd-order tensor(s).",
         py::arg("A"),
         py::arg("ret"));
@@ -55,7 +55,7 @@ void add3d_Hydrostatic(M& module)
 {
     module.def(
         "Hydrostatic",
-        py::overload_cast<const T&>(&GMatTensor::Cartesian3d::Hydrostatic<T>),
+        static_cast<R (*)(const T&)>(&GMatTensor::Cartesian3d::Hydrostatic),
         "Hydrostatic part of a(n) (array of) 2nd-order tensor(s).",
         py::arg("A"));
 }
@@ -65,7 +65,7 @@ void add3d_hydrostatic(M& module)
 {
     module.def(
         "hydrostatic",
-        py::overload_cast<const T&, R&>(&GMatTensor::Cartesian3d::hydrostatic<T, R>),
+        static_cast<void (*)(const T&, R&)>(&GMatTensor::Cartesian3d::hydrostatic),
         "Hydrostatic part of a(n) (array of) 2nd-order tensor(s).",
         py::arg("A"),
         py::arg("ret"));
@@ -76,7 +76,7 @@ void add3d_Det(M& module)
 {
     module.def(
         "Det",
-        py::overload_cast<const T&>(&GMatTensor::Cartesian3d::Det<T>),
+        static_cast<R (*)(const T&)>(&GMatTensor::Cartesian3d::Det),
         "Determinant of a(n) (array of) 2nd-order tensor(s).",
         py::arg("A"));
 }
@@ -86,7 +86,7 @@ void add3d_det(M& module)
 {
     module.def(
         "det",
-        py::overload_cast<const T&, R&>(&GMatTensor::Cartesian3d::det<T, R>),
+        static_cast<void (*)(const T&, R&)>(&GMatTensor::Cartesian3d::det),
         "Determinant of a(n) (array of) 2nd-order tensor(s).",
         py::arg("A"),
         py::arg("ret"));
@@ -97,7 +97,7 @@ void add3d_A2_ddot_B2(M& module)
 {
     module.def(
         "A2_ddot_B2",
-        py::overload_cast<const T&, const T&>(&GMatTensor::Cartesian3d::A2_ddot_B2<T>),
+        static_cast<R (*)(const T&, const T&)>(&GMatTensor::Cartesian3d::A2_ddot_B2),
         "Product 'A : B' for two (arrays of) 2nd-order tensors.",
         py::arg("A"),
         py::arg("B"));
@@ -108,7 +108,7 @@ void add3d_A2_ddot_B2_ret(M& module)
 {
     module.def(
         "A2_ddot_B2",
-        py::overload_cast<const T&, const T&, R&>(&GMatTensor::Cartesian3d::A2_ddot_B2<T, R>),
+        static_cast<void (*)(const T&, const T&, R&)>(&GMatTensor::Cartesian3d::A2_ddot_B2),
         "Product 'A : B' for two (arrays of) 2nd-order tensors.",
         py::arg("A"),
         py::arg("B"),
@@ -120,7 +120,7 @@ void add3d_A2s_ddot_B2s(M& module)
 {
     module.def(
         "A2s_ddot_B2s",
-        py::overload_cast<const T&, const T&>(&GMatTensor::Cartesian3d::A2s_ddot_B2s<T>),
+        static_cast<R (*)(const T&, const T&)>(&GMatTensor::Cartesian3d::A2s_ddot_B2s),
         "Product 'A : B' for two (arrays of) symmetric 2nd-order tensors (no assertion).",
         py::arg("A"),
         py::arg("B"));
@@ -131,7 +131,7 @@ void add3d_A2s_ddot_B2s_ret(M& module)
 {
     module.def(
         "A2s_ddot_B2s",
-        py::overload_cast<const T&, const T&, R&>(&GMatTensor::Cartesian3d::A2s_ddot_B2s<T, R>),
+        static_cast<void (*)(const T&, const T&, R&)>(&GMatTensor::Cartesian3d::A2s_ddot_B2s),
         "Product 'A : B' for two (arrays of) symmetric 2nd-order tensors (no assertion).",
         py::arg("A"),
         py::arg("B"),
@@ -143,7 +143,7 @@ void add3d_Norm_deviatoric(M& module)
 {
     module.def(
         "Norm_deviatoric",
-        py::overload_cast<const T&>(&GMatTensor::Cartesian3d::Norm_deviatoric<T>),
+        static_cast<R (*)(const T&)>(&GMatTensor::Cartesian3d::Norm_deviatoric),
         "Norm of the deviatoric part of a(n) (array of) tensor(s).",
         py::arg("A"));
 }
@@ -153,7 +153,7 @@ void add3d_norm_deviatoric(M& module)
 {
     module.def(
         "norm_deviatoric",
-        py::overload_cast<const T&, R&>(&GMatTensor::Cartesian3d::norm_deviatoric<T, R>),
+        static_cast<void (*)(const T&, R&)>(&GMatTensor::Cartesian3d::norm_deviatoric),
         "Norm of the deviatoric part of a(n) (array of) tensor(s).",
         py::arg("A"),
         py::arg("ret"));
@@ -164,7 +164,7 @@ void add3d_Deviatoric(M& module)
 {
     module.def(
         "Deviatoric",
-        py::overload_cast<const T&>(&GMatTensor::Cartesian3d::Deviatoric<T>),
+        static_cast<R (*)(const T&)>(&GMatTensor::Cartesian3d::Deviatoric),
         "Deviatoric part of a (array of) tensor(s).",
         py::arg("A"));
 }
@@ -174,7 +174,7 @@ void add3d_deviatoric(M& module)
 {
     module.def(
         "deviatoric",
-        py::overload_cast<const T&, R&>(&GMatTensor::Cartesian3d::deviatoric<T, R>),
+        static_cast<void (*)(const T&, R&)>(&GMatTensor::Cartesian3d::deviatoric),
         "Deviatoric part of a (array of) tensor(s).",
         py::arg("A"),
         py::arg("ret"));
@@ -185,7 +185,7 @@ void add3d_Sym(M& module)
 {
     module.def(
         "Sym",
-        py::overload_cast<const T&>(&GMatTensor::Cartesian3d::Sym<T>),
+        static_cast<R (*)(const T&)>(&GMatTensor::Cartesian3d::Sym),
         "Symmetric part of a (array of) tensor(s).",
         py::arg("A"));
 }
@@ -195,7 +195,7 @@ void add3d_sym(M& module)
 {
     module.def(
         "sym",
-        py::overload_cast<const T&, R&>(&GMatTensor::Cartesian3d::sym<T, R>),
+        static_cast<void (*)(const T&, R&)>(&GMatTensor::Cartesian3d::sym),
         "Symmetric part of a (array of) tensor(s).",
         py::arg("A"),
         py::arg("ret"));
@@ -206,7 +206,7 @@ void add3d_Inv(M& module)
 {
     module.def(
         "Inv",
-        py::overload_cast<const T&>(&GMatTensor::Cartesian3d::Inv<T>),
+        static_cast<R (*)(const T&)>(&GMatTensor::Cartesian3d::Inv),
         "Inverse of a (array of) tensor(s).",
         py::arg("A"));
 }
@@ -216,7 +216,7 @@ void add3d_inv(M& module)
 {
     module.def(
         "inv",
-        py::overload_cast<const T&, R&>(&GMatTensor::Cartesian3d::inv<T, R>),
+        static_cast<void (*)(const T&, R&)>(&GMatTensor::Cartesian3d::inv),
         "Inverse of a (array of) tensor(s).",
         py::arg("A"),
         py::arg("ret"));
@@ -227,7 +227,7 @@ void add3d_Logs(M& module)
 {
     module.def(
         "Logs",
-        py::overload_cast<const T&>(&GMatTensor::Cartesian3d::Logs<T>),
+        static_cast<R (*)(const T&)>(&GMatTensor::Cartesian3d::Logs),
         "Log of a (array of) symmetric 2nd-order tensor(s) (no assertion).",
         py::arg("A"));
 }
@@ -237,7 +237,7 @@ void add3d_logs(M& module)
 {
     module.def(
         "logs",
-        py::overload_cast<const T&, R&>(&GMatTensor::Cartesian3d::logs<T, R>),
+        static_cast<void (*)(const T&, R&)>(&GMatTensor::Cartesian3d::logs),
         "Log of a (array of) symmetric 2nd-order tensor(s) (no assertion).",
         py::arg("A"),
         py::arg("ret"));
@@ -248,7 +248,7 @@ void add3d_A2_dot_A2T(M& module)
 {
     module.def(
         "A2_dot_A2T",
-        py::overload_cast<const T&>(&GMatTensor::Cartesian3d::A2_dot_A2T<T>),
+        static_cast<R (*)(const T&)>(&GMatTensor::Cartesian3d::A2_dot_A2T),
         "Product 'A . A^T' of a (array of) tensor(s).",
         py::arg("A"));
 }
@@ -258,7 +258,7 @@ void add3d_A2_dot_A2T_ret(M& module)
 {
     module.def(
         "A2_dot_A2T",
-        py::overload_cast<const T&, R&>(&GMatTensor::Cartesian3d::A2_dot_A2T<T, R>),
+        static_cast<void (*)(const T&, R&)>(&GMatTensor::Cartesian3d::A2_dot_A2T),
         "Product 'A . A^T' of a (array of) tensor(s).",
         py::arg("A"),
         py::arg("ret"));
@@ -269,7 +269,7 @@ void add3d_A2_dot_B2(M& module)
 {
     module.def(
         "A2_dot_B2",
-        py::overload_cast<const T&, const T&>(&GMatTensor::Cartesian3d::A2_dot_B2<T>),
+        static_cast<R (*)(const T&, const T&)>(&GMatTensor::Cartesian3d::A2_dot_B2),
         "Product 'A . B' of a (array of) tensor(s).",
         py::arg("A"),
         py::arg("B"));
@@ -280,7 +280,7 @@ void add3d_A2_dot_B2_ret(M& module)
 {
     module.def(
         "A2_dot_B2",
-        py::overload_cast<const T&, const T&, R&>(&GMatTensor::Cartesian3d::A2_dot_B2<T, R>),
+        static_cast<void (*)(const T&, const T&, R&)>(&GMatTensor::Cartesian3d::A2_dot_B2),
         "Product 'A . B' of a (array of) tensor(s).",
         py::arg("A"),
         py::arg("B"),
@@ -292,7 +292,7 @@ void add3d_A2_dyadic_B2(M& module)
 {
     module.def(
         "A2_dyadic_B2",
-        py::overload_cast<const T&, const T&>(&GMatTensor::Cartesian3d::A2_dyadic_B2<T>),
+        static_cast<R (*)(const T&, const T&)>(&GMatTensor::Cartesian3d::A2_dyadic_B2),
         "Product 'A * B' for two (arrays of) 2nd-order tensors.",
         py::arg("A"),
         py::arg("B"));
@@ -303,7 +303,7 @@ void add3d_A2_dyadic_B2_ret(M& module)
 {
     module.def(
         "A2_dyadic_B2",
-        py::overload_cast<const T&, const T&, R&>(&GMatTensor::Cartesian3d::A2_dyadic_B2<T, R>),
+        static_cast<void (*)(const T&, const T&, R&)>(&GMatTensor::Cartesian3d::A2_dyadic_B2),
         "Product 'A * B' for two (arrays of) 2nd-order tensors.",
         py::arg("A"),
         py::arg("B"),
@@ -315,7 +315,7 @@ void add3d_A4_ddot_B2(M& module)
 {
     module.def(
         "A4_ddot_B2",
-        py::overload_cast<const T&, const U&>(&GMatTensor::Cartesian3d::A4_ddot_B2<T, U>),
+        static_cast<R (*)(const T&, const U&)>(&GMatTensor::Cartesian3d::A4_ddot_B2),
         "Product 'A : B' for two (arrays of) 4th and 2nd-order tensors.",
         py::arg("A"),
         py::arg("B"));
@@ -326,7 +326,7 @@ void add3d_A4_ddot_B2_ret(M& module)
 {
     module.def(
         "A4_ddot_B2",
-        py::overload_cast<const T&, const U&, R&>(&GMatTensor::Cartesian3d::A4_ddot_B2<T, U, R>),
+        static_cast<void (*)(const T&, const U&, R&)>(&GMatTensor::Cartesian3d::A4_ddot_B2),
         "Product 'A : B' for two (arrays of) 4th and 2nd-order tensors.",
         py::arg("A"),
         py::arg("B"),
@@ -338,7 +338,7 @@ void add3d_A4_dot_B2(M& module)
 {
     module.def(
         "A4_dot_B2",
-        py::overload_cast<const T&, const U&>(&GMatTensor::Cartesian3d::A4_dot_B2<T, U>),
+        static_cast<R (*)(const T&, const U&)>(&GMatTensor::Cartesian3d::A4_dot_B2),
         "Product 'A . B' for two (arrays of) 4th and 2nd-order tensors.",
         py::arg("A"),
         py::arg("B"));
@@ -349,7 +349,7 @@ void add3d_A4_dot_B2_ret(M& module)
 {
     module.def(
         "A4_dot_B2",
-        py::overload_cast<const T&, const U&, R&>(&GMatTensor::Cartesian3d::A4_dot_B2<T, U, R>),
+        static_cast<void (*)(const T&, const U&, R&)>(&GMatTensor::Cartesian3d::A4_dot_B2),
         "Product 'A . B' for two (arrays of) 4th and 2nd-order tensors.",
         py::arg("A"),
         py::arg("B"),
