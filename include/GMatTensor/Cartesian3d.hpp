@@ -283,7 +283,7 @@ inline auto A4_ddot_B2(const T& A, const U& B)
 }
 
 template <class T, class U, class R>
-inline auto A4_dot_B2(const T& A, const U& B, R& ret)
+inline void A4_dot_B2(const T& A, const U& B, R& ret)
 {
     return detail::impl_A4<T, 3>::B2_ret4(A, B, ret,
         [](const auto& a, const auto& b, const auto& r){ return pointer::A4_dot_B2(a, b, r); });

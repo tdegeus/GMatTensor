@@ -12,6 +12,25 @@ Implementation details (not part of public API).
 namespace GMatTensor {
 namespace detail {
 
+template <size_t RANK, class T>
+struct allocate
+{
+};
+
+template <size_t RANK, class EC, size_t N, xt::layout_type L, class Tag>
+struct allocate<RANK, xt::xtensor<EC, N, L, Tag>>
+{
+    using type = typename xt::xtensor<EC, RANK, L, Tag>;
+};
+
+#ifdef PY_TENSOR_HPP
+template <size_t RANK, class EC, size_t N, xt::layout_type L>
+struct allocate<RANK, xt::pytensor<EC, N, L>>
+{
+    using type = typename xt::pytensor<EC, RANK, L>;
+};
+#endif
+
 // --------------------------
 // Array of 2nd-order tensors
 // --------------------------
@@ -23,7 +42,7 @@ struct impl_A2
     using shape_type = typename T::shape_type;
     static_assert(xt::has_fixed_rank_t<T>::value, "Only fixed rank allowed.");
     static_assert(xt::get_rank<T>::value >= 2, "Rank too low.");
-    constexpr static size_t rank = xt::get_rank<T>::value - 2;
+    constexpr static size_t rank = xt::get_rank<T>::value - 2; // rank of the 'pure' matrix
     constexpr static size_t stride0 = 1;
     constexpr static size_t stride2 = nd * nd;
     constexpr static size_t stride4 = nd * nd * nd * nd;
@@ -70,28 +89,34 @@ struct impl_A2
         return ret;
     }
 
-    // Argument: A2
-    // Return: scalar
-
-    template <typename F>
-    static void ret0(const T& A, xt::xtensor<value_type, rank>& ret, F func)
+    /**
+    \param A 2nd order tensor.
+    \param ret scalar (0th order tensor).
+    */
+    template <class R, typename F>
+    static void ret0(const T& A, R& ret, F func)
     {
         GMATTENSOR_ASSERT(xt::has_shape(A, toShapeT2(A.shape())));
         GMATTENSOR_ASSERT(xt::has_shape(ret, toShapeT0(A.shape())));
         #pragma omp parallel for
         for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
-            ret.data()[i] = func(&A.data()[i * stride2]);
+            ret.flat(i) = func(&A.flat(i * stride2));
         }
     }
 
+    /**
+    \param A 2nd order tensor.
+    \return scalar (0th order tensor).
+    */
     template <typename F>
-    static auto ret0(const T& A, F func)
+    static auto ret0(const T& A, F func) -> typename allocate<rank, T>::type
     {
+        using return_type = typename allocate<rank, T>::type;
         GMATTENSOR_ASSERT(xt::has_shape(A, toShapeT2(A.shape())));
-        xt::xtensor<value_type, rank> ret = xt::empty<value_type>(toShapeT0(A.shape()));
+        return_type ret = return_type::from_shape(toShapeT0(A.shape()));
         #pragma omp parallel for
         for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
-            ret.data()[i] = func(&A.data()[i * stride2]);
+            ret.flat(i) = func(&A.flat(i * stride2));
         }
         return ret;
     }
@@ -99,27 +124,28 @@ struct impl_A2
     // Argument: A2, B2
     // Return: scalar
 
-    template <typename F>
-    static void B2_ret0(const T& A, const T& B, xt::xtensor<value_type, rank>& ret, F func)
+    template <class R, typename F>
+    static void B2_ret0(const T& A, const T& B, R& ret, F func)
     {
         GMATTENSOR_ASSERT(xt::has_shape(A, toShapeT2(A.shape())));
         GMATTENSOR_ASSERT(xt::has_shape(B, toShapeT2(B.shape())));
         GMATTENSOR_ASSERT(xt::has_shape(ret, toShapeT0(A.shape())));
         #pragma omp parallel for
         for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
-            ret.data()[i] = func(&A.data()[i * stride2], &B.data()[i * stride2]);
+            ret.flat(i) = func(&A.flat(i * stride2), &B.flat(i * stride2));
         }
     }
 
     template <typename F>
-    static auto B2_ret0(const T& A, const T& B, F func)
+    static auto B2_ret0(const T& A, const T& B, F func) -> typename allocate<rank, T>::type
     {
+        using return_type = typename allocate<rank, T>::type;
         GMATTENSOR_ASSERT(xt::has_shape(A, toShapeT2(A.shape())));
         GMATTENSOR_ASSERT(xt::has_shape(B, toShapeT2(A.shape())));
-        xt::xtensor<value_type, rank> ret = xt::empty<value_type>(toShapeT0(A.shape()));
+        return_type ret = return_type::from_shape(toShapeT0(A.shape()));
         #pragma omp parallel for
         for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
-            ret.data()[i] = func(&A.data()[i * stride2], &B.data()[i * stride2]);
+            ret.flat(i) = func(&A.flat(i * stride2), &B.flat(i * stride2));
         }
         return ret;
     }
@@ -127,27 +153,28 @@ struct impl_A2
     // Argument: A2, B2
     // Return: 2nd-order tensor
 
-    template <typename F>
-    static void B2_ret2(const T& A, const T& B, xt::xtensor<value_type, rank + 2>& ret, F func)
+    template <class R, typename F>
+    static void B2_ret2(const T& A, const T& B, R& ret, F func)
     {
         GMATTENSOR_ASSERT(xt::has_shape(A, toShapeT2(A.shape())));
         GMATTENSOR_ASSERT(xt::has_shape(B, toShapeT2(B.shape())));
         GMATTENSOR_ASSERT(xt::has_shape(ret, toShapeT2(A.shape())));
         #pragma omp parallel for
         for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
-            func(&A.data()[i * stride2], &B.data()[i * stride2], &ret.data()[i * stride2]);
+            func(&A.flat(i * stride2), &B.flat(i * stride2), &ret.flat(i * stride2));
         }
     }
 
     template <typename F>
-    static auto B2_ret2(const T& A, const T& B, F func)
+    static auto B2_ret2(const T& A, const T& B, F func) -> typename allocate<rank + 2, T>::type
     {
+        using return_type = typename allocate<rank + 2, T>::type;
         GMATTENSOR_ASSERT(xt::has_shape(A, toShapeT2(A.shape())));
         GMATTENSOR_ASSERT(xt::has_shape(B, toShapeT2(A.shape())));
-        xt::xtensor<value_type, rank + 2> ret = xt::empty<value_type>(toShapeT2(A.shape()));
+        return_type ret = return_type::from_shape(toShapeT2(A.shape()));
         #pragma omp parallel for
         for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
-            func(&A.data()[i * stride2], &B.data()[i * stride2], &ret.data()[i * stride2]);
+            func(&A.flat(i * stride2), &B.flat(i * stride2), &ret.flat(i * stride2));
         }
         return ret;
     }
@@ -155,27 +182,28 @@ struct impl_A2
     // Argument: A2, B2
     // Return: 4th-order tensor
 
-    template <typename F>
-    static void B2_ret4(const T& A, const T& B, xt::xtensor<value_type, rank + 4>& ret, F func)
+    template <class R, typename F>
+    static void B2_ret4(const T& A, const T& B, R& ret, F func)
     {
         GMATTENSOR_ASSERT(xt::has_shape(A, toShapeT2(A.shape())));
         GMATTENSOR_ASSERT(xt::has_shape(B, toShapeT2(B.shape())));
         GMATTENSOR_ASSERT(xt::has_shape(ret, toShapeT4(A.shape())));
         #pragma omp parallel for
         for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
-            func(&A.data()[i * stride2], &B.data()[i * stride2], &ret.data()[i * stride4]);
+            func(&A.flat(i * stride2), &B.flat(i * stride2), &ret.flat(i * stride4));
         }
     }
 
     template <typename F>
-    static auto B2_ret4(const T& A, const T& B, F func)
+    static auto B2_ret4(const T& A, const T& B, F func) -> typename allocate<rank + 4, T>::type
     {
+        using return_type = typename allocate<rank + 4, T>::type;
         GMATTENSOR_ASSERT(xt::has_shape(A, toShapeT2(A.shape())));
         GMATTENSOR_ASSERT(xt::has_shape(B, toShapeT2(A.shape())));
-        xt::xtensor<value_type, rank + 4> ret = xt::empty<value_type>(toShapeT4(A.shape()));
+        return_type ret = return_type::from_shape(toShapeT4(A.shape()));
         #pragma omp parallel for
         for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
-            func(&A.data()[i * stride2], &B.data()[i * stride2], &ret.data()[i * stride4]);
+            func(&A.flat(i * stride2), &B.flat(i * stride2), &ret.flat(i * stride4));
         }
         return ret;
     }
@@ -183,25 +211,26 @@ struct impl_A2
     // Argument: A2
     // Return: 2nd-order tensor
 
-    template <typename F>
-    static void ret2(const T& A, xt::xtensor<value_type, rank + 2>& ret, F func)
+    template <class R, typename F>
+    static void ret2(const T& A, R& ret, F func)
     {
         GMATTENSOR_ASSERT(xt::has_shape(A, toShapeT2(A.shape())));
         GMATTENSOR_ASSERT(xt::has_shape(ret, toShapeT2(A.shape())));
         #pragma omp parallel for
         for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
-            func(&A.data()[i * stride2], &ret.data()[i * stride2]);
+            func(&A.flat(i * stride2), &ret.flat(i * stride2));
         }
     }
 
     template <typename F>
-    static auto ret2(const T& A, F func)
+    static auto ret2(const T& A, F func) -> typename allocate<rank + 2, T>::type
     {
+        using return_type = typename allocate<rank + 2, T>::type;
         GMATTENSOR_ASSERT(xt::has_shape(A, toShapeT2(A.shape())));
-        xt::xtensor<value_type, rank + 2> ret = xt::empty<value_type>(toShapeT2(A.shape()));
+        return_type ret = return_type::from_shape(toShapeT2(A.shape()));
         #pragma omp parallel for
         for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
-            func(&A.data()[i * stride2], &ret.data()[i * stride2]);
+            func(&A.flat(i * stride2), &ret.flat(i * stride2));
         }
         return ret;
     }
@@ -268,27 +297,28 @@ struct impl_A4
     // Argument: A4, B2
     // Return: 2nd-order tensor
 
-    template <class U, typename F>
-    static void B2_ret2(const T& A, const U& B, xt::xtensor<value_type, rank + 2>& ret, F func)
+    template <class U, class R, typename F>
+    static void B2_ret2(const T& A, const U& B, R& ret, F func)
     {
         GMATTENSOR_ASSERT(xt::has_shape(A, toShapeT4(A.shape())));
         GMATTENSOR_ASSERT(xt::has_shape(B, toShapeT2(A.shape())));
         GMATTENSOR_ASSERT(xt::has_shape(ret, toShapeT2(A.shape())));
         #pragma omp parallel for
         for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
-            func(&A.data()[i * stride4], &B.data()[i * stride2], &ret.data()[i * stride2]);
+            func(&A.flat(i * stride4), &B.flat(i * stride2), &ret.flat(i * stride2));
         }
     }
 
     template <class U, typename F>
-    static auto B2_ret2(const T& A, const U& B, F func)
+    static auto B2_ret2(const T& A, const U& B, F func) -> typename allocate<rank + 2, T>::type
     {
+        using return_type = typename allocate<rank + 2, T>::type;
         GMATTENSOR_ASSERT(xt::has_shape(A, toShapeT4(A.shape())));
         GMATTENSOR_ASSERT(xt::has_shape(B, toShapeT2(A.shape())));
-        xt::xtensor<value_type, rank + 2> ret = xt::empty<value_type>(toShapeT2(A.shape()));
+        return_type ret = return_type::from_shape(toShapeT2(A.shape()));
         #pragma omp parallel for
         for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
-            func(&A.data()[i * stride4], &B.data()[i * stride2], &ret.data()[i * stride2]);
+            func(&A.flat(i * stride4), &B.flat(i * stride2), &ret.flat(i * stride2));
         }
         return ret;
     }
@@ -296,27 +326,28 @@ struct impl_A4
     // Argument: A4, B2
     // Return: 4th-order tensor
 
-    template <class U, typename F>
-    static void B2_ret4(const T& A, const U& B, xt::xtensor<value_type, rank + 4>& ret, F func)
+    template <class U, class R, typename F>
+    static void B2_ret4(const T& A, const U& B, R& ret, F func)
     {
         GMATTENSOR_ASSERT(xt::has_shape(A, toShapeT4(A.shape())));
         GMATTENSOR_ASSERT(xt::has_shape(B, toShapeT2(A.shape())));
         GMATTENSOR_ASSERT(xt::has_shape(ret, toShapeT4(A.shape())));
         #pragma omp parallel for
         for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
-            func(&A.data()[i * stride4], &B.data()[i * stride2], &ret.data()[i * stride2]);
+            func(&A.flat(i * stride4), &B.flat(i * stride2), &ret.flat(i * stride2));
         }
     }
 
     template <class U, typename F>
-    static auto B2_ret4(const T& A, const U& B, F func)
+    static auto B2_ret4(const T& A, const U& B, F func) -> typename allocate<rank + 4, T>::type
     {
+        using return_type = typename allocate<rank + 4, T>::type;
         GMATTENSOR_ASSERT(xt::has_shape(A, toShapeT4(A.shape())));
         GMATTENSOR_ASSERT(xt::has_shape(B, toShapeT2(A.shape())));
-        xt::xtensor<value_type, rank + 4> ret = xt::empty<value_type>(toShapeT4(A.shape()));
+        return_type ret = return_type::from_shape(toShapeT4(A.shape()));
         #pragma omp parallel for
         for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
-            func(&A.data()[i * stride4], &B.data()[i * stride2], &ret.data()[i * stride2]);
+            func(&A.flat(i * stride4), &B.flat(i * stride2), &ret.flat(i * stride2));
         }
         return ret;
     }

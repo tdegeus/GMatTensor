@@ -6,7 +6,6 @@
 
 #include <pybind11/pybind11.h>
 #include <xtensor-python/pytensor.hpp>
-#include <pyxtensor/pyxtensor.hpp>
 
 #include <GMatTensor/Cartesian2d.h>
 
@@ -35,9 +34,20 @@ void add2d_Trace(M& module)
 {
     module.def(
         "Trace",
-        static_cast<R (*)(const T&)>(&GMatTensor::Cartesian2d::Trace),
+        py::overload_cast<const T&>(&GMatTensor::Cartesian2d::Trace<T>),
         "Trace of a(n) (array of) 2nd-order tensor(s).",
         py::arg("A"));
+}
+
+template <class R, class T, class M>
+void add2d_trace(M& module)
+{
+    module.def(
+        "trace",
+        py::overload_cast<const T&, R&>(&GMatTensor::Cartesian2d::trace<T, R>),
+        "Trace of a(n) (array of) 2nd-order tensor(s).",
+        py::arg("A"),
+        py::arg("ret"));
 }
 
 template <class R, class T, class M>
@@ -48,6 +58,17 @@ void add2d_Hydrostatic(M& module)
         py::overload_cast<const T&>(&GMatTensor::Cartesian2d::Hydrostatic<T>),
         "Hydrostatic part of a(n) (array of) 2nd-order tensor(s).",
         py::arg("A"));
+}
+
+template <class R, class T, class M>
+void add2d_hydrostatic(M& module)
+{
+    module.def(
+        "hydrostatic",
+        py::overload_cast<const T&, R&>(&GMatTensor::Cartesian2d::hydrostatic<T, R>),
+        "Hydrostatic part of a(n) (array of) 2nd-order tensor(s).",
+        py::arg("A"),
+        py::arg("ret"));
 }
 
 template <class R, class T, class M>
@@ -62,6 +83,18 @@ void add2d_A2_ddot_B2(M& module)
 }
 
 template <class R, class T, class M>
+void add2d_A2_ddot_B2_ret(M& module)
+{
+    module.def(
+        "A2_ddot_B2",
+        py::overload_cast<const T&, const T&, R&>(&GMatTensor::Cartesian2d::A2_ddot_B2<T, R>),
+        "Product 'A : B' for two (arrays of) 2nd-order tensors.",
+        py::arg("A"),
+        py::arg("B"),
+        py::arg("ret"));
+}
+
+template <class R, class T, class M>
 void add2d_A2s_ddot_B2s(M& module)
 {
     module.def(
@@ -70,6 +103,18 @@ void add2d_A2s_ddot_B2s(M& module)
         "Product 'A : B' for two (arrays of) symmetric 2nd-order tensors (no assertion).",
         py::arg("A"),
         py::arg("B"));
+}
+
+template <class R, class T, class M>
+void add2d_A2s_ddot_B2s_ret(M& module)
+{
+    module.def(
+        "A2s_ddot_B2s",
+        py::overload_cast<const T&, const T&, R&>(&GMatTensor::Cartesian2d::A2s_ddot_B2s<T, R>),
+        "Product 'A : B' for two (arrays of) symmetric 2nd-order tensors (no assertion).",
+        py::arg("A"),
+        py::arg("B"),
+        py::arg("ret"));
 }
 
 template <class R, class T, class M>
@@ -82,7 +127,18 @@ void add2d_Norm_deviatoric(M& module)
         py::arg("A"));
 }
 
-template <class T, class M>
+template <class R, class T, class M>
+void add2d_norm_deviatoric(M& module)
+{
+    module.def(
+        "norm_deviatoric",
+        py::overload_cast<const T&, R&>(&GMatTensor::Cartesian2d::norm_deviatoric<T, R>),
+        "Norm of the deviatoric part of a(n) (array of) 2nd-order tensor(s).",
+        py::arg("A"),
+        py::arg("ret"));
+}
+
+template <class R, class T, class M>
 void add2d_Sym(M& module)
 {
     module.def(
@@ -92,7 +148,18 @@ void add2d_Sym(M& module)
         py::arg("A"));
 }
 
-template <class T, class M>
+template <class R, class T, class M>
+void add2d_sym(M& module)
+{
+    module.def(
+        "sym",
+        py::overload_cast<const T&, R&>(&GMatTensor::Cartesian2d::sym<T, R>),
+        "Symmetric part of a(n) (array of) 2nd-order tensor(s).",
+        py::arg("A"),
+        py::arg("ret"));
+}
+
+template <class R, class T, class M>
 void add2d_Deviatoric(M& module)
 {
     module.def(
@@ -102,7 +169,18 @@ void add2d_Deviatoric(M& module)
         py::arg("A"));
 }
 
-template <class T, class M>
+template <class R, class T, class M>
+void add2d_deviatoric(M& module)
+{
+    module.def(
+        "deviatoric",
+        py::overload_cast<const T&, R&>(&GMatTensor::Cartesian2d::deviatoric<T, R>),
+        "Deviatoric part of a(n) (array of) 2nd-order tensor(s).",
+        py::arg("A"),
+        py::arg("ret"));
+}
+
+template <class R, class T, class M>
 void add2d_A2_dot_B2(M& module)
 {
     module.def(
@@ -111,6 +189,18 @@ void add2d_A2_dot_B2(M& module)
         "Product 'A . B' of a (array of) tensor(s).",
         py::arg("A"),
         py::arg("B"));
+}
+
+template <class R, class T, class M>
+void add2d_A2_dot_B2_ret(M& module)
+{
+    module.def(
+        "A2_dot_B2",
+        py::overload_cast<const T&, const T&, R&>(&GMatTensor::Cartesian2d::A2_dot_B2<T, R>),
+        "Product 'A . B' of a (array of) tensor(s).",
+        py::arg("A"),
+        py::arg("B"),
+        py::arg("ret"));
 }
 
 template <class R, class T, class M>
@@ -125,14 +215,38 @@ void add2d_A2_dyadic_B2(M& module)
 }
 
 template <class R, class T, class M>
+void add2d_A2_dyadic_B2_ret(M& module)
+{
+    module.def(
+        "A2_dyadic_B2",
+        py::overload_cast<const T&, const T&, R&>(&GMatTensor::Cartesian2d::A2_dyadic_B2<T, R>),
+        "Product 'A * B' for two (arrays of) 2nd-order tensors.",
+        py::arg("A"),
+        py::arg("B"),
+        py::arg("ret"));
+}
+
+template <class R, class T, class U, class M>
 void add2d_A4_ddot_B2(M& module)
 {
     module.def(
         "A4_ddot_B2",
-        py::overload_cast<const T&, const R&>(&GMatTensor::Cartesian2d::A4_ddot_B2<T, R>),
+        py::overload_cast<const T&, const U&>(&GMatTensor::Cartesian2d::A4_ddot_B2<T, U>),
         "Product 'A : B' for two (arrays of) 4th and 2nd-order tensors.",
         py::arg("A"),
         py::arg("B"));
+}
+
+template <class R, class T, class U, class M>
+void add2d_A4_ddot_B2_ret(M& module)
+{
+    module.def(
+        "A4_ddot_B2",
+        py::overload_cast<const T&, const U&, R&>(&GMatTensor::Cartesian2d::A4_ddot_B2<T, U, R>),
+        "Product 'A : B' for two (arrays of) 4th and 2nd-order tensors.",
+        py::arg("A"),
+        py::arg("B"),
+        py::arg("ret"));
 }
 
 void init_Cartesian2d(py::module& m)
@@ -152,36 +266,85 @@ void init_Cartesian2d(py::module& m)
 
     // Tensor algebra
 
-    add2d_Trace<xt::xtensor<double, 2>, xt::pytensor<double, 4>>(m);
-    add2d_Trace<xt::xtensor<double, 1>, xt::pytensor<double, 3>>(m);
-    add2d_Trace<xt::xtensor<double, 0>, xt::pytensor<double, 2>>(m);
-    add2d_Hydrostatic<xt::xtensor<double, 2>, xt::pytensor<double, 4>>(m);
-    add2d_Hydrostatic<xt::xtensor<double, 1>, xt::pytensor<double, 3>>(m);
-    add2d_Hydrostatic<xt::xtensor<double, 0>, xt::pytensor<double, 2>>(m);
-    add2d_A2_ddot_B2<xt::xtensor<double, 2>, xt::pytensor<double, 4>>(m);
-    add2d_A2_ddot_B2<xt::xtensor<double, 1>, xt::pytensor<double, 3>>(m);
-    add2d_A2_ddot_B2<xt::xtensor<double, 0>, xt::pytensor<double, 2>>(m);
-    add2d_A2s_ddot_B2s<xt::xtensor<double, 2>, xt::pytensor<double, 4>>(m);
-    add2d_A2s_ddot_B2s<xt::xtensor<double, 1>, xt::pytensor<double, 3>>(m);
-    add2d_A2s_ddot_B2s<xt::xtensor<double, 0>, xt::pytensor<double, 2>>(m);
-    add2d_Norm_deviatoric<xt::xtensor<double, 2>, xt::pytensor<double, 4>>(m);
-    add2d_Norm_deviatoric<xt::xtensor<double, 1>, xt::pytensor<double, 3>>(m);
-    add2d_Norm_deviatoric<xt::xtensor<double, 0>, xt::pytensor<double, 2>>(m);
-    add2d_Deviatoric<xt::xtensor<double, 4>>(m);
-    add2d_Deviatoric<xt::xtensor<double, 3>>(m);
-    add2d_Deviatoric<xt::xtensor<double, 2>>(m);
-    add2d_Sym<xt::xtensor<double, 4>>(m);
-    add2d_Sym<xt::xtensor<double, 3>>(m);
-    add2d_Sym<xt::xtensor<double, 2>>(m);
-    add2d_A2_dot_B2<xt::xtensor<double, 4>>(m);
-    add2d_A2_dot_B2<xt::xtensor<double, 3>>(m);
-    add2d_A2_dot_B2<xt::xtensor<double, 2>>(m);
-    add2d_A2_dyadic_B2<xt::xtensor<double, 6>, xt::pytensor<double, 4>>(m);
-    add2d_A2_dyadic_B2<xt::xtensor<double, 5>, xt::pytensor<double, 3>>(m);
-    add2d_A2_dyadic_B2<xt::xtensor<double, 4>, xt::pytensor<double, 2>>(m);
-    add2d_A4_ddot_B2<xt::xtensor<double, 4>, xt::pytensor<double, 6>>(m);
-    add2d_A4_ddot_B2<xt::xtensor<double, 3>, xt::pytensor<double, 5>>(m);
-    add2d_A4_ddot_B2<xt::xtensor<double, 2>, xt::pytensor<double, 4>>(m);
+    add2d_Trace<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
+    add2d_Trace<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    add2d_Trace<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+
+    add2d_trace<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
+    add2d_trace<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    add2d_trace<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+
+    add2d_Hydrostatic<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
+    add2d_Hydrostatic<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    add2d_Hydrostatic<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+
+    add2d_hydrostatic<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
+    add2d_hydrostatic<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    add2d_hydrostatic<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+
+    add2d_A2_ddot_B2<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
+    add2d_A2_ddot_B2<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    add2d_A2_ddot_B2<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+
+    add2d_A2_ddot_B2_ret<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
+    add2d_A2_ddot_B2_ret<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    add2d_A2_ddot_B2_ret<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+
+    add2d_A2s_ddot_B2s<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
+    add2d_A2s_ddot_B2s<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    add2d_A2s_ddot_B2s<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+
+    add2d_A2s_ddot_B2s_ret<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
+    add2d_A2s_ddot_B2s_ret<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    add2d_A2s_ddot_B2s_ret<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+
+    add2d_Norm_deviatoric<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
+    add2d_Norm_deviatoric<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    add2d_Norm_deviatoric<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+
+    add2d_norm_deviatoric<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
+    add2d_norm_deviatoric<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    add2d_norm_deviatoric<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+
+    add2d_Deviatoric<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
+    add2d_Deviatoric<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);
+    add2d_Deviatoric<xt::pytensor<double, 2>, xt::pytensor<double, 2>>(m);
+
+    add2d_deviatoric<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
+    add2d_deviatoric<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);
+    add2d_deviatoric<xt::pytensor<double, 2>, xt::pytensor<double, 2>>(m);
+
+    add2d_Sym<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
+    add2d_Sym<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);
+    add2d_Sym<xt::pytensor<double, 2>, xt::pytensor<double, 2>>(m);
+
+    add2d_sym<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
+    add2d_sym<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);
+    add2d_sym<xt::pytensor<double, 2>, xt::pytensor<double, 2>>(m);
+
+    add2d_A2_dot_B2<xt::pytensor<double, 5>, xt::pytensor<double, 4>>(m);
+    add2d_A2_dot_B2<xt::pytensor<double, 4>, xt::pytensor<double, 3>>(m);
+    add2d_A2_dot_B2<xt::pytensor<double, 4>, xt::pytensor<double, 2>>(m);
+
+    add2d_A2_dot_B2_ret<xt::pytensor<double, 5>, xt::pytensor<double, 4>>(m);
+    add2d_A2_dot_B2_ret<xt::pytensor<double, 4>, xt::pytensor<double, 3>>(m);
+    add2d_A2_dot_B2_ret<xt::pytensor<double, 4>, xt::pytensor<double, 2>>(m);
+
+    add2d_A2_dyadic_B2<xt::pytensor<double, 6>, xt::pytensor<double, 4>>(m);
+    add2d_A2_dyadic_B2<xt::pytensor<double, 5>, xt::pytensor<double, 3>>(m);
+    add2d_A2_dyadic_B2<xt::pytensor<double, 4>, xt::pytensor<double, 2>>(m);
+
+    add2d_A2_dyadic_B2_ret<xt::pytensor<double, 6>, xt::pytensor<double, 4>>(m);
+    add2d_A2_dyadic_B2_ret<xt::pytensor<double, 5>, xt::pytensor<double, 3>>(m);
+    add2d_A2_dyadic_B2_ret<xt::pytensor<double, 4>, xt::pytensor<double, 2>>(m);
+
+    add2d_A4_ddot_B2<xt::pytensor<double, 4>, xt::pytensor<double, 6>, xt::pytensor<double, 4>>(m);
+    add2d_A4_ddot_B2<xt::pytensor<double, 3>, xt::pytensor<double, 5>, xt::pytensor<double, 3>>(m);
+    add2d_A4_ddot_B2<xt::pytensor<double, 2>, xt::pytensor<double, 4>, xt::pytensor<double, 2>>(m);
+
+    add2d_A4_ddot_B2_ret<xt::pytensor<double, 4>, xt::pytensor<double, 6>, xt::pytensor<double, 4>>(m);
+    add2d_A4_ddot_B2_ret<xt::pytensor<double, 3>, xt::pytensor<double, 5>, xt::pytensor<double, 3>>(m);
+    add2d_A4_ddot_B2_ret<xt::pytensor<double, 2>, xt::pytensor<double, 4>, xt::pytensor<double, 2>>(m);
 
     // Array
 
