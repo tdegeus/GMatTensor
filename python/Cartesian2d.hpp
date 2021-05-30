@@ -6,6 +6,9 @@
 
 #include <pybind11/pybind11.h>
 #include <xtensor-python/pytensor.hpp>
+#ifdef _WIN32
+#include <pyxtensor/pyxtensor.hpp>
+#endif
 
 #include <GMatTensor/Cartesian2d.h>
 
@@ -268,43 +271,93 @@ void init_Cartesian2d(py::module& m)
 
     add2d_Trace<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add2d_Trace<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    // todo: switch to xt::pytensor when https://github.com/xtensor-stack/xtensor-python/pull/263 is fixed
+    add2d_Trace<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add2d_Trace<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add2d_trace<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add2d_trace<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    // todo: switch to xt::pytensor when https://github.com/xtensor-stack/xtensor-python/pull/263 is fixed
+    add2d_trace<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add2d_trace<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add2d_Hydrostatic<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add2d_Hydrostatic<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    // todo: switch to xt::pytensor when https://github.com/xtensor-stack/xtensor-python/pull/263 is fixed
+    add2d_Hydrostatic<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add2d_Hydrostatic<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add2d_hydrostatic<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add2d_hydrostatic<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    // todo: switch to xt::pytensor when https://github.com/xtensor-stack/xtensor-python/pull/263 is fixed
+    add2d_hydrostatic<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add2d_hydrostatic<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add2d_A2_ddot_B2<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add2d_A2_ddot_B2<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    // todo: switch to xt::pytensor when https://github.com/xtensor-stack/xtensor-python/pull/263 is fixed
+    add2d_A2_ddot_B2<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add2d_A2_ddot_B2<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add2d_A2_ddot_B2_ret<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add2d_A2_ddot_B2_ret<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    // todo: switch to xt::pytensor when https://github.com/xtensor-stack/xtensor-python/pull/263 is fixed
+    add2d_A2_ddot_B2_ret<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add2d_A2_ddot_B2_ret<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add2d_A2s_ddot_B2s<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add2d_A2s_ddot_B2s<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    // todo: switch to xt::pytensor when https://github.com/xtensor-stack/xtensor-python/pull/263 is fixed
+    add2d_A2s_ddot_B2s<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add2d_A2s_ddot_B2s<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add2d_A2s_ddot_B2s_ret<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add2d_A2s_ddot_B2s_ret<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    // todo: switch to xt::pytensor when https://github.com/xtensor-stack/xtensor-python/pull/263 is fixed
+    add2d_A2s_ddot_B2s_ret<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add2d_A2s_ddot_B2s_ret<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add2d_Norm_deviatoric<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add2d_Norm_deviatoric<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    // todo: switch to xt::pytensor when https://github.com/xtensor-stack/xtensor-python/pull/263 is fixed
+    add2d_Norm_deviatoric<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add2d_Norm_deviatoric<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add2d_norm_deviatoric<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add2d_norm_deviatoric<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    // todo: switch to xt::pytensor when https://github.com/xtensor-stack/xtensor-python/pull/263 is fixed
+    add2d_norm_deviatoric<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add2d_norm_deviatoric<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add2d_Deviatoric<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
     add2d_Deviatoric<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);

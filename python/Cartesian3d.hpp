@@ -6,6 +6,9 @@
 
 #include <pybind11/pybind11.h>
 #include <xtensor-python/pytensor.hpp>
+#ifdef _WIN32
+#include <pyxtensor/pyxtensor.hpp>
+#endif
 
 #include <GMatTensor/Cartesian3d.h>
 
@@ -375,51 +378,99 @@ void init_Cartesian3d(py::module& m)
 
     add3d_Trace<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add3d_Trace<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    add3d_Trace<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add3d_Trace<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add3d_trace<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add3d_trace<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    add3d_trace<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add3d_trace<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add3d_Hydrostatic<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add3d_Hydrostatic<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    add3d_Hydrostatic<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add3d_Hydrostatic<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add3d_hydrostatic<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add3d_hydrostatic<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    add3d_hydrostatic<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add3d_hydrostatic<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add3d_Det<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add3d_Det<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    add3d_Det<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add3d_Det<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add3d_det<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add3d_det<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    add3d_det<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add3d_det<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add3d_A2_ddot_B2<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add3d_A2_ddot_B2<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    add3d_A2_ddot_B2<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add3d_A2_ddot_B2<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add3d_A2_ddot_B2_ret<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add3d_A2_ddot_B2_ret<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    add3d_A2_ddot_B2_ret<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add3d_A2_ddot_B2_ret<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add3d_A2s_ddot_B2s<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add3d_A2s_ddot_B2s<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    add3d_A2s_ddot_B2s<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add3d_A2s_ddot_B2s<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add3d_A2s_ddot_B2s_ret<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add3d_A2s_ddot_B2s_ret<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    add3d_A2s_ddot_B2s_ret<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add3d_A2s_ddot_B2s_ret<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add3d_Norm_deviatoric<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add3d_Norm_deviatoric<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    add3d_Norm_deviatoric<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add3d_Norm_deviatoric<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add3d_norm_deviatoric<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     add3d_norm_deviatoric<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
+    #ifdef _WIN32
+    add3d_norm_deviatoric<xt::xtensor<double, 0>, xt::xtensor<double, 2>>(m);
+    #else
     add3d_norm_deviatoric<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
+    #endif
 
     add3d_Deviatoric<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
     add3d_Deviatoric<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);

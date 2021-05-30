@@ -15,6 +15,7 @@ dependencies:
   # Python API
   - python
   - xtensor-python
+  - pyxtensor
 
   # run tests
   - catch2
