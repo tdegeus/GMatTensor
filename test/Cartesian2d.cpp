@@ -87,10 +87,10 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
         REQUIRE(xt::allclose(GM::A4_ddot_B2(N.I4d(), M), GM::Deviatoric(GM::Sym(M))));
     }
 
-    #ifdef _WIN32
+    #ifndef _WIN32
     SECTION("Trace - Tensor")
     {
-        xt::xtensor_fixed<double, xt::fixed_shape<2, 2>> A = {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
+        xt::xtensor_fixed<double, xt::fixed_shape<2, 2>> A = {{0, 1}, {2, 3}};
         REQUIRE(GM::Trace(A)() == Approx(A(0, 0) + A(1, 1)));
     }
     #endif
