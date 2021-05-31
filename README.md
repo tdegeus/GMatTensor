@@ -36,6 +36,8 @@ Tensor definitions supporting several GMat models.
     - [By hand](#by-hand)
     - [Using pkg-config](#using-pkg-config)
 - [Change-log](#change-log)
+    - [v0.7.2](#v072)
+    - [v0.7.1](#v071)
     - [v0.7.0](#v070)
     - [v0.6.0](#v060)
     - [v0.5.0](#v050)
@@ -328,6 +330,15 @@ Note that you have to take care of the *xtensor* dependency, the C++ version, op
 enabling *xsimd*, ...
 
 # Change-log
+
+## v0.7.2
+
+*   Bugfix: type recognition for xtensor-fixed.
+
+## v0.7.1
+
+*   Using xtensor-python to speed-up Python API, and to allow in-place output.
+*   [CI] Using micromamba for efficiency.
 
 ## v0.7.0
 
