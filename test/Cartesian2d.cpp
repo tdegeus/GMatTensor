@@ -2,6 +2,10 @@
 #include <catch2/catch.hpp>
 #include <xtensor/xrandom.hpp>
 #include <xtensor/xio.hpp>
+#ifdef _WIN32
+#include <xtensor/xfixed.hpp>
+#endif
+
 #include <GMatTensor/Cartesian2d.h>
 
 namespace GM = GMatTensor::Cartesian2d;
@@ -82,6 +86,14 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
         REQUIRE(xt::allclose(GM::A4_ddot_B2(N.I4d(), M), R));
         REQUIRE(xt::allclose(GM::A4_ddot_B2(N.I4d(), M), GM::Deviatoric(GM::Sym(M))));
     }
+
+    #ifdef _WIN32
+    SECTION("Trace - Tensor")
+    {
+        xt::xtensor_fixed<double, xt::fixed_shape<2, 2>> A = {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
+        REQUIRE(GM::Trace(A)() == Approx(A(0, 0) + A(1, 1)));
+    }
+    #endif
 
     SECTION("Trace - Tensor")
     {
