@@ -28,7 +28,7 @@ Tensor definitions supporting several GMat models.
     - [Python module](#python-module)
         - [Using conda](#using-conda-1)
         - [From source](#from-source-1)
-- [Compiling](#compiling)
+- [Compiling user-code](#compiling-user-code)
     - [Using CMake](#using-cmake)
         - [Example](#example)
         - [Targets](#targets)
@@ -36,6 +36,7 @@ Tensor definitions supporting several GMat models.
     - [By hand](#by-hand)
     - [Using pkg-config](#using-pkg-config)
 - [Change-log](#change-log)
+    - [v0.7.3](#v073)
     - [v0.7.2](#v072)
     - [v0.7.1](#v071)
     - [v0.7.0](#v070)
@@ -44,7 +45,6 @@ Tensor definitions supporting several GMat models.
     - [v0.4.0](#v040)
     - [v0.3.0](#v030)
     - [v0.2.0](#v020)
-        - [Pointer API](#pointer-api)
     - [v0.1.2](#v012)
     - [v0.1.1](#v011)
     - [v0.1.0](#v010)
@@ -212,7 +212,8 @@ git checkout https://github.com/tdegeus/GMatTensor.git
 cd GMatTensor
 
 # Install headers, CMake and pkg-config support
-cmake .
+cmake -Bbuild .
+cd build
 make install
 ```
 
@@ -229,12 +230,12 @@ To enable them you have to compile on your system, as is discussed next.
 
 ### From source
 
->   You need *xtensor*, *pyxtensor* and optionally *xsimd* as prerequisites. 
+>   You need *xtensor*, *xtensor-python* and optionally *xsimd* as prerequisites. 
 >   Additionally, Python needs to know how to find them. 
 >   The easiest is to use *conda* to get the prerequisites:
 > 
 >   ```bash
->   conda install -c conda-forge pyxtensor
+>   conda install -c conda-forge xtensor-python
 >   conda install -c conda-forge xsimd
 >   ```
 >   
@@ -248,14 +249,15 @@ To enable them you have to compile on your system, as is discussed next.
 git checkout https://github.com/tdegeus/GMatTensor.git
 cd GMatTensor
 
+# Only if you want to use hardware optization:
+export CMAKE_ARGS="-DUSE_SIMD=1"
+
 # Compile and install the Python module
-python setup.py build
-python setup.py install
-# OR you can use one command (but with less readable output)
-python -m pip install .
+# (-vv can be omitted as is controls just the verbosity)
+python -m pip install . -vv
 ```
 
-# Compiling
+# Compiling user-code
 
 ## Using CMake
 
@@ -298,11 +300,9 @@ The above example then becomes:
 cmake_minimum_required(VERSION 3.1)
 project(example)
 find_package(GMatTensor REQUIRED)
+find_package(xtensor REQUIRED)
 add_executable(example example.cpp)
-target_link_libraries(example PRIVATE 
-    GMatTensor 
-    xtensor::optimize 
-    xtensor::use_xsimd)
+target_link_libraries(example PRIVATE GMatTensor xtensor::optimize xtensor::use_xsimd)
 ```
 
 See the [documentation of xtensor](https://xtensor.readthedocs.io/en/latest/) concerning optimization.

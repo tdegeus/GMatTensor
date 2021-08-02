@@ -9,6 +9,7 @@ option(BUILD_ALL "${PROJECT_NAME}: Build tests, Python API & docs" OFF)
 option(BUILD_TESTS "${PROJECT_NAME}: Build tests" OFF)
 option(BUILD_PYTHON "${PROJECT_NAME}: Build Python API" OFF)
 option(BUILD_DOCS "${PROJECT_NAME}: Build docs" OFF)
+option(USE_SIMD "${PROJECT_NAME}: Use xsimd and -march=native if available" OFF)
 
 execute_process(
     COMMAND python -c "from setuptools_scm import get_version; print(get_version())"
@@ -101,6 +102,12 @@ if(BUILD_PYTHON OR BUILD_ALL)
     set_target_properties(mypymod PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
     target_link_libraries(mypymod PUBLIC ${PROJECT_NAME} pybind11::module Python::NumPy xtensor-python)
     target_compile_definitions(mypymod PRIVATE VERSION_INFO=${PROJECT_VERSION})
+    if (USE_SIMD)
+        find_package(xtensor REQUIRED)
+        find_package(xsimd REQUIRED)
+        target_link_libraries(mypymod PUBLIC xtensor::optimize xtensor::use_xsimd)
+        message(STATUS "Compiling ${PROJECT_NAME} with hardware optimization")
+    endif()
 endif()
 
 # Documentation
