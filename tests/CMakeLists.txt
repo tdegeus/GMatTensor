@@ -59,6 +59,3 @@ foreach(mysource ${APP_SOURCES})
     target_link_libraries(${myexec} PRIVATE mytarget)
     add_test(NAME ${myexec} COMMAND ${myexec})
 endforeach()
-
-# allows running from the same directory as the binary
-configure_file("Redraw_reconstruct-data.h5" "Redraw_reconstruct-data.h5" COPYONLY)
