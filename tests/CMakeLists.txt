@@ -6,7 +6,6 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     option(USE_ASSERT "${PROJECT_NAME}: Build with assertions" ON)
     option(USE_DEBUG "${PROJECT_NAME}: Build in debug mode" OFF)
     option(USE_SIMD "${PROJECT_NAME}: Build with hardware optimization" OFF)
-    option(USE_HDF5 "${PROJECT_NAME}: Build HDF5-based tests" ON)
 endif()
 
 set(MYPROJECT "${PROJECT_NAME}-test")
@@ -24,15 +23,6 @@ target_link_libraries(mytarget INTERFACE
     ${PROJECT_NAME}
     ${PROJECT_NAME}::compiler_warnings
     Catch2::Catch2)
-
-if(USE_HDF5)
-    set(HIGHFIVE_USE_BOOST 0)
-    set(HIGHFIVE_USE_XTENSOR 1)
-    find_package(HighFive REQUIRED)
-    target_link_libraries(mytarget INTERFACE HighFive)
-    target_compile_definitions(mytarget INTERFACE USE_HDF5)
-    message(STATUS "Compiling ${MYPROJECT} with HDF5")
-endif()
 
 if(USE_ASSERT)
     target_link_libraries(mytarget INTERFACE ${PROJECT_NAME}::assert)
