@@ -1,3 +1,3 @@
 from ._GMatTensor import *
-import Cartesian2d
-import Cartesian3d
+from . import Cartesian2d
+from . import Cartesian3d
