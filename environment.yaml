@@ -1,26 +1,15 @@
 channels:
   - conda-forge
 dependencies:
-  # dependencies
-  - xtensor
-
-  # optional dependencies
-  - xsimd
-
-  # build tools
-  - cmake
-  - ninja
-  - setuptools_scm
-
-  # Python API
-  - python
-  - xtensor-python
-  - pyxtensor
-
-  # run tests
   - catch2
-  - numpy
-
-  # build docs
+  - cmake
   - doxygen
   - mathjax
+  - ninja
+  - numpy
+  - python
+  - scikit-build
+  - setuptools_scm
+  - xsimd
+  - xtensor
+  - xtensor-python

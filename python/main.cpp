@@ -18,7 +18,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(GMatTensor, m)
+PYBIND11_MODULE(_GMatTensor, m)
 {
     xt::import_numpy();
 
