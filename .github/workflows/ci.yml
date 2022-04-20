@@ -68,18 +68,4 @@ jobs:
 
     - name: Run Python tests
       working-directory: tests
-      run: python Cartesian3d.py
-
-    - name: Generate consistency data based on current commit
-      if: runner.os == 'Linux'
-      working-directory: tests/compare_versions
-      run: |
-        python Cartesian3d_generate.py
-        python Cartesian3d_check_main.py
-
-    - name: Check consistency with v0.1.0
-      if: runner.os == 'Linux'
-      working-directory: tests/compare_versions
-      run: |
-        micromamba install -c conda-forge python=3.8.5 python-gmatelastic=0.1.0
-        python Cartesian3d_check_v0.1.0.py
+      run: python -m unittest discover tests
