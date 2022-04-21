@@ -86,6 +86,6 @@ struct allocate<RANK, xt::pytensor<EC, N, L>> {
 };
 #endif
 
-}
+} // namespace GMatTensor
 
 #endif
