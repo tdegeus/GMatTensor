@@ -29,11 +29,11 @@ Macros used in the library.
 */
 
 /**
-All assertions are implementation as::
+All assertions are implementation as:
 
     GMATTENSOR_ASSERT(...)
 
-They can be enabled by::
+They can be enabled by:
 
     #define GMATTENSOR_ENABLE_ASSERT
 
