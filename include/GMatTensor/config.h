@@ -56,6 +56,19 @@ Tensor products / operations.
 */
 namespace GMatTensor {
 
+/**
+Helper to allocate 'output' which is of the same type of some 'input', but of a different rank.
+For example:
+
+    // input: array of 2nd order tensors, shape = [..., ndim, ndim].
+    // output: array of scalars, shape = [...]
+    template <class T>
+    auto return_scalar_array(const T& A2) ->
+        typename GMatTensor::allocate<xt::get_rank<T>::value - 2, T>::type;
+
+\tparam RANK Rank of the output.
+\tparam T Type of the 'input'
+*/
 template <size_t RANK, class T>
 struct allocate {
 };
