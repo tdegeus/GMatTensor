@@ -59,12 +59,13 @@ namespace GMatTensor {
 /**
 Helper to allocate 'output' which is of the same type of some 'input', but of a different rank.
 For example:
-
-    // input: array of 2nd order tensors, shape = [..., ndim, ndim].
-    // output: array of scalars, shape = [...]
-    template <class T>
-    auto return_scalar_array(const T& A2) ->
-        typename GMatTensor::allocate<xt::get_rank<T>::value - 2, T>::type;
+\code
+// input: array of 2nd order tensors, shape = [..., ndim, ndim].
+// output: array of scalars, shape = [...]
+template <class T>
+auto return_scalar_array(const T& A2) ->
+    typename GMatTensor::allocate<xt::get_rank<T>::value - 2, T>::type;
+\endcode
 
 \tparam RANK Rank of the output.
 \tparam T Type of the 'input'
@@ -73,6 +74,9 @@ template <size_t RANK, class T>
 struct allocate {
 };
 
+/**
+\cond
+*/
 template <size_t RANK, class EC, size_t N, xt::layout_type L, class Tag>
 struct allocate<RANK, xt::xtensor<EC, N, L, Tag>> {
     using type = typename xt::xtensor<EC, RANK, L, Tag>;
@@ -98,6 +102,9 @@ struct allocate<RANK, xt::pytensor<EC, N, L>> {
     using type = typename xt::pytensor<EC, RANK, L>;
 };
 #endif
+/**
+\endcond
+*/
 
 } // namespace GMatTensor
 
