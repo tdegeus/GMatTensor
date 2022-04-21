@@ -352,6 +352,46 @@ void d3_A4_dot_B2_ret(M& module)
         py::arg("ret"));
 }
 
+template <class T, class M>
+void d3_underlying_size_A2(M& module)
+{
+    module.def(
+        "underlying_size_A2",
+        &GMatTensor::Cartesian3d::underlying_size_A2<T>,
+        "Size of the underlying array.",
+        py::arg("A"));
+}
+
+template <class T, class M>
+void d3_underlying_size_A4(M& module)
+{
+    module.def(
+        "underlying_size_A4",
+        &GMatTensor::Cartesian3d::underlying_size_A4<T>,
+        "Size of the underlying array.",
+        py::arg("A"));
+}
+
+template <class T, class M>
+void d3_underlying_shape_A2(M& module)
+{
+    module.def(
+        "underlying_shape_A2",
+        &GMatTensor::Cartesian3d::underlying_shape_A2<T>,
+        "Shape of the underlying array.",
+        py::arg("A"));
+}
+
+template <class T, class M>
+void d3_underlying_shape_A4(M& module)
+{
+    module.def(
+        "underlying_shape_A4",
+        &GMatTensor::Cartesian3d::underlying_shape_A4<T>,
+        "Shape of the underlying array.",
+        py::arg("A"));
+}
+
 void init_Cartesian3d(py::module& m)
 {
     namespace M = GMatTensor::Cartesian3d;
@@ -488,6 +528,22 @@ void init_Cartesian3d(py::module& m)
     d3_A4_dot_B2_ret<xt::pytensor<double, 6>, xt::pytensor<double, 6>, xt::pytensor<double, 4>>(m);
     d3_A4_dot_B2_ret<xt::pytensor<double, 5>, xt::pytensor<double, 5>, xt::pytensor<double, 3>>(m);
     d3_A4_dot_B2_ret<xt::pytensor<double, 4>, xt::pytensor<double, 4>, xt::pytensor<double, 2>>(m);
+
+    d3_underlying_size_A2<xt::pytensor<double, 4>>(m);
+    d3_underlying_size_A2<xt::pytensor<double, 3>>(m);
+    d3_underlying_size_A2<xt::pytensor<double, 2>>(m);
+
+    d3_underlying_size_A4<xt::pytensor<double, 6>>(m);
+    d3_underlying_size_A4<xt::pytensor<double, 5>>(m);
+    d3_underlying_size_A4<xt::pytensor<double, 4>>(m);
+
+    d3_underlying_shape_A2<xt::pytensor<double, 4>>(m);
+    d3_underlying_shape_A2<xt::pytensor<double, 3>>(m);
+    d3_underlying_shape_A2<xt::pytensor<double, 2>>(m);
+
+    d3_underlying_shape_A4<xt::pytensor<double, 6>>(m);
+    d3_underlying_shape_A4<xt::pytensor<double, 5>>(m);
+    d3_underlying_shape_A4<xt::pytensor<double, 4>>(m);
 
     // Array
 

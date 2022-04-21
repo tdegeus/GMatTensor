@@ -245,6 +245,46 @@ void d2_A4_ddot_B2_ret(M& module)
         py::arg("ret"));
 }
 
+template <class T, class M>
+void d2_underlying_size_A2(M& module)
+{
+    module.def(
+        "underlying_size_A2",
+        &GMatTensor::Cartesian2d::underlying_size_A2<T>,
+        "Size of the underlying array.",
+        py::arg("A"));
+}
+
+template <class T, class M>
+void d2_underlying_size_A4(M& module)
+{
+    module.def(
+        "underlying_size_A4",
+        &GMatTensor::Cartesian2d::underlying_size_A4<T>,
+        "Size of the underlying array.",
+        py::arg("A"));
+}
+
+template <class T, class M>
+void d2_underlying_shape_A2(M& module)
+{
+    module.def(
+        "underlying_shape_A2",
+        &GMatTensor::Cartesian2d::underlying_shape_A2<T>,
+        "Shape of the underlying array.",
+        py::arg("A"));
+}
+
+template <class T, class M>
+void d2_underlying_shape_A4(M& module)
+{
+    module.def(
+        "underlying_shape_A4",
+        &GMatTensor::Cartesian2d::underlying_shape_A4<T>,
+        "Shape of the underlying array.",
+        py::arg("A"));
+}
+
 void init_Cartesian2d(py::module& m)
 {
     namespace M = GMatTensor::Cartesian2d;
@@ -341,6 +381,22 @@ void init_Cartesian2d(py::module& m)
     d2_A4_ddot_B2_ret<xt::pytensor<double, 4>, xt::pytensor<double, 6>, xt::pytensor<double, 4>>(m);
     d2_A4_ddot_B2_ret<xt::pytensor<double, 3>, xt::pytensor<double, 5>, xt::pytensor<double, 3>>(m);
     d2_A4_ddot_B2_ret<xt::pytensor<double, 2>, xt::pytensor<double, 4>, xt::pytensor<double, 2>>(m);
+
+    d2_underlying_size_A2<xt::pytensor<double, 4>>(m);
+    d2_underlying_size_A2<xt::pytensor<double, 3>>(m);
+    d2_underlying_size_A2<xt::pytensor<double, 2>>(m);
+
+    d2_underlying_size_A4<xt::pytensor<double, 6>>(m);
+    d2_underlying_size_A4<xt::pytensor<double, 5>>(m);
+    d2_underlying_size_A4<xt::pytensor<double, 4>>(m);
+
+    d2_underlying_shape_A2<xt::pytensor<double, 4>>(m);
+    d2_underlying_shape_A2<xt::pytensor<double, 3>>(m);
+    d2_underlying_shape_A2<xt::pytensor<double, 2>>(m);
+
+    d2_underlying_shape_A4<xt::pytensor<double, 6>>(m);
+    d2_underlying_shape_A4<xt::pytensor<double, 5>>(m);
+    d2_underlying_shape_A4<xt::pytensor<double, 4>>(m);
 
     // Array
 

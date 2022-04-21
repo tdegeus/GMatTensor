@@ -532,6 +532,42 @@ template <class T, class U, class R>
 inline void A4_dot_B2(const T& A, const U& B, R& ret);
 
 /**
+Size of the underlying array.
+
+\param A [..., 2, 2] array.
+\return `prod([...])`.
+*/
+template <class T>
+inline auto underlying_size_A2(const T& A);
+
+/**
+Size of the underlying array.
+
+\param A [..., 2, 2] array.
+\return `prod([...])`.
+*/
+template <class T>
+inline auto underlying_size_A4(const T& A);
+
+/**
+Shape of the underlying array.
+
+\param A [..., 2, 2] array.
+\return `[...]`.
+*/
+template <class T>
+inline auto underlying_shape_A2(const T& A);
+
+/**
+Shape of the underlying array.
+
+\param A [..., 2, 2] array.
+\return `[...]`.
+*/
+template <class T>
+inline auto underlying_shape_A4(const T& A);
+
+/**
 Array of tensors:
 -   scalars: shape ``[...]``.
 -   2nd-order tensors: shape ``[..., 3, 3]``.

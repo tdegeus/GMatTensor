@@ -14,6 +14,30 @@ Implementation of GMatTensor/Cartesian2d.h
 namespace GMatTensor {
 namespace Cartesian2d {
 
+template <class T>
+inline auto underlying_size_A2(const T& A)
+{
+    return detail::impl_A2<T, 2>::toSizeT0(A.shape());
+}
+
+template <class T>
+inline auto underlying_size_A4(const T& A)
+{
+    return detail::impl_A4<T, 2>::toSizeT0(A.shape());
+}
+
+template <class T>
+inline auto underlying_shape_A2(const T& A)
+{
+    return detail::impl_A2<T, 2>::toShapeT0(A.shape());
+}
+
+template <class T>
+inline auto underlying_shape_A4(const T& A)
+{
+    return detail::impl_A4<T, 2>::toShapeT0(A.shape());
+}
+
 template <size_t N>
 inline Array<N>::Array(const std::array<size_t, N>& shape)
 {
