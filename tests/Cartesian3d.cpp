@@ -8,6 +8,26 @@ namespace GM = GMatTensor::Cartesian3d;
 
 TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
 {
+    SECTION("Array - view_tensor2")
+    {
+        auto N = GM::Array<3>({4, 2, 3});
+        auto M = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
+        auto A = xt::xtensor<double, 5>::from_shape({4, 2, 3, 3, 3});
+        for (size_t i = 0; i < M.shape(0); ++i) {
+            for (size_t j = 0; j < M.shape(1); ++j) {
+                for (size_t k = 0; k < M.shape(2); ++k) {
+                    xt::view(M, i, j, k, xt::all(), xt::all()) = GM::Random2();
+                }
+            }
+        }
+        for (size_t i = 0; i < 4 * 2 * 3; ++i) {
+            auto m = N.view_tensor2(M, i);
+            auto a = B.view_tensor2(M, i);
+            std::copy(m.cbegin(), m.cend(), a.begin());
+        }
+        REQUIRE(xt::allclose(M, A));
+    }
+
     SECTION("I4 - Tensor")
     {
         auto A = GM::Random2();
