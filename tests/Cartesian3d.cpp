@@ -22,7 +22,7 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
         }
         for (size_t i = 0; i < 4 * 2 * 3; ++i) {
             auto m = N.view_tensor2(M, i);
-            auto a = B.view_tensor2(M, i);
+            auto a = A.view_tensor2(M, i);
             std::copy(m.cbegin(), m.cend(), a.begin());
         }
         REQUIRE(xt::allclose(M, A));
