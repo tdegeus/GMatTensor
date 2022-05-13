@@ -488,6 +488,20 @@ public:
     std::array<size_t, N> shape() const;
 
     /**
+    Shape of the array of second-order tensors.
+
+    \return List of size #rank + 2.
+    */
+    std::array<size_t, N + 2> shape_tensor2() const;
+
+    /**
+    Shape of the array of fourth-order tensors.
+
+    \return List of size #rank + 4.
+    */
+    std::array<size_t, N + 2> shape_tensor4() const;
+
+    /**
     Array of Cartesian2d::O2()
 
     \return [shape(), 2, 2]
@@ -542,26 +556,6 @@ public:
     \return [shape(), 2, 2, 2, 2]
     */
     xt::xtensor<double, N + 4> I4d() const;
-
-    /**
-    Return a view of the `i`th second order tensor.
-    For example, consider an array `A` of shape `[M, N, 3, 3]` and you want to obtain the tensor
-    `A[m, n, :, :]` then you should call `view_tensor2(A, m * N + n)`.
-
-    \param var The variable to view (careful not to operate a view that is out-of-scope).
-    \param i The index of the flat storage of the corresponding scalar array.
-    */
-    template <class T>
-    auto view_tensor2(T& var, size_t i) const;
-
-    /**
-    Similar to view_tensor2() for fourth order tensors.
-
-    \param var The variable to view (careful not to operate a view that is out-of-scope).
-    \param i The index of the flat storage of the corresponding scalar array.
-    */
-    template <class T>
-    auto view_tensor4(T& var, size_t i) const;
 
 protected:
     /**

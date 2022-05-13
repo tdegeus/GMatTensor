@@ -57,28 +57,6 @@ inline void Array<N>::init(const std::array<size_t, N>& shape)
 }
 
 template <size_t N>
-template <class T>
-inline auto Array<N>::view_tensor2(T& var, size_t i) const
-{
-    return xt::adapt(
-        &var.flat(i * m_stride_tensor2),
-        m_stride_tensor2,
-        xt::no_ownership(),
-        std::array<size_t, 2>{m_ndim, m_ndim});
-}
-
-template <size_t N>
-template <class T>
-inline auto Array<N>::view_tensor4(T& var, size_t i) const
-{
-    return xt::adapt(
-        &var.flat(i * m_stride_tensor4),
-        m_stride_tensor4,
-        xt::no_ownership(),
-        std::array<size_t, 4>{m_ndim, m_ndim, m_ndim, m_ndim});
-}
-
-template <size_t N>
 inline std::array<size_t, N> Array<N>::shape() const
 {
     return m_shape;
