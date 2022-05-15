@@ -57,15 +57,22 @@ inline void Array<N>::init(const std::array<size_t, N>& shape)
 }
 
 template <size_t N>
-inline std::array<size_t, N> Array<N>::shape() const
+inline const std::array<size_t, N>& Array<N>::shape() const
 {
     return m_shape;
 }
 
 template <size_t N>
-inline xt::xtensor<double, N + 2> Array<N>::O2() const
+inline const std::array<size_t, N + 2>& Array<N>::shape_tensor2() const
 {
-    xt::xtensor<double, N + 2> ret = xt::empty<double>(m_shape_tensor2);
+    return m_shape_tensor2;
+}
+
+template <size_t N>
+inline const std::array<size_t, N + 4>& Array<N>::shape_tensor4() const
+{
+    return m_shape_tensor4;
+}
 
 #pragma omp parallel for
     for (size_t i = 0; i < m_size; ++i) {

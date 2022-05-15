@@ -57,19 +57,19 @@ inline void Array<N>::init(const std::array<size_t, N>& shape)
 }
 
 template <size_t N>
-inline std::array<size_t, N> Array<N>::shape() const
+inline const std::array<size_t, N>& Array<N>::shape() const
 {
     return m_shape;
 }
 
 template <size_t N>
-inline std::array<size_t, N + 2> Array<N>::shape_tensor2() const
+inline const std::array<size_t, N + 2>& Array<N>::shape_tensor2() const
 {
     return m_shape_tensor2;
 }
 
 template <size_t N>
-inline std::array<size_t, N + 4> Array<N>::shape_tensor4() const
+inline const std::array<size_t, N + 4>& Array<N>::shape_tensor4() const
 {
     return m_shape_tensor4;
 }

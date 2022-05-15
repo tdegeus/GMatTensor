@@ -485,21 +485,21 @@ public:
 
     \return List of size #rank.
     */
-    std::array<size_t, N> shape() const;
+    const std::array<size_t, N>& shape() const;
 
     /**
     Shape of the array of second-order tensors.
 
     \return List of size #rank + 2.
     */
-    std::array<size_t, N + 2> shape_tensor2() const;
+    const std::array<size_t, N + 2>& shape_tensor2() const;
 
     /**
     Shape of the array of fourth-order tensors.
 
     \return List of size #rank + 4.
     */
-    std::array<size_t, N + 2> shape_tensor4() const;
+    const std::array<size_t, N + 4>& shape_tensor4() const;
 
     /**
     Array of Cartesian2d::O2()

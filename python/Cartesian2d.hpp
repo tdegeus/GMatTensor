@@ -14,15 +14,17 @@ namespace py = pybind11;
 template <class T, class M>
 auto construct2d_Array(M& self)
 {
-    self.def(py::init<std::array<size_t, T::rank>>(), "Array.", py::arg("shape"))
-        .def("shape", &T::shape, "Shape of array.")
-        .def("I2", &T::I2, "Array with 2nd-order unit tensors.")
-        .def("II", &T::II, "Array with 4th-order tensors = dyadic(I2, I2).")
-        .def("I4", &T::I4, "Array with 4th-order unit tensors.")
-        .def("I4rt", &T::I4rt, "Array with 4th-order right-transposed unit tensors.")
-        .def("I4s", &T::I4s, "Array with 4th-order symmetric projection tensors.")
-        .def("I4d", &T::I4d, "Array with 4th-order deviatoric projection tensors.")
-        .def("__repr__", [](const T&) { return "<GMatTensor.Cartesian2d.Array>"; });
+    self.def(py::init<std::array<size_t, T::rank>>(), "Array.", py::arg("shape"));
+    self.def_property_readonly("shape", &T::shape, "Shape of array.");
+    self.def_property_readonly("shape_tensor2", &T::shape, "Shape of array of rank 2 tensors.");
+    self.def_property_readonly("shape_tensor4", &T::shape, "Shape of array of rank 4 tensors.");
+    self.def("I2", &T::I2, "Array with 2nd-order unit tensors.");
+    self.def("II", &T::II, "Array with 4th-order tensors = dyadic(I2, I2).");
+    self.def("I4", &T::I4, "Array with 4th-order unit tensors.");
+    self.def("I4rt", &T::I4rt, "Array with 4th-order right-transposed unit tensors.");
+    self.def("I4s", &T::I4s, "Array with 4th-order symmetric projection tensors.");
+    self.def("I4d", &T::I4d, "Array with 4th-order deviatoric projection tensors.");
+    self.def("__repr__", [](const T&) { return "<GMatTensor.Cartesian2d.Array>"; });
 }
 
 template <class R, class T, class M>
