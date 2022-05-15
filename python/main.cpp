@@ -10,6 +10,7 @@
 #define FORCE_IMPORT_ARRAY
 #include <xtensor-python/pytensor.hpp>
 
+#define GMATTENSOR_USE_XTENSOR_PYTHON
 #include <GMatTensor/version.h>
 
 #include "Cartesian2d.hpp"

@@ -75,9 +75,9 @@ inline const std::array<size_t, N + 4>& Array<N>::shape_tensor4() const
 }
 
 template <size_t N>
-inline xt::xtensor<double, N + 2> Array<N>::O2() const
+inline array_type::tensor<double, N + 2> Array<N>::O2() const
 {
-    xt::xtensor<double, N + 2> ret = xt::empty<double>(m_shape_tensor2);
+    array_type::tensor<double, N + 2> ret = xt::empty<double>(m_shape_tensor2);
 
 #pragma omp parallel for
     for (size_t i = 0; i < m_size; ++i) {
@@ -88,9 +88,9 @@ inline xt::xtensor<double, N + 2> Array<N>::O2() const
 }
 
 template <size_t N>
-inline xt::xtensor<double, N + 4> Array<N>::O4() const
+inline array_type::tensor<double, N + 4> Array<N>::O4() const
 {
-    xt::xtensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
+    array_type::tensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
 
 #pragma omp parallel for
     for (size_t i = 0; i < m_size; ++i) {
@@ -101,9 +101,9 @@ inline xt::xtensor<double, N + 4> Array<N>::O4() const
 }
 
 template <size_t N>
-inline xt::xtensor<double, N + 2> Array<N>::I2() const
+inline array_type::tensor<double, N + 2> Array<N>::I2() const
 {
-    xt::xtensor<double, N + 2> ret = xt::empty<double>(m_shape_tensor2);
+    array_type::tensor<double, N + 2> ret = xt::empty<double>(m_shape_tensor2);
 
 #pragma omp parallel for
     for (size_t i = 0; i < m_size; ++i) {
@@ -114,9 +114,9 @@ inline xt::xtensor<double, N + 2> Array<N>::I2() const
 }
 
 template <size_t N>
-inline xt::xtensor<double, N + 4> Array<N>::II() const
+inline array_type::tensor<double, N + 4> Array<N>::II() const
 {
-    xt::xtensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
+    array_type::tensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
 
 #pragma omp parallel for
     for (size_t i = 0; i < m_size; ++i) {
@@ -127,9 +127,9 @@ inline xt::xtensor<double, N + 4> Array<N>::II() const
 }
 
 template <size_t N>
-inline xt::xtensor<double, N + 4> Array<N>::I4() const
+inline array_type::tensor<double, N + 4> Array<N>::I4() const
 {
-    xt::xtensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
+    array_type::tensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
 
 #pragma omp parallel for
     for (size_t i = 0; i < m_size; ++i) {
@@ -140,9 +140,9 @@ inline xt::xtensor<double, N + 4> Array<N>::I4() const
 }
 
 template <size_t N>
-inline xt::xtensor<double, N + 4> Array<N>::I4rt() const
+inline array_type::tensor<double, N + 4> Array<N>::I4rt() const
 {
-    xt::xtensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
+    array_type::tensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
 
 #pragma omp parallel for
     for (size_t i = 0; i < m_size; ++i) {
@@ -153,9 +153,9 @@ inline xt::xtensor<double, N + 4> Array<N>::I4rt() const
 }
 
 template <size_t N>
-inline xt::xtensor<double, N + 4> Array<N>::I4s() const
+inline array_type::tensor<double, N + 4> Array<N>::I4s() const
 {
-    xt::xtensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
+    array_type::tensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
 
 #pragma omp parallel for
     for (size_t i = 0; i < m_size; ++i) {
@@ -166,9 +166,9 @@ inline xt::xtensor<double, N + 4> Array<N>::I4s() const
 }
 
 template <size_t N>
-inline xt::xtensor<double, N + 4> Array<N>::I4d() const
+inline array_type::tensor<double, N + 4> Array<N>::I4d() const
 {
-    xt::xtensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
+    array_type::tensor<double, N + 4> ret = xt::empty<double>(m_shape_tensor4);
 
 #pragma omp parallel for
     for (size_t i = 0; i < m_size; ++i) {

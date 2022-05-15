@@ -12,6 +12,12 @@ Macros used in the library.
 #include <algorithm>
 #include <string>
 
+#ifdef GMATTENSOR_USE_XTENSOR_PYTHON
+#include <xtensor-python/pytensor.hpp>
+#else
+#include <xtensor/xtensor.hpp>
+#endif
+
 /**
 \cond
 */
@@ -55,6 +61,31 @@ The advantage is that:
 Tensor products / operations.
 */
 namespace GMatTensor {
+
+/**
+Container type.
+*/
+namespace array_type {
+
+#ifdef GMATTENSOR_USE_XTENSOR_PYTHON
+
+/**
+Fixed (static) rank array.
+*/
+template <typename T, size_t N>
+using tensor = xt::pytensor<T, N>;
+
+#else
+
+/**
+Fixed (static) rank array.
+*/
+template <typename T, size_t N>
+using tensor = xt::xtensor<T, N>;
+
+#endif
+
+} // namespace array_type
 
 /**
 Helper to allocate 'output' which is of the same type of some 'input', but of a different rank.

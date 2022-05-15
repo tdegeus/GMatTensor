@@ -20,68 +20,68 @@ using GMatTensor::detail::impl_A2;
 using GMatTensor::detail::impl_A4;
 } // namespace detail
 
-inline xt::xtensor<double, 2> Random2()
+inline array_type::tensor<double, 2> Random2()
 {
-    xt::xtensor<double, 2> ret = xt::random::randn<double>({3, 3});
+    array_type::tensor<double, 2> ret = xt::random::randn<double>({3, 3});
     return ret;
 }
 
-inline xt::xtensor<double, 4> Random4()
+inline array_type::tensor<double, 4> Random4()
 {
-    xt::xtensor<double, 4> ret = xt::random::randn<double>({3, 3, 3, 3});
+    array_type::tensor<double, 4> ret = xt::random::randn<double>({3, 3, 3, 3});
     return ret;
 }
 
-inline xt::xtensor<double, 2> O2()
+inline array_type::tensor<double, 2> O2()
 {
-    xt::xtensor<double, 2> ret = xt::zeros<double>({3, 3});
+    array_type::tensor<double, 2> ret = xt::zeros<double>({3, 3});
     return ret;
 }
 
-inline xt::xtensor<double, 4> O4()
+inline array_type::tensor<double, 4> O4()
 {
-    xt::xtensor<double, 4> ret = xt::zeros<double>({3, 3, 3, 3});
+    array_type::tensor<double, 4> ret = xt::zeros<double>({3, 3, 3, 3});
     return ret;
 }
 
-inline xt::xtensor<double, 2> I2()
+inline array_type::tensor<double, 2> I2()
 {
-    xt::xtensor<double, 2> ret = xt::empty<double>({3, 3});
+    array_type::tensor<double, 2> ret = xt::empty<double>({3, 3});
     pointer::I2(ret.data());
     return ret;
 }
 
-inline xt::xtensor<double, 4> II()
+inline array_type::tensor<double, 4> II()
 {
-    xt::xtensor<double, 4> ret = xt::empty<double>({3, 3, 3, 3});
+    array_type::tensor<double, 4> ret = xt::empty<double>({3, 3, 3, 3});
     pointer::II(ret.data());
     return ret;
 }
 
-inline xt::xtensor<double, 4> I4()
+inline array_type::tensor<double, 4> I4()
 {
-    xt::xtensor<double, 4> ret = xt::empty<double>({3, 3, 3, 3});
+    array_type::tensor<double, 4> ret = xt::empty<double>({3, 3, 3, 3});
     pointer::I4(ret.data());
     return ret;
 }
 
-inline xt::xtensor<double, 4> I4rt()
+inline array_type::tensor<double, 4> I4rt()
 {
-    xt::xtensor<double, 4> ret = xt::empty<double>({3, 3, 3, 3});
+    array_type::tensor<double, 4> ret = xt::empty<double>({3, 3, 3, 3});
     pointer::I4rt(ret.data());
     return ret;
 }
 
-inline xt::xtensor<double, 4> I4s()
+inline array_type::tensor<double, 4> I4s()
 {
-    xt::xtensor<double, 4> ret = xt::empty<double>({3, 3, 3, 3});
+    array_type::tensor<double, 4> ret = xt::empty<double>({3, 3, 3, 3});
     pointer::I4s(ret.data());
     return ret;
 }
 
-inline xt::xtensor<double, 4> I4d()
+inline array_type::tensor<double, 4> I4d()
 {
-    xt::xtensor<double, 4> ret = xt::empty<double>({3, 3, 3, 3});
+    array_type::tensor<double, 4> ret = xt::empty<double>({3, 3, 3, 3});
     pointer::I4d(ret.data());
     return ret;
 }

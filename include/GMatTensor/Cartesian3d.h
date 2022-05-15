@@ -29,28 +29,28 @@ Random 2nd-order tensor (for example for use in testing).
 
 \return [3, 3] array.
 */
-inline xt::xtensor<double, 2> Random2();
+inline array_type::tensor<double, 2> Random2();
 
 /**
 Random 4th-order tensor (for example for use in testing).
 
 \return [3, 3, 3, 3] array.
 */
-inline xt::xtensor<double, 4> Random4();
+inline array_type::tensor<double, 4> Random4();
 
 /**
 2nd-order null tensor (all components equal to zero).
 
 \return [3, 3] array.
 */
-inline xt::xtensor<double, 2> O2();
+inline array_type::tensor<double, 2> O2();
 
 /**
 4th-order null tensor (all components equal to zero).
 
 \return [3, 3, 3, 3] array.
 */
-inline xt::xtensor<double, 4> O4();
+inline array_type::tensor<double, 4> O4();
 
 /**
 2nd-order identity tensor.
@@ -70,7 +70,7 @@ See A2_dot_B2().
 
 \return [3, 3] array.
 */
-inline xt::xtensor<double, 2> I2();
+inline array_type::tensor<double, 2> I2();
 
 /**
 Result of the dyadic product of two 2nd-order identity tensors (see I2()).
@@ -90,7 +90,7 @@ See A4_ddot_B2(), Trace(), I2().
 
 \return [3, 3, 3, 3] array.
 */
-inline xt::xtensor<double, 4> II();
+inline array_type::tensor<double, 4> II();
 
 /**
 Fourth order unit tensor.
@@ -110,7 +110,7 @@ See A4_ddot_B2().
 
 \return [3, 3, 3, 3] array.
 */
-inline xt::xtensor<double, 4> I4();
+inline array_type::tensor<double, 4> I4();
 
 /**
 Right-transposed fourth order unit tensor.
@@ -130,7 +130,7 @@ See A4_ddot_B2().
 
 \return [3, 3, 3, 3] array.
 */
-inline xt::xtensor<double, 4> I4rt();
+inline array_type::tensor<double, 4> I4rt();
 
 /**
 Fourth order symmetric projection.
@@ -150,7 +150,7 @@ See A4_ddot_B2(), Sym().
 
 \return [3, 3, 3, 3] array.
 */
-inline xt::xtensor<double, 4> I4s();
+inline array_type::tensor<double, 4> I4s();
 
 /**
 Fourth order deviatoric projection.
@@ -166,7 +166,7 @@ See A4_ddot_B2(), Deviatoric().
 
 \return [3, 3, 3, 3] array.
 */
-inline xt::xtensor<double, 4> I4d();
+inline array_type::tensor<double, 4> I4d();
 
 /**
 Trace or 2nd-order tensor.
@@ -618,56 +618,56 @@ public:
 
     \return [shape(), 3, 3]
     */
-    xt::xtensor<double, N + 2> O2() const;
+    array_type::tensor<double, N + 2> O2() const;
 
     /**
     Array of Cartesian3d::O4()
 
     \return [shape(), 3, 3, 3, 3]
     */
-    xt::xtensor<double, N + 4> O4() const;
+    array_type::tensor<double, N + 4> O4() const;
 
     /**
     Array of Cartesian3d::I2()
 
     \return [shape(), 3, 3]
     */
-    xt::xtensor<double, N + 2> I2() const;
+    array_type::tensor<double, N + 2> I2() const;
 
     /**
     Array of Cartesian3d::II()
 
     \return [shape(), 3, 3, 3, 3]
     */
-    xt::xtensor<double, N + 4> II() const;
+    array_type::tensor<double, N + 4> II() const;
 
     /**
     Array of Cartesian3d::I4()
 
     \return [shape(), 3, 3, 3, 3]
     */
-    xt::xtensor<double, N + 4> I4() const;
+    array_type::tensor<double, N + 4> I4() const;
 
     /**
     Array of Cartesian3d::I4rt()
 
     \return [shape(), 3, 3, 3, 3]
     */
-    xt::xtensor<double, N + 4> I4rt() const;
+    array_type::tensor<double, N + 4> I4rt() const;
 
     /**
     Array of Cartesian3d::I4s()
 
     \return [shape(), 3, 3, 3, 3]
     */
-    xt::xtensor<double, N + 4> I4s() const;
+    array_type::tensor<double, N + 4> I4s() const;
 
     /**
     Array of Cartesian3d::I4d()
 
     \return [shape(), 3, 3, 3, 3]
     */
-    xt::xtensor<double, N + 4> I4d() const;
+    array_type::tensor<double, N + 4> I4d() const;
 
 protected:
     /**
