@@ -10,51 +10,6 @@ Tensor definitions supporting several GMat models.
 - Getting started: this readme.
 - Documentation: https://tdegeus.github.io/GMatTensor
 
-# Contents
-
-<!-- MarkdownTOC -->
-
-- [Disclaimer](#disclaimer)
-- [Functionality](#functionality)
-    - [Unit tensors](#unit-tensors)
-    - [Tensor operations](#tensor-operations)
-    - [Tensor operations \(semi-public API\)](#tensor-operations-semi-public-api)
-- [Implementation](#implementation)
-    - [C++ and Python](#c-and-python)
-- [Installation](#installation)
-    - [C++ headers](#c-headers)
-        - [Using conda](#using-conda)
-        - [From source](#from-source)
-    - [Python module](#python-module)
-        - [Using conda](#using-conda-1)
-        - [From source](#from-source-1)
-- [Compiling user-code](#compiling-user-code)
-    - [Using CMake](#using-cmake)
-        - [Example](#example)
-        - [Targets](#targets)
-        - [Optimisation](#optimisation)
-    - [By hand](#by-hand)
-    - [Using pkg-config](#using-pkg-config)
-- [Change-log](#change-log)
-    - [v0.9.0](#v090)
-    - [v0.8.0](#v080)
-    - [v0.7.5](#v075)
-    - [v0.7.4](#v074)
-    - [v0.7.3](#v073)
-    - [v0.7.2](#v072)
-    - [v0.7.1](#v071)
-    - [v0.7.0](#v070)
-    - [v0.6.0](#v060)
-    - [v0.5.0](#v050)
-    - [v0.4.0](#v040)
-    - [v0.3.0](#v030)
-    - [v0.2.0](#v020)
-    - [v0.1.2](#v012)
-    - [v0.1.1](#v011)
-    - [v0.1.0](#v010)
-
-<!-- /MarkdownTOC -->
-
 # Disclaimer
 
 This library is free to use under the
@@ -188,8 +143,8 @@ the following functions are available:
 
 ## C++ and Python
 
-The code is a C++ header-only library (see [installation notes](#c-headers)),
-but a Python module is also provided (see [installation notes](#python-module)).
+The code is a C++ header-only library (see installation notes),
+but a Python module is also provided (see installation notes).
 The interfaces are identical except:
 
 +   All *xtensor* objects (`xt::xtensor<...>`) are *NumPy* arrays in Python.
