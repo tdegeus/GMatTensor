@@ -1,8 +1,6 @@
 /**
-Version information.
-
 \file
-\copyright Copyright 2020. Tom de Geus. All rights reserved.
+\copyright Copyright. Tom de Geus. All rights reserved.
 \license This project is released under the MIT License.
 */
 
@@ -38,7 +36,7 @@ overwrite the automatic version.
 namespace GMatTensor {
 
 /**
-Return version string, e.g.::
+Return version string, e.g.:
 
     "0.8.0"
 

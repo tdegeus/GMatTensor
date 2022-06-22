@@ -47,7 +47,7 @@ They can be enabled by:
 The advantage is that:
 
 -   File and line-number are displayed if the assertion fails.
--   GMatTensor's assertions can be enabled/disabled independently from those of other libraries.
+-   Assertions can be enabled/disabled independently from those of other libraries.
 
 \throw std::runtime_error
 */
