@@ -1,8 +1,8 @@
-#define CATCH_CONFIG_MAIN
-#include <GMatTensor/Cartesian3d.h>
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 #include <xtensor/xio.hpp>
 #include <xtensor/xrandom.hpp>
+
+#include <GMatTensor/Cartesian3d.h>
 
 namespace GM = GMatTensor::Cartesian3d;
 
@@ -98,7 +98,7 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
     SECTION("Trace - Tensor")
     {
         auto A = GM::Random2();
-        REQUIRE(GM::Trace(A)() == Approx(A(0, 0) + A(1, 1) + A(2, 2)));
+        REQUIRE(GM::Trace(A)() == Catch::Approx(A(0, 0) + A(1, 1) + A(2, 2)));
     }
 
     SECTION("Trace - Array")
@@ -120,7 +120,7 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
     SECTION("Hydrostatic - Tensor")
     {
         auto A = GM::Random2();
-        REQUIRE(GM::Hydrostatic(A)() == Approx((A(0, 0) + A(1, 1) + A(2, 2)) / 3.0));
+        REQUIRE(GM::Hydrostatic(A)() == Catch::Approx((A(0, 0) + A(1, 1) + A(2, 2)) / 3.0));
     }
 
     SECTION("Hydrostatic - Array")
@@ -142,7 +142,7 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
     SECTION("Det - Tensor")
     {
         auto A = GM::I2();
-        REQUIRE(GM::Det(A)() == Approx(1.0));
+        REQUIRE(GM::Det(A)() == Catch::Approx(1.0));
     }
 
     SECTION("Det - Array")
@@ -167,7 +167,7 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
         A(0, 1) = 1.0;
         A(1, 0) = 1.0;
         auto r = 2.0;
-        REQUIRE(GM::A2_ddot_B2(A, A)() == Approx(r));
+        REQUIRE(GM::A2_ddot_B2(A, A)() == Catch::Approx(r));
     }
 
     SECTION("A2_ddot_B2 - Array")
@@ -196,7 +196,7 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
         A(0, 1) = 1.0;
         A(1, 0) = 1.0;
         auto r = 2.0;
-        REQUIRE(GM::A2s_ddot_B2s(A, A)() == Approx(r));
+        REQUIRE(GM::A2s_ddot_B2s(A, A)() == Catch::Approx(r));
     }
 
     SECTION("A2s_ddot_B2s - Array")
@@ -225,7 +225,7 @@ TEST_CASE("GMatTensor::Cartesian3d", "Cartesian3d.h")
         A(0, 1) = 1.0;
         A(1, 0) = 1.0;
         auto r = std::sqrt(2.0);
-        REQUIRE(GM::Norm_deviatoric(A)() == Approx(r));
+        REQUIRE(GM::Norm_deviatoric(A)() == Catch::Approx(r));
     }
 
     SECTION("Norm_deviatoric - Array")

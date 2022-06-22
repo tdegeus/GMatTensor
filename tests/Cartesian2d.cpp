@@ -1,5 +1,4 @@
-#define CATCH_CONFIG_MAIN
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 #include <xtensor/xio.hpp>
 #include <xtensor/xrandom.hpp>
 #ifdef _WIN32
@@ -103,14 +102,14 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
     SECTION("Trace - Tensor")
     {
         xt::xtensor_fixed<double, xt::fixed_shape<2, 2>> A = {{0, 1}, {2, 3}};
-        REQUIRE(GM::Trace(A)() == Approx(A(0, 0) + A(1, 1)));
+        REQUIRE(GM::Trace(A)() == Catch::Approx(A(0, 0) + A(1, 1)));
     }
 #endif
 
     SECTION("Trace - Tensor")
     {
         auto A = GM::Random2();
-        REQUIRE(GM::Trace(A)() == Approx(A(0, 0) + A(1, 1)));
+        REQUIRE(GM::Trace(A)() == Catch::Approx(A(0, 0) + A(1, 1)));
     }
 
     SECTION("Trace - Array")
@@ -132,7 +131,7 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
     SECTION("Hydrostatic - Tensor")
     {
         auto A = GM::Random2();
-        REQUIRE(GM::Hydrostatic(A)() == Approx(0.5 * (A(0, 0) + A(1, 1))));
+        REQUIRE(GM::Hydrostatic(A)() == Catch::Approx(0.5 * (A(0, 0) + A(1, 1))));
     }
 
     SECTION("Hydrostatic - Array")
@@ -155,7 +154,7 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
     {
         auto A = GM::Deviatoric(GM::Sym(GM::Random2()));
         auto r = 2.0 * std::pow(A(0, 0), 2.0) + 2.0 * std::pow(A(0, 1), 2.0);
-        REQUIRE(GM::A2_ddot_B2(A, A)() == Approx(r));
+        REQUIRE(GM::A2_ddot_B2(A, A)() == Catch::Approx(r));
     }
 
     SECTION("A2_ddot_B2 - Array")
@@ -179,7 +178,7 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
     {
         auto A = GM::Deviatoric(GM::Sym(GM::Random2()));
         auto r = 2.0 * std::pow(A(0, 0), 2.0) + 2.0 * std::pow(A(0, 1), 2.0);
-        REQUIRE(GM::A2s_ddot_B2s(A, A)() == Approx(r));
+        REQUIRE(GM::A2s_ddot_B2s(A, A)() == Catch::Approx(r));
     }
 
     SECTION("A2s_ddot_B2s - Array")
@@ -204,7 +203,7 @@ TEST_CASE("GMatTensor::Cartesian2d", "Cartesian2d.h")
         auto A = GM::Sym(GM::Random2());
         auto B = GM::Deviatoric(A);
         auto r = std::sqrt(2.0 * std::pow(B(0, 0), 2.0) + 2.0 * std::pow(B(0, 1), 2.0));
-        REQUIRE(GM::Norm_deviatoric(B)() == Approx(r));
+        REQUIRE(GM::Norm_deviatoric(B)() == Catch::Approx(r));
     }
 
     SECTION("Norm_deviatoric - Array")
