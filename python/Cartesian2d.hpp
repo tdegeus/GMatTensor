@@ -18,12 +18,12 @@ auto construct2d_Array(M& self)
     self.def_property_readonly("shape", &T::shape, "Shape of array.");
     self.def_property_readonly("shape_tensor2", &T::shape, "Shape of array of rank 2 tensors.");
     self.def_property_readonly("shape_tensor4", &T::shape, "Shape of array of rank 4 tensors.");
-    self.def("I2", &T::I2, "Array with 2nd-order unit tensors.");
-    self.def("II", &T::II, "Array with 4th-order tensors = dyadic(I2, I2).");
-    self.def("I4", &T::I4, "Array with 4th-order unit tensors.");
-    self.def("I4rt", &T::I4rt, "Array with 4th-order right-transposed unit tensors.");
-    self.def("I4s", &T::I4s, "Array with 4th-order symmetric projection tensors.");
-    self.def("I4d", &T::I4d, "Array with 4th-order deviatoric projection tensors.");
+    self.def_property_readonly("I2", &T::I2, "Array of 2nd-order unit tensors.");
+    self.def_property_readonly("II", &T::II, "Array of 4th-order tensors = dyadic(I2, I2).");
+    self.def_property_readonly("I4", &T::I4, "Array of 4th-order unit tensors.");
+    self.def_property_readonly("I4rt", &T::I4rt, "Array of 4th-order right-transposed unit tens.");
+    self.def_property_readonly("I4s", &T::I4s, "Array of 4th-order symmetric projection tensors.");
+    self.def_property_readonly("I4d", &T::I4d, "Array of 4th-order deviatoric projection tensors.");
     self.def("__repr__", [](const T&) { return "<GMatTensor.Cartesian2d.Array>"; });
 }
 
