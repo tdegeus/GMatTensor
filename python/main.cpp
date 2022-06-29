@@ -26,6 +26,14 @@ PYBIND11_MODULE(_GMatTensor, m)
 
     m.def("version", &GMatTensor::version, "Return version string.");
 
+    m.def(
+        "version_dependencies",
+        &GMatTensor::version_dependencies,
+        "Return list of major dependencies.");
+
+    m.def(
+        "version_compiler", &GMatTensor::version_compiler, "Return list of compiler indications.");
+
     {
         py::module sm = m.def_submodule("Cartesian2d", "2d Cartesian coordinates");
         init_Cartesian2d(sm);
