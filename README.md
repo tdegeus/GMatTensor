@@ -296,6 +296,15 @@ enabling *xsimd*, ...
 
 # Change-log
 
+## v0.10.1
+
+*   Extra functions to get version information
+
+## v0.10.0
+
+*   [python] Array: unit tensors -> properties
+*   Updating Catch2
+
 ## v0.9.0
 
 *   Type alias `xt::xtensor`: allows full API to use `xt::pytensor` (#44)

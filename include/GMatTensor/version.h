@@ -145,7 +145,7 @@ inline std::vector<std::string> version_compiler()
 #endif
 
 #ifdef _MSC_VER
-    ret.push_back("msvc=" + std::string(_MSC_VER));
+    ret.push_back("msvc=" + std::to_string(_MSC_VER));
 #endif
 
     // c++ version
