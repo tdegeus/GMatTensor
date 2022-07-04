@@ -105,7 +105,7 @@ inline std::vector<std::string> version_dependencies()
 }
 
 /**
-Return compiler version.
+Return information on the compiler, the platform, the C++ standard, and the compilation data.
 \return List of strings.
 */
 inline std::vector<std::string> version_compiler()
