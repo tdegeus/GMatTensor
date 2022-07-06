@@ -114,8 +114,7 @@ inline std::vector<std::string> version_compiler()
 
 #ifdef __DATE__
     std::string date = detail::unquote(std::string(QUOTE(__DATE__)));
-    std::replace(date.begin(), date.end(), ' ', '-');
-    ret.push_back("date=" + date);
+    ret.push_back("date=" + detail::replace(detail::replace(date, " ", "-"), "--", "-"));
 #endif
 
 #ifdef __APPLE__
