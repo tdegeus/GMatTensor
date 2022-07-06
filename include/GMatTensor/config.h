@@ -24,6 +24,8 @@ Macros used in the library.
 #define Q(x) #x
 #define QUOTE(x) Q(x)
 
+#define UNUSED(p) ((void)(p))
+
 #define GMATTENSOR_ASSERT_IMPL(expr, file, line) \
     if (!(expr)) { \
         throw std::runtime_error( \
