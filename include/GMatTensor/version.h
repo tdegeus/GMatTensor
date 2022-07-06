@@ -44,6 +44,16 @@ inline std::string unquote(const std::string& arg)
     return ret;
 }
 
+inline std::string replace(std::string str, const std::string& from, const std::string& to)
+{
+    size_t start_pos = 0;
+    while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length();
+    }
+    return str;
+}
+
 } // namespace detail
 
 /**
@@ -63,20 +73,144 @@ The output is a list of strings:
     "xtensor=0.20.1",
     ...
 
+\param greedy Add as much as possible version information, even if the library is not used here.
 \return List of strings.
 */
-inline std::vector<std::string> version_dependencies()
+inline std::vector<std::string> version_dependencies(bool greedy = true)
 {
-    std::vector<std::string> ret;
+    UNUSED(greedy);
 
+    std::vector<std::string> ret;
     ret.push_back("gmattensor=" + GMatTensor::version());
 
+    // Goose suite
+
+#ifdef GMATELASTIC_VERSION
+    if (greedy) {
+        ret.push_back("gmatelastic=" + detail::unquote(std::string(QUOTE(GMATELASTIC_VERSION))));
+    }
+#endif
+
+#ifdef GMATELASTOPLASTIC_VERSION
+    if (greedy) {
+        ret.push_back(
+            "gmatelastoplastic=" + detail::unquote(std::string(QUOTE(GMATELASTOPLASTIC_VERSION))));
+    }
+#endif
+
+#ifdef GMATELASTOPLASTICQPOT_VERSION
+    if (greedy) {
+        ret.push_back(
+            "gmatelastoplasticqpot=" +
+            detail::unquote(std::string(QUOTE(GMATELASTOPLASTICQPOT_VERSION))));
+    }
+#endif
+
+#ifdef GMATELASTOPLASTICQPOT3D_VERSION
+    if (greedy) {
+        ret.push_back(
+            "gmatelastoplasticqpot3d=" +
+            detail::unquote(std::string(QUOTE(GMATELASTOPLASTICQPOT3D_VERSION))));
+    }
+#endif
+
+#ifdef GMATELASTOPLASTICFINITESTRAINSIMO_VERSION
+    if (greedy) {
+        ret.push_back(
+            "gmatelastoplasticfinitestrainsimo=" +
+            detail::unquote(std::string(QUOTE(GMATELASTOPLASTICFINITESTRAINSIMO_VERSION))));
+    }
+#endif
+
+#ifdef GMATNONLINEARELASTIC_VERSION
+    if (greedy) {
+        ret.push_back(
+            "gmatnonlinearelastic=" +
+            detail::unquote(std::string(QUOTE(GMATNONLINEARELASTIC_VERSION))));
+    }
+#endif
+
+#ifdef GOOSEFEM_VERSION
+    if (greedy) {
+        ret.push_back("goosefem=" + detail::unquote(std::string(QUOTE(GOOSEFEM_VERSION))));
+    }
+#endif
+
+#ifdef GOOSEEYE_VERSION
+    if (greedy) {
+        ret.push_back("goosefem=" + detail::unquote(std::string(QUOTE(GOOSEEYE_VERSION))));
+    }
+#endif
+
+#ifdef QPOT_VERSION
+    if (greedy) {
+        ret.push_back("qpot=" + detail::unquote(std::string(QUOTE(QPOT_VERSION))));
+    }
+#endif
+
+#ifdef PRRNG_VERSION
+    if (greedy) {
+        ret.push_back("prrng=" + detail::unquote(std::string(QUOTE(PRRNG_VERSION))));
+    }
+#endif
+
+#ifdef FRICTIONQPOTSPRINGBLOCK_VERSION
+    if (greedy) {
+        ret.push_back(
+            "frictionqpotspringblock=" +
+            detail::unquote(std::string(QUOTE(FRICTIONQPOTSPRINGBLOCK_VERSION))));
+    }
+#endif
+
+#ifdef FRICTIONQPOTFEM_VERSION
+    if (greedy) {
+        ret.push_back(
+            "frictionqpotfem=" + detail::unquote(std::string(QUOTE(FRICTIONQPOTFEM_VERSION))));
+    }
+#endif
+
+#ifdef CPPPATH_VERSION
+    if (greedy) {
+        ret.push_back("cpppath=" + detail::unquote(std::string(QUOTE(CPPPATH_VERSION))));
+    }
+#endif
+
+#ifdef CPPCOLORMAP_VERSION
+    if (greedy) {
+        ret.push_back("cppcolormap=" + detail::unquote(std::string(QUOTE(CPPCOLORMAP_VERSION))));
+    }
+#endif
+
+    // Boost
+
+#ifdef BOOST_VERSION
+    if (greedy) {
+        ret.push_back(
+            "boost=" + detail::unquote(std::string(QUOTE(BOOST_VERSION / 100000))) + "." +
+            detail::unquote(std::string(QUOTE((BOOST_VERSION / 100) % 1000))) + "." +
+            detail::unquote(std::string(QUOTE(BOOST_VERSION % 100))));
+    }
+#endif
+
+    // Eigen
+
+#ifdef EIGEN_WORLD_VERSION
+    if (greedy) {
+        ret.push_back(
+            "eigen=" + detail::unquote(std::string(QUOTE(EIGEN_WORLD_VERSION))) + "." +
+            detail::unquote(std::string(QUOTE(EIGEN_MAJOR_VERSION))) + "." +
+            detail::unquote(std::string(QUOTE(EIGEN_MINOR_VERSION))));
+    }
+#endif
+
+    // xtensor suite
+
+#ifdef XTENSOR_VERSION_MAJOR
     ret.push_back(
         "xtensor=" + detail::unquote(std::string(QUOTE(XTENSOR_VERSION_MAJOR))) + "." +
         detail::unquote(std::string(QUOTE(XTENSOR_VERSION_MINOR))) + "." +
         detail::unquote(std::string(QUOTE(XTENSOR_VERSION_PATCH))));
-
-    // xtensor suite
+#endif
 
 #ifdef XSIMD_VERSION_MAJOR
     ret.push_back(
