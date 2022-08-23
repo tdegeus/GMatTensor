@@ -411,138 +411,172 @@ void init_Cartesian3d(py::module& m)
 
     // Tensor algebra
 
+    d3_Trace<xt::pytensor<double, 3>, xt::pytensor<double, 5>>(m);
     d3_Trace<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     d3_Trace<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
     d3_Trace<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
 
+    d3_trace<xt::pytensor<double, 3>, xt::pytensor<double, 5>>(m);
     d3_trace<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     d3_trace<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
     d3_trace<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
 
+    d3_Hydrostatic<xt::pytensor<double, 3>, xt::pytensor<double, 5>>(m);
     d3_Hydrostatic<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     d3_Hydrostatic<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
     d3_Hydrostatic<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
 
+    d3_hydrostatic<xt::pytensor<double, 3>, xt::pytensor<double, 5>>(m);
     d3_hydrostatic<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     d3_hydrostatic<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
     d3_hydrostatic<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
 
+    d3_Det<xt::pytensor<double, 3>, xt::pytensor<double, 5>>(m);
     d3_Det<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     d3_Det<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
     d3_Det<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
 
+    d3_det<xt::pytensor<double, 3>, xt::pytensor<double, 5>>(m);
     d3_det<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     d3_det<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
     d3_det<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
 
+    d3_A2_ddot_B2<xt::pytensor<double, 3>, xt::pytensor<double, 5>>(m);
     d3_A2_ddot_B2<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     d3_A2_ddot_B2<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
     d3_A2_ddot_B2<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
 
+    d3_A2_ddot_B2_ret<xt::pytensor<double, 3>, xt::pytensor<double, 5>>(m);
     d3_A2_ddot_B2_ret<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     d3_A2_ddot_B2_ret<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
     d3_A2_ddot_B2_ret<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
 
+    d3_A2s_ddot_B2s<xt::pytensor<double, 3>, xt::pytensor<double, 5>>(m);
     d3_A2s_ddot_B2s<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     d3_A2s_ddot_B2s<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
     d3_A2s_ddot_B2s<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
 
+    d3_A2s_ddot_B2s_ret<xt::pytensor<double, 3>, xt::pytensor<double, 5>>(m);
     d3_A2s_ddot_B2s_ret<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     d3_A2s_ddot_B2s_ret<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
     d3_A2s_ddot_B2s_ret<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
 
+    d3_Norm_deviatoric<xt::pytensor<double, 3>, xt::pytensor<double, 5>>(m);
     d3_Norm_deviatoric<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     d3_Norm_deviatoric<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
     d3_Norm_deviatoric<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
 
+    d3_norm_deviatoric<xt::pytensor<double, 3>, xt::pytensor<double, 5>>(m);
     d3_norm_deviatoric<xt::pytensor<double, 2>, xt::pytensor<double, 4>>(m);
     d3_norm_deviatoric<xt::pytensor<double, 1>, xt::pytensor<double, 3>>(m);
     d3_norm_deviatoric<xt::pytensor<double, 0>, xt::pytensor<double, 2>>(m);
 
+    d3_Deviatoric<xt::pytensor<double, 5>, xt::pytensor<double, 5>>(m);
     d3_Deviatoric<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
     d3_Deviatoric<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);
     d3_Deviatoric<xt::pytensor<double, 2>, xt::pytensor<double, 2>>(m);
 
+    d3_deviatoric<xt::pytensor<double, 5>, xt::pytensor<double, 5>>(m);
     d3_deviatoric<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
     d3_deviatoric<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);
     d3_deviatoric<xt::pytensor<double, 2>, xt::pytensor<double, 2>>(m);
 
+    d3_Sym<xt::pytensor<double, 5>, xt::pytensor<double, 5>>(m);
     d3_Sym<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
     d3_Sym<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);
     d3_Sym<xt::pytensor<double, 2>, xt::pytensor<double, 2>>(m);
 
+    d3_sym<xt::pytensor<double, 5>, xt::pytensor<double, 5>>(m);
     d3_sym<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
     d3_sym<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);
     d3_sym<xt::pytensor<double, 2>, xt::pytensor<double, 2>>(m);
 
+    d3_Inv<xt::pytensor<double, 5>, xt::pytensor<double, 5>>(m);
     d3_Inv<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
     d3_Inv<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);
     d3_Inv<xt::pytensor<double, 2>, xt::pytensor<double, 2>>(m);
 
+    d3_inv<xt::pytensor<double, 5>, xt::pytensor<double, 5>>(m);
     d3_inv<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
     d3_inv<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);
     d3_inv<xt::pytensor<double, 2>, xt::pytensor<double, 2>>(m);
 
+    d3_Logs<xt::pytensor<double, 5>, xt::pytensor<double, 5>>(m);
     d3_Logs<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
     d3_Logs<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);
     d3_Logs<xt::pytensor<double, 2>, xt::pytensor<double, 2>>(m);
 
+    d3_logs<xt::pytensor<double, 5>, xt::pytensor<double, 5>>(m);
     d3_logs<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
     d3_logs<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);
     d3_logs<xt::pytensor<double, 2>, xt::pytensor<double, 2>>(m);
 
+    d3_A2_dot_A2T<xt::pytensor<double, 5>, xt::pytensor<double, 5>>(m);
     d3_A2_dot_A2T<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
     d3_A2_dot_A2T<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);
     d3_A2_dot_A2T<xt::pytensor<double, 2>, xt::pytensor<double, 2>>(m);
 
+    d3_A2_dot_A2T_ret<xt::pytensor<double, 5>, xt::pytensor<double, 5>>(m);
     d3_A2_dot_A2T_ret<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
     d3_A2_dot_A2T_ret<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);
     d3_A2_dot_A2T_ret<xt::pytensor<double, 2>, xt::pytensor<double, 2>>(m);
 
+    d3_A2_dot_B2<xt::pytensor<double, 5>, xt::pytensor<double, 5>>(m);
     d3_A2_dot_B2<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
     d3_A2_dot_B2<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);
     d3_A2_dot_B2<xt::pytensor<double, 2>, xt::pytensor<double, 2>>(m);
 
+    d3_A2_dot_B2_ret<xt::pytensor<double, 5>, xt::pytensor<double, 5>>(m);
     d3_A2_dot_B2_ret<xt::pytensor<double, 4>, xt::pytensor<double, 4>>(m);
     d3_A2_dot_B2_ret<xt::pytensor<double, 3>, xt::pytensor<double, 3>>(m);
     d3_A2_dot_B2_ret<xt::pytensor<double, 2>, xt::pytensor<double, 2>>(m);
 
+    d3_A2_dyadic_B2<xt::pytensor<double, 7>, xt::pytensor<double, 5>>(m);
     d3_A2_dyadic_B2<xt::pytensor<double, 6>, xt::pytensor<double, 4>>(m);
     d3_A2_dyadic_B2<xt::pytensor<double, 5>, xt::pytensor<double, 3>>(m);
     d3_A2_dyadic_B2<xt::pytensor<double, 4>, xt::pytensor<double, 2>>(m);
 
+    d3_A2_dyadic_B2_ret<xt::pytensor<double, 7>, xt::pytensor<double, 5>>(m);
     d3_A2_dyadic_B2_ret<xt::pytensor<double, 6>, xt::pytensor<double, 4>>(m);
     d3_A2_dyadic_B2_ret<xt::pytensor<double, 5>, xt::pytensor<double, 3>>(m);
     d3_A2_dyadic_B2_ret<xt::pytensor<double, 4>, xt::pytensor<double, 2>>(m);
 
+    d3_A4_ddot_B2<xt::pytensor<double, 5>, xt::pytensor<double, 7>, xt::pytensor<double, 5>>(m);
     d3_A4_ddot_B2<xt::pytensor<double, 4>, xt::pytensor<double, 6>, xt::pytensor<double, 4>>(m);
     d3_A4_ddot_B2<xt::pytensor<double, 3>, xt::pytensor<double, 5>, xt::pytensor<double, 3>>(m);
     d3_A4_ddot_B2<xt::pytensor<double, 2>, xt::pytensor<double, 4>, xt::pytensor<double, 2>>(m);
 
+    d3_A4_ddot_B2_ret<xt::pytensor<double, 5>, xt::pytensor<double, 7>, xt::pytensor<double, 5>>(m);
     d3_A4_ddot_B2_ret<xt::pytensor<double, 4>, xt::pytensor<double, 6>, xt::pytensor<double, 4>>(m);
     d3_A4_ddot_B2_ret<xt::pytensor<double, 3>, xt::pytensor<double, 5>, xt::pytensor<double, 3>>(m);
     d3_A4_ddot_B2_ret<xt::pytensor<double, 2>, xt::pytensor<double, 4>, xt::pytensor<double, 2>>(m);
 
+    d3_A4_dot_B2<xt::pytensor<double, 7>, xt::pytensor<double, 7>, xt::pytensor<double, 5>>(m);
     d3_A4_dot_B2<xt::pytensor<double, 6>, xt::pytensor<double, 6>, xt::pytensor<double, 4>>(m);
     d3_A4_dot_B2<xt::pytensor<double, 5>, xt::pytensor<double, 5>, xt::pytensor<double, 3>>(m);
     d3_A4_dot_B2<xt::pytensor<double, 4>, xt::pytensor<double, 4>, xt::pytensor<double, 2>>(m);
 
+    d3_A4_dot_B2_ret<xt::pytensor<double, 7>, xt::pytensor<double, 7>, xt::pytensor<double, 5>>(m);
     d3_A4_dot_B2_ret<xt::pytensor<double, 6>, xt::pytensor<double, 6>, xt::pytensor<double, 4>>(m);
     d3_A4_dot_B2_ret<xt::pytensor<double, 5>, xt::pytensor<double, 5>, xt::pytensor<double, 3>>(m);
     d3_A4_dot_B2_ret<xt::pytensor<double, 4>, xt::pytensor<double, 4>, xt::pytensor<double, 2>>(m);
 
+    d3_underlying_size_A2<xt::pytensor<double, 5>>(m);
     d3_underlying_size_A2<xt::pytensor<double, 4>>(m);
     d3_underlying_size_A2<xt::pytensor<double, 3>>(m);
     d3_underlying_size_A2<xt::pytensor<double, 2>>(m);
 
+    d3_underlying_size_A4<xt::pytensor<double, 7>>(m);
     d3_underlying_size_A4<xt::pytensor<double, 6>>(m);
     d3_underlying_size_A4<xt::pytensor<double, 5>>(m);
     d3_underlying_size_A4<xt::pytensor<double, 4>>(m);
 
+    d3_underlying_shape_A2<xt::pytensor<double, 5>>(m);
     d3_underlying_shape_A2<xt::pytensor<double, 4>>(m);
     d3_underlying_shape_A2<xt::pytensor<double, 3>>(m);
     d3_underlying_shape_A2<xt::pytensor<double, 2>>(m);
 
+    d3_underlying_shape_A4<xt::pytensor<double, 7>>(m);
     d3_underlying_shape_A4<xt::pytensor<double, 6>>(m);
     d3_underlying_shape_A4<xt::pytensor<double, 5>>(m);
     d3_underlying_shape_A4<xt::pytensor<double, 4>>(m);
