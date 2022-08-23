@@ -14,6 +14,7 @@
 #include <xtensor/xview.hpp>
 
 #include "config.h"
+#include "detail.hpp"
 #include "version.h"
 
 namespace GMatTensor {
@@ -538,7 +539,10 @@ Size of the underlying array.
 \return `prod([...])`.
 */
 template <class T>
-inline auto underlying_size_A2(const T& A);
+inline size_t underlying_size_A2(const T& A)
+{
+    return detail::impl_A2<T, 3>::toSizeT0(A.shape());
+}
 
 /**
 Size of the underlying array.
@@ -547,7 +551,10 @@ Size of the underlying array.
 \return `prod([...])`.
 */
 template <class T>
-inline auto underlying_size_A4(const T& A);
+inline size_t underlying_size_A4(const T& A)
+{
+    return detail::impl_A4<T, 3>::toSizeT0(A.shape());
+}
 
 /**
 Shape of the underlying array.
@@ -556,7 +563,10 @@ Shape of the underlying array.
 \return `[...]`.
 */
 template <class T>
-inline auto underlying_shape_A2(const T& A);
+inline auto underlying_shape_A2(const T& A) -> std::array<size_t, detail::impl_A2<T, 3>::rank>
+{
+    return detail::impl_A2<T, 3>::toShapeT0(A.shape());
+}
 
 /**
 Shape of the underlying array.
@@ -565,7 +575,10 @@ Shape of the underlying array.
 \return `[...]`.
 */
 template <class T>
-inline auto underlying_shape_A4(const T& A);
+inline auto underlying_shape_A4(const T& A) -> std::array<size_t, detail::impl_A4<T, 3>::rank>
+{
+    return detail::impl_A4<T, 3>::toShapeT0(A.shape());
+}
 
 /**
 Array of tensors:

@@ -5,6 +5,8 @@ import numpy as np
 
 
 class Test_tensor(unittest.TestCase):
+    """ """
+
     def test_I4(self):
 
         A = np.random.random([2, 2])
@@ -44,6 +46,24 @@ class Test_tensor(unittest.TestCase):
         B[0, 0] -= 0.5 * tr
         B[1, 1] -= 0.5 * tr
         self.assertTrue(np.allclose(GMat.Deviatoric(A), B))
+
+
+class Test_Array(unittest.TestCase):
+    """ """
+
+    def test_underlying_shape_A2(self):
+
+        shape = [4, 3, 2]
+        A = np.empty(shape + [2, 2])
+        self.assertEqual(shape, GMat.underlying_shape_A2(A))
+        self.assertEqual(np.prod(shape), GMat.underlying_size_A2(A))
+
+    def test_underlying_shape_A4(self):
+
+        shape = [4, 3, 2]
+        A = np.empty(shape + [2, 2, 2, 2])
+        self.assertEqual(shape, GMat.underlying_shape_A4(A))
+        self.assertEqual(np.prod(shape), GMat.underlying_size_A4(A))
 
 
 if __name__ == "__main__":
