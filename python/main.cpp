@@ -29,7 +29,8 @@ PYBIND11_MODULE(_GMatTensor, m)
     m.def(
         "version_dependencies",
         &GMatTensor::version_dependencies,
-        "List of version strings, include dependencies.");
+        "List of version strings, include dependencies.",
+        py::arg("greedy") = true);
 
     m.def(
         "version_compiler",
