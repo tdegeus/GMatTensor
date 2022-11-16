@@ -1,10 +1,10 @@
 /**
-Implementation of GMatTensor/Cartesian3d.h
-
-\file
-\copyright Copyright 2020. Tom de Geus. All rights reserved.
-\license This project is released under the MIT License.
-*/
+ * Implementation of GMatTensor/Cartesian3d.h
+ *
+ * @file
+ * @copyright Copyright 2020. Tom de Geus. All rights reserved.
+ * @license This project is released under the MIT License.
+ */
 
 #ifndef GMATTENSOR_CARTESIAN3D_HPP
 #define GMATTENSOR_CARTESIAN3D_HPP
