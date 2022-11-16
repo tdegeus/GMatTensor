@@ -186,9 +186,9 @@ inline std::vector<std::string> version_dependencies(bool greedy = true)
 #ifdef BOOST_VERSION
     if (greedy) {
         ret.push_back(
-            "boost=" + detail::unquote(std::string(QUOTE(BOOST_VERSION / 100000))) + "." +
-            detail::unquote(std::string(QUOTE((BOOST_VERSION / 100) % 1000))) + "." +
-            detail::unquote(std::string(QUOTE(BOOST_VERSION % 100))));
+            "boost=" + detail::unquote(std::to_string(BOOST_VERSION / 100000)) + "." +
+            detail::unquote(std::to_string((BOOST_VERSION / 100) % 1000)) + "." +
+            detail::unquote(std::to_string(BOOST_VERSION % 100)));
     }
 #endif
 
