@@ -1,8 +1,8 @@
 /**
-\file
-\copyright Copyright. Tom de Geus. All rights reserved.
-\license This project is released under the MIT License.
-*/
+ * @file
+ * @copyright Copyright. Tom de Geus. All rights reserved.
+ * @license This project is released under the MIT License.
+ */
 
 #ifndef GMATTENSOR_VERSION_H
 #define GMATTENSOR_VERSION_H
@@ -10,25 +10,25 @@
 #include "config.h"
 
 /**
-Current version.
-
-Either:
-
--   Configure using CMake at install time. Internally uses::
-
-        python -c "from setuptools_scm import get_version; print(get_version())"
-
--   Define externally using::
-
-        -DGMATTENSOR_VERSION="`python -c "from setuptools_scm import get_version;
-print(get_version())"`"
-
-    From the root of this project. This is what ``setup.py`` does.
-
-Note that both ``CMakeLists.txt`` and ``setup.py`` will construct the version using
-``setuptools_scm``. Tip: use the environment variable ``SETUPTOOLS_SCM_PRETEND_VERSION`` to
-overwrite the automatic version.
-*/
+ * Current version.
+ *
+ * Either:
+ *
+ * -   Configure using CMake at install time. Internally uses::
+ *
+ *         python -c "from setuptools_scm import get_version; print(get_version())"
+ *
+ * -   Define externally using::
+ *
+ *         -DGMATTENSOR_VERSION="`python -c "from setuptools_scm import get_version;
+ * print(get_version())"`"
+ *
+ *     From the root of this project. This is what ``setup.py`` does.
+ *
+ * Note that both ``CMakeLists.txt`` and ``setup.py`` will construct the version using
+ * ``setuptools_scm``. Tip: use the environment variable ``SETUPTOOLS_SCM_PRETEND_VERSION`` to
+ * overwrite the automatic version.
+ */
 #ifndef GMATTENSOR_VERSION
 #define GMATTENSOR_VERSION "@PROJECT_VERSION@"
 #endif
@@ -57,25 +57,25 @@ inline std::string replace(std::string str, const std::string& from, const std::
 } // namespace detail
 
 /**
-Return version string, e.g. `"0.8.0"`
-\return Version string.
-*/
+ * Return version string, e.g. `"0.8.0"`
+ * @return Version string.
+ */
 inline std::string version()
 {
     return detail::unquote(std::string(QUOTE(GMATTENSOR_VERSION)));
 }
 
 /**
-Return versions of this library and of all of its major dependencies.
-The output is a list of strings:
-
-    "gmattensor=0.8.0",
-    "xtensor=0.20.1",
-    ...
-
-\param greedy Add as much as possible version information, even if the library is not used here.
-\return List of strings.
-*/
+ * Return versions of this library and of all of its major dependencies.
+ * The output is a list of strings:
+ *
+ *     "gmattensor=0.8.0",
+ *     "xtensor=0.20.1",
+ *     ...
+ *
+ * @param greedy Add as much as possible version information, even if the library is not used here.
+ * @return List of strings.
+ */
 inline std::vector<std::string> version_dependencies(bool greedy = true)
 {
     UNUSED(greedy);
@@ -239,9 +239,9 @@ inline std::vector<std::string> version_dependencies(bool greedy = true)
 }
 
 /**
-Return information on the compiler, the platform, the C++ standard, and the compilation data.
-\return List of strings.
-*/
+ * Return information on the compiler, the platform, the C++ standard, and the compilation data.
+ * @return List of strings.
+ */
 inline std::vector<std::string> version_compiler()
 {
     std::vector<std::string> ret;

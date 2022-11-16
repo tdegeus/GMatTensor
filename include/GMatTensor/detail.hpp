@@ -1,10 +1,10 @@
 /**
-Implementation details (not part of public API).
-
-\file
-\copyright Copyright 2020. Tom de Geus. All rights reserved.
-\license This project is released under the MIT License.
-*/
+ * Implementation details (not part of public API).
+ *
+ * @file
+ * @copyright Copyright 2020. Tom de Geus. All rights reserved.
+ * @license This project is released under the MIT License.
+ */
 
 #ifndef GMATTENSOR_DETAIL_HPP
 #define GMATTENSOR_DETAIL_HPP
@@ -72,9 +72,9 @@ struct impl_A2 {
     }
 
     /**
-    \param A 2nd order tensor.
-    \param ret scalar (0th order tensor).
-    */
+     * @param A 2nd order tensor.
+     * @param ret scalar (0th order tensor).
+     */
     template <class R, typename F>
     static void ret0(const T& A, R& ret, F func)
     {
@@ -87,9 +87,9 @@ struct impl_A2 {
     }
 
     /**
-    \param A 2nd order tensor.
-    \return scalar (0th order tensor).
-    */
+     * @param A 2nd order tensor.
+     * @return scalar (0th order tensor).
+     */
     template <typename F>
     static auto ret0(const T& A, F func) -> typename allocate<rank, T>::type
     {
