@@ -1,12 +1,17 @@
+from pathlib import Path
+
 from setuptools_scm import get_version
 from skbuild import setup
 
 project_name = "GMatTensor"
 
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
+
 setup(
     name=project_name,
     description="Tensor operations and unit tensors support GMat models",
-    long_description="Tensor operations and unit tensors support GMat models",
+    long_description=long_description,
     version=get_version(),
     license="MIT",
     author="Tom de Geus",
