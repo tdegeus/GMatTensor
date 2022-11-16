@@ -10,7 +10,7 @@ string(TOUPPER "${PROJECT_NAME}" PROJECT_NAME_UPPER)
 option(BUILD_ALL "${PROJECT_NAME}: Build tests, Python API & docs" OFF)
 option(BUILD_TESTS "${PROJECT_NAME}: Build tests" OFF)
 option(BUILD_PYTHON "${PROJECT_NAME}: Build Python API" OFF)
-option(BUILD_DOCS "${PROJECT_NAME}: Build docs" OFF)
+option(BUILD_DOCS "${PROJECT_NAME}: Build docs (use `make html`)" OFF)
 option(USE_ASSERT "${PROJECT_NAME}: Build with assertions" ON)
 option(USE_DEBUG "${PROJECT_NAME}: Build in debug mode" OFF)
 option(USE_SIMD "${PROJECT_NAME}: Build with hardware optimization" OFF)
@@ -141,6 +141,7 @@ if(BUILD_PYTHON OR BUILD_ALL)
 
     target_compile_definitions(${PYPROJECT_NAME} PUBLIC VERSION_INFO=${PROJECT_VERSION})
     target_link_libraries(${PYPROJECT_NAME} PUBLIC ${PROJECT_NAME} xtensor-python)
+    target_link_libraries(${PYPROJECT_NAME} PUBLIC ${PROJECT_NAME}::compiler_warnings)
 
     if (SKBUILD)
         target_include_directories(${PYPROJECT_NAME} PUBLIC ${NumPy_INCLUDE_DIRS})
@@ -194,12 +195,8 @@ if(BUILD_DOCS OR BUILD_ALL)
     set(DOXYGEN_WARN_IF_UNDOCUMENTED YES)
     set(DOXYGEN_WARN_AS_ERROR YES)
     set(DOXYGEN_ALIASES "license=@par License:")
+    set(DOXYGEN_HTML_COLORSTYLE TOGGLE)
     set(DOXYGEN_USE_MDFILE_AS_MAINPAGE "README.md")
-
-    set(DOXYGEN_HTML_EXTRA_STYLESHEET
-        "${CMAKE_CURRENT_SOURCE_DIR}/docs/doxystyle/doxygen-awesome.css"
-        "${CMAKE_CURRENT_SOURCE_DIR}/docs/doxystyle/custom.css")
-
     set(DOXYGEN_STRIP_FROM_INC_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include")
     set(DOXYGEN_STRIP_FROM_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include")
     doxygen_add_docs(html "${CMAKE_CURRENT_SOURCE_DIR}/include" "README.md")
