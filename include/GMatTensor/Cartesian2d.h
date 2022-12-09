@@ -486,6 +486,8 @@ public:
 
     Array() = default;
 
+    virtual ~Array() = default;
+
     /**
      * Constructor.
      *
