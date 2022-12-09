@@ -315,7 +315,7 @@ struct impl_A4 {
         GMATTENSOR_ASSERT(xt::has_shape(ret, toShapeT4(A.shape())));
 #pragma omp parallel for
         for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
-            func(&A.flat(i * stride4), &B.flat(i * stride2), &ret.flat(i * stride2));
+            func(&A.flat(i * stride4), &B.flat(i * stride2), &ret.flat(i * stride4));
         }
     }
 
@@ -328,7 +328,7 @@ struct impl_A4 {
         return_type ret = return_type::from_shape(toShapeT4(A.shape()));
 #pragma omp parallel for
         for (size_t i = 0; i < toSizeT0(A.shape()); ++i) {
-            func(&A.flat(i * stride4), &B.flat(i * stride2), &ret.flat(i * stride2));
+            func(&A.flat(i * stride4), &B.flat(i * stride2), &ret.flat(i * stride4));
         }
         return ret;
     }
