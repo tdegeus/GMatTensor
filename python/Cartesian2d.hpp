@@ -16,8 +16,10 @@ auto construct2d_Array(M& self)
 {
     self.def(py::init<std::array<size_t, T::rank>>(), "Array.", py::arg("shape"));
     self.def_property_readonly("shape", &T::shape, "Shape of array.");
-    self.def_property_readonly("shape_tensor2", &T::shape, "Shape of array of rank 2 tensors.");
-    self.def_property_readonly("shape_tensor4", &T::shape, "Shape of array of rank 4 tensors.");
+    self.def_property_readonly("shape_tensor2", &T::shape_tensor2, "Array of rank 2 tensors.");
+    self.def_property_readonly("shape_tensor4", &T::shape_tensor4, "Array of rank 4 tensors.");
+    self.def_property_readonly("O2", &T::O2, "Array of 2nd-order null tensors.");
+    self.def_property_readonly("O4", &T::O4, "Array of 4th-order null tensors.");
     self.def_property_readonly("I2", &T::I2, "Array of 2nd-order unit tensors.");
     self.def_property_readonly("II", &T::II, "Array of 4th-order tensors = dyadic(I2, I2).");
     self.def_property_readonly("I4", &T::I4, "Array of 4th-order unit tensors.");
