@@ -220,6 +220,19 @@ class Test_tensor(unittest.TestCase):
         self.assertTrue(np.allclose(res, GMat.Logs(B)))
         self.assertTrue(np.allclose(res, ret))
 
+    def test_A2_dot_A2T(self):
+
+        A = np.random.random(shape + [nd, nd])
+        A_T = np.einsum("...ij -> ...ji", A)
+
+        res = np.einsum("...ij, ...jk", A, A_T)
+
+        ret = np.empty_like(res)
+        GMat.A2_dot_A2T(A, ret)
+
+        self.assertTrue(np.allclose(res, GMat.A2_dot_A2T(A)))
+        self.assertTrue(np.allclose(res, ret))
+
     def test_A2_dot_B2(self):
 
         A = np.random.random(shape + [nd, nd])
@@ -257,6 +270,19 @@ class Test_tensor(unittest.TestCase):
         GMat.A4_ddot_B2(A, B, ret)
 
         self.assertTrue(np.allclose(res, GMat.A4_ddot_B2(A, B)))
+        self.assertTrue(np.allclose(res, ret))
+
+    def test_A4_dot_B2(self):
+
+        A = np.random.random(shape + [nd, nd, nd, nd])
+        B = np.random.random(shape + [nd, nd])
+
+        res = np.einsum("...ijkl, ...lm", A, B)
+
+        ret = np.empty_like(res)
+        GMat.A4_dot_B2(A, B, ret)
+
+        self.assertTrue(np.allclose(res, GMat.A4_dot_B2(A, B)))
         self.assertTrue(np.allclose(res, ret))
 
     def test_underlying_shape_A2(self):
